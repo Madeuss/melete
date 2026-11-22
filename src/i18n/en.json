@@ -309,7 +309,24 @@
       "standard": "The question is shown as text and you can answer by speaking or typing.",
       "hard": "Closer to a real interview: voice only, the question is blurred (you can reveal it if you need to) and you can ask out loud for it to be repeated."
     },
-    "hardNeedsVoice": "Hard needs spoken answers and questions read aloud. Turn both on in Settings."
+    "hardNeedsVoice": "Hard needs spoken answers and questions read aloud. Turn both on in Settings.",
+    "stage": "Stage of the process",
+    "stages": {
+      "any": "Any",
+      "recruiter": "Recruiter",
+      "hiringManager": "Hiring manager",
+      "technical": "Technical",
+      "values": "Values and culture",
+      "final": "Final round"
+    },
+    "stageHints": {
+      "any": "A general interview, without a specific interviewer.",
+      "recruiter": "Light and brief: motivation, your career story, why this company, how you communicate.",
+      "hiringManager": "Your future manager, direct and probing: ownership, impact, priorities, stakeholders, failure.",
+      "technical": "An engineer on the team: technical decisions, trade-offs, debugging and architecture from your experience.",
+      "values": "Fit with the company's principles: collaboration, feedback, integrity, customer focus, learning from mistakes.",
+      "final": "A senior leader, big picture: career goals, why this company, leading others, hard decisions, your first months."
+    }
   },
   "room": {
     "leave": "Leave",

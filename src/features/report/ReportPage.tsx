@@ -122,6 +122,7 @@ export default function ReportPage() {
             role: config.role,
             seniority: t(`newInterview.seniorities.${config.seniority}`),
           })}
+          {config.stage && ` · ${t(`newInterview.stages.${config.stage}`)}`}
           {config.difficulty === 'hard' && ` · ${t('newInterview.difficulties.hard')}`}
         </p>
         <p className="text-sm text-text-subtle">

@@ -204,3 +204,22 @@ describe('evaluatePitch v1', () => {
     expect(user.content).toContain('Typed, not spoken')
   })
 })
+
+describe('planQuestions v2 (stages)', () => {
+  const input = { config, stories: [], language: 'en' as const }
+
+  it('adds the stage guidance and tone only when a stage is chosen', () => {
+    const [plain] = planQuestions.build(input)
+    expect(plain.content).not.toContain('Stage:')
+    const [system, user] = planQuestions.build({ ...input, config: { ...config, stage: 'recruiter' } })
+    expect(system.content).toContain('Stage: recruiter screen')
+    expect(system.content).toContain('tone of that interviewer')
+    expect(user.content).toContain('Stage: recruiter')
+  })
+
+  it('asks for competencies from the story tags when one fits', () => {
+    const [system] = planQuestions.build(input)
+    expect(system.content).toContain('use it exactly: conflict, leadership, failure')
+    expect(planQuestions.version).toBe('v2')
+  })
+})

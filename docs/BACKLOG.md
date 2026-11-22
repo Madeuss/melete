@@ -54,7 +54,6 @@ A prioridade é sugestão: o Mat decide a ordem. As de prioridade alta são bara
 | Feature | O que faz | Prioridade sugerida |
 | --- | --- | --- |
 | Fluência em inglês | Para quem não é nativo: pausas longas, palavras que o reconhecimento de voz errou várias vezes (pista de pronúncia), vocabulário repetido e sugestões de expressões | Alta: diferencial pro público brasileiro e latino |
-| Etapas do processo | Simulação por etapa real (recrutador, gestor, técnica, valores, final), cada uma com tom e tipo de pergunta próprios | Alta |
 | Personas de entrevistador | Amigável, neutro ou cético (aperta nos detalhes, corta resposta longa) | Média |
 | Evolução no tempo | Gráfico das notas por competência e das métricas ao longo das sessões | Média |
 | Modo véspera | Uma página pra revisar na véspera: melhores histórias, briefing da empresa, perguntas pra fazer | Média |

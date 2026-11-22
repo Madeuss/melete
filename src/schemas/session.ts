@@ -26,6 +26,10 @@ export type FeedbackTiming = z.infer<typeof FeedbackTiming>
 export const Difficulty = z.enum(['standard', 'hard'])
 export type Difficulty = z.infer<typeof Difficulty>
 
+/** The stage of a real hiring process the mock interview simulates (tone and kind of questions). */
+export const InterviewStage = z.enum(['recruiter', 'hiringManager', 'technical', 'values', 'final'])
+export type InterviewStage = z.infer<typeof InterviewStage>
+
 export const SessionConfig = z.object({
   type: InterviewType,
   role: z.string().trim().min(1),
@@ -35,6 +39,8 @@ export const SessionConfig = z.object({
   followUps: z.boolean(),
   feedbackTiming: FeedbackTiming,
   difficulty: Difficulty.default('standard'),
+  /** Absent = a general interview, as before stages existed. */
+  stage: InterviewStage.optional(),
 })
 export type SessionConfig = z.infer<typeof SessionConfig>
 

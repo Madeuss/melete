@@ -6,7 +6,7 @@ export { classifyReplyV1 as classifyReply } from './classifyReply.v1'
 export { decideFollowUpV1 as decideFollowUp } from './decideFollowUp.v1'
 export { evaluateAnswerV1 as evaluateAnswer } from './evaluateAnswer.v1'
 export { evaluatePitchV1 as evaluatePitch } from './evaluatePitch.v1'
-export { planQuestionsV1 as planQuestions } from './planQuestions.v1'
+export { planQuestionsV2 as planQuestions } from './planQuestions.v2'
 export { structureStoryV1 as structureStory } from './structureStory.v1'
 export { summarizeSessionV1 as summarizeSession } from './summarizeSession.v1'
 

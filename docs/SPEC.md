@@ -488,6 +488,18 @@ Um modo só pro pitch de abertura, com cronômetro, versões salvas e comparaç�
 
 - [x] Feito em 22/11/2026.
 
+### Etapas do processo (pedido em 22/11/2026)
+
+Simulação por etapa real, cada uma com o tom e o tipo de pergunta próprios.
+
+- Na Nova entrevista, "Etapa do processo" (opcional): Qualquer (como antes), Recrutador, Gestor, Técnica, Valores e cultura, Final. Cada uma tem uma linha explicando o foco. A escolha fica salva com o resto da configuração.
+- Escolher uma etapa sugere o tipo de entrevista mais comum pra ela (Técnica → técnica, Final → mista, as outras → comportamental); o usuário pode trocar.
+- `SessionConfig.stage` (opcional; sessões antigas ficam sem etapa).
+- Prompt `planQuestions` v2 (o v1 continua no repositório): com etapa, descreve quem está entrevistando e o que aquela etapa procura, e pede o tom desse entrevistador. Também pede a `competency` da lista de competências das histórias quando alguma serve.
+- O relatório mostra a etapa junto com o tipo, o cargo e a senioridade.
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

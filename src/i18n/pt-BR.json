@@ -309,7 +309,24 @@
       "standard": "A pergunta aparece escrita e você pode responder falando ou digitando.",
       "hard": "Mais perto de uma entrevista de verdade: só por voz, a pergunta fica borrada (dá pra mostrar se precisar) e você pode pedir pra repetir falando."
     },
-    "hardNeedsVoice": "O modo difícil precisa de resposta falando e das perguntas lidas em voz alta. Ative os dois nas Configurações."
+    "hardNeedsVoice": "O modo difícil precisa de resposta falando e das perguntas lidas em voz alta. Ative os dois nas Configurações.",
+    "stage": "Etapa do processo",
+    "stages": {
+      "any": "Qualquer",
+      "recruiter": "Recrutador",
+      "hiringManager": "Gestor",
+      "technical": "Técnica",
+      "values": "Valores e cultura",
+      "final": "Final"
+    },
+    "stageHints": {
+      "any": "Uma entrevista geral, sem um entrevistador específico.",
+      "recruiter": "Leve e rápida: motivação, sua trajetória, por que essa empresa, como você se comunica.",
+      "hiringManager": "Seu futuro gestor, direto e insistente: ownership, impacto, prioridades, stakeholders, fracassos.",
+      "technical": "Uma pessoa engenheira do time: decisões técnicas, trade-offs, debugging e arquitetura da sua experiência.",
+      "values": "Encaixe com os princípios da empresa: colaboração, feedback, integridade, foco no cliente, aprender com erros.",
+      "final": "Uma liderança sênior, visão geral: objetivos de carreira, por que essa empresa, liderar pessoas, decisões difíceis, seus primeiros meses."
+    }
   },
   "room": {
     "leave": "Sair",

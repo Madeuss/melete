@@ -3,13 +3,22 @@ import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
 import { canUseVoice, preloadVoice } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
-import { Difficulty, InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
+import { Difficulty, InterviewStage, InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
 import { useStories } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
 import { Button, Field, Input, Notice, SegmentedControl, Select, Textarea, Toggle, describedBy } from '../../ui'
 import { PageHeader } from '../../ui/PageHeader'
 
 const LAST_CONFIG_KEY = 'melete.lastConfig'
+
+/** Picking a stage suggests the usual interview type for it (the user can still change it). */
+const TYPE_FOR_STAGE: Record<InterviewStage, InterviewType> = {
+  recruiter: 'behavioral',
+  hiringManager: 'behavioral',
+  technical: 'technical',
+  values: 'behavioral',
+  final: 'mixed',
+}
 
 const defaults: SessionConfig = {
   type: 'behavioral',
@@ -100,6 +109,27 @@ export default function NewInterviewPage() {
             onChange={(v) => set('type', v)}
             options={InterviewType.options.map((v) => ({ value: v, label: t(`newInterview.types.${v}`) }))}
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span id={`${ids}-stage`} className="text-sm font-medium">
+            {t('newInterview.stage')}
+          </span>
+          <SegmentedControl<'any' | InterviewStage>
+            aria-labelledby={`${ids}-stage`}
+            variant="chips"
+            value={config.stage ?? 'any'}
+            onChange={(v) =>
+              setConfig((c) =>
+                v === 'any' ? { ...c, stage: undefined } : { ...c, stage: v, type: TYPE_FOR_STAGE[v] },
+              )
+            }
+            options={(['any', ...InterviewStage.options] as const).map((v) => ({
+              value: v,
+              label: t(`newInterview.stages.${v}`),
+            }))}
+          />
+          <p className="text-caption text-text-subtle">{t(`newInterview.stageHints.${config.stage ?? 'any'}`)}</p>
         </div>
 
         <Field id={`${ids}-role`} label={t('newInterview.role')} error={roleError ? t('newInterview.roleRequired') : undefined}>

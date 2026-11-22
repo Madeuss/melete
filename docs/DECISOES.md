@@ -67,6 +67,8 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 60 | Nome no menu | "Apresentação" no menu e "Tell me about yourself" como título da tela, que é como a pergunta aparece nas entrevistas em inglês. | "Pitch" ou "Fale sobre você". |
 | 61 | Avaliação do pitch fora do custo por sessão | Como no assistente de história, as chamadas de `evaluatePitch` não entram em `llmCalls`, porque não pertencem a uma entrevista. | Gravar também, sem sessão. |
 | 62 | Tempo de versão digitada | Estimado a 140 palavras por minuto (ritmo de conversa) e marcado com "~", pra a faixa de 60–90 s ainda servir de guia. | Não mostrar tempo pra versões digitadas. |
+| 63 | O que a etapa muda | Só o planejamento das perguntas (tom e foco). A avaliação continua a mesma (STAR + clareza) em todas as etapas, e o follow-up também. Se quiser, a avaliação pode pesar critérios diferentes por etapa (ex.: no recrutador, comunicação e motivação). | Avaliação com critérios por etapa (nova versão do evaluateAnswer). |
+| 64 | Competência das perguntas | No `planQuestions` v2, a competência vem da lista das tags de histórias quando alguma serve. Isso ainda não aparece em lugar nenhum, mas permite o mapa de cobertura mostrar também o que já foi praticado (decisão 54). | — |
 
 ## O que ficou pra você
 
