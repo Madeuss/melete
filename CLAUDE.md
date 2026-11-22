@@ -21,3 +21,8 @@ Decisions taken during implementation that still need the owner's review are log
 - No hardcoded UI text: every string lives in `src/i18n/{pt-BR,en,es}.json`.
 - No hex colors or default Tailwind palette classes in components: use the tokens from `src/styles/tokens.css`.
 - Commits: English, Conventional Commits, no co-author trailers.
+
+## Gotchas
+
+- Windows: run Vitest from a path with an uppercase drive letter (`cd C:/Users/...`). With `c:/...` Vitest
+  loads itself twice and every test file fails with "Vitest failed to find the current suite".

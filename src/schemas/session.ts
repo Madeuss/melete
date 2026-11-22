@@ -1,0 +1,46 @@
+import { z } from 'zod'
+import { SessionSummary } from './feedback'
+import { InterviewLanguage } from './settings'
+
+export const PlannedQuestion = z.object({
+  text: z.string().min(1),
+  competency: z.string(), // e.g. ownership, conflict, system design
+  storyId: z.string().optional(), // story the question tries to pull
+})
+export type PlannedQuestion = z.infer<typeof PlannedQuestion>
+
+export const InterviewType = z.enum(['behavioral', 'technical', 'mixed'])
+export type InterviewType = z.infer<typeof InterviewType>
+
+export const Seniority = z.enum(['junior', 'mid', 'senior', 'staff'])
+export type Seniority = z.infer<typeof Seniority>
+
+export const FeedbackTiming = z.enum(['per-answer', 'end'])
+export type FeedbackTiming = z.infer<typeof FeedbackTiming>
+
+export const SessionConfig = z.object({
+  type: InterviewType,
+  role: z.string().trim().min(1),
+  seniority: Seniority,
+  jobDescription: z.string().optional(),
+  questionCount: z.number().int().min(1).max(15),
+  followUps: z.boolean(),
+  feedbackTiming: FeedbackTiming,
+})
+export type SessionConfig = z.infer<typeof SessionConfig>
+
+export const SessionStatus = z.enum(['in-progress', 'finished', 'abandoned'])
+export type SessionStatus = z.infer<typeof SessionStatus>
+
+export const Session = z.object({
+  id: z.string(),
+  createdAt: z.string(),
+  config: SessionConfig,
+  model: z.string(), // model used, to compare later
+  /** Interview language at the time of the session (settings can change later). */
+  language: InterviewLanguage.default('en'),
+  status: SessionStatus,
+  plannedQuestions: z.array(PlannedQuestion),
+  summary: SessionSummary.optional(),
+})
+export type Session = z.infer<typeof Session>

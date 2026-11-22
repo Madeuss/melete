@@ -1,0 +1,217 @@
+import {
+  ExportFile,
+  Session,
+  Settings,
+  Story,
+  StoryInput,
+  Turn,
+  defaultSettings,
+  normalizeTag,
+  type SessionStatus,
+  type UiLanguage,
+} from '../schemas'
+import { getDb, newId, nowIso, type MeleteDb } from './db'
+
+/*
+ * Every read goes through schema.parse: data in IndexedDB may come from an older version
+ * or from an import, so it's treated as untrusted like LLM output.
+ */
+
+function parseAll<T>(schema: { parse: (v: unknown) => T }, rows: unknown[]): T[] {
+  return rows.map((r) => schema.parse(r))
+}
+
+export function createSettingsRepo(db: MeleteDb) {
+  return {
+    async get(): Promise<Settings | undefined> {
+      const row = await db.settings.get('default')
+      return row ? Settings.parse(row) : undefined
+    },
+    async getOrDefault(fallbackLanguage?: UiLanguage): Promise<Settings> {
+      return (await this.get()) ?? defaultSettings(fallbackLanguage)
+    },
+    async save(settings: Settings): Promise<Settings> {
+      const parsed = Settings.parse(settings)
+      await db.settings.put(parsed)
+      return parsed
+    },
+  }
+}
+
+function cleanStoryInput(input: StoryInput): StoryInput {
+  const parsed = StoryInput.parse(input)
+  const tags = [...new Set(parsed.tags.map(normalizeTag).filter(Boolean))]
+  return { ...parsed, tags }
+}
+
+export function createStoriesRepo(db: MeleteDb) {
+  return {
+    async list(): Promise<Story[]> {
+      const rows = await db.stories.orderBy('updatedAt').reverse().toArray()
+      return parseAll(Story, rows)
+    },
+    async get(id: string): Promise<Story | undefined> {
+      const row = await db.stories.get(id)
+      return row ? Story.parse(row) : undefined
+    },
+    async create(input: StoryInput): Promise<Story> {
+      const now = nowIso()
+      const story = Story.parse({ ...cleanStoryInput(input), id: newId(), createdAt: now, updatedAt: now })
+      await db.stories.add(story)
+      return story
+    },
+    async update(id: string, input: StoryInput): Promise<Story> {
+      const current = await this.get(id)
+      if (!current) throw new Error(`Story ${id} not found`)
+      const story = Story.parse({ ...current, ...cleanStoryInput(input), updatedAt: nowIso() })
+      await db.stories.put(story)
+      return story
+    },
+    async remove(id: string): Promise<void> {
+      await db.stories.delete(id)
+    },
+    /** Upsert by id: importing the same file twice doesn't duplicate stories. */
+    async importMany(stories: Story[]): Promise<number> {
+      const parsed = parseAll(Story, stories)
+      await db.stories.bulkPut(parsed)
+      return parsed.length
+    },
+    async allTags(): Promise<string[]> {
+      const keys = await db.stories.orderBy('tags').uniqueKeys()
+      return keys.map(String).sort()
+    },
+  }
+}
+
+export function createSessionsRepo(db: MeleteDb) {
+  return {
+    async create(data: Omit<Session, 'id' | 'createdAt'>): Promise<Session> {
+      const session = Session.parse({ ...data, id: newId(), createdAt: nowIso() })
+      await db.sessions.add(session)
+      return session
+    },
+    async get(id: string): Promise<Session | undefined> {
+      const row = await db.sessions.get(id)
+      return row ? Session.parse(row) : undefined
+    },
+    async list(): Promise<Session[]> {
+      const rows = await db.sessions.orderBy('createdAt').reverse().toArray()
+      return parseAll(Session, rows)
+    },
+    async update(id: string, patch: Partial<Omit<Session, 'id' | 'createdAt'>>): Promise<Session> {
+      const current = await this.get(id)
+      if (!current) throw new Error(`Session ${id} not found`)
+      const next = Session.parse({ ...current, ...patch })
+      await db.sessions.put(next)
+      return next
+    },
+    async setStatus(id: string, status: SessionStatus): Promise<void> {
+      await db.sessions.update(id, { status })
+    },
+    /** Deletes a session and its turns. */
+    async remove(id: string): Promise<void> {
+      await db.transaction('rw', db.sessions, db.turns, async () => {
+        await db.turns.where('sessionId').equals(id).delete()
+        await db.sessions.delete(id)
+      })
+    },
+  }
+}
+
+export function createTurnsRepo(db: MeleteDb) {
+  return {
+    async add(data: Omit<Turn, 'id' | 'createdAt'>): Promise<Turn> {
+      const turn = Turn.parse({ ...data, id: newId(), createdAt: nowIso() })
+      await db.turns.add(turn)
+      return turn
+    },
+    async listBySession(sessionId: string): Promise<Turn[]> {
+      const rows = await db.turns
+        .where('[sessionId+index]')
+        .between([sessionId, -Infinity], [sessionId, Infinity])
+        .toArray()
+      return parseAll(Turn, rows)
+    },
+    async update(id: string, patch: Partial<Omit<Turn, 'id' | 'sessionId' | 'createdAt'>>): Promise<Turn> {
+      const row = await db.turns.get(id)
+      if (!row) throw new Error(`Turn ${id} not found`)
+      const next = Turn.parse({ ...Turn.parse(row), ...patch })
+      await db.turns.put(next)
+      return next
+    },
+  }
+}
+
+export function createDataRepo(db: MeleteDb) {
+  return {
+    /** Full export. Settings (and so the API key) are never included. */
+    async exportAll(): Promise<ExportFile> {
+      const [stories, sessions, turns] = await Promise.all([
+        db.stories.toArray(),
+        db.sessions.toArray(),
+        db.turns.toArray(),
+      ])
+      return ExportFile.parse({
+        app: 'melete',
+        version: 1,
+        exportedAt: nowIso(),
+        stories,
+        sessions,
+        turns,
+      })
+    },
+    async exportStories(): Promise<ExportFile> {
+      return ExportFile.parse({
+        app: 'melete',
+        version: 1,
+        exportedAt: nowIso(),
+        stories: await db.stories.toArray(),
+      })
+    },
+    /** Validates the whole file first, then upserts everything in one transaction. */
+    async importFile(raw: unknown): Promise<{ stories: number; sessions: number }> {
+      const file = ExportFile.parse(raw)
+      await db.transaction('rw', db.stories, db.sessions, db.turns, async () => {
+        await db.stories.bulkPut(file.stories)
+        await db.sessions.bulkPut(file.sessions)
+        await db.turns.bulkPut(file.turns)
+      })
+      return { stories: file.stories.length, sessions: file.sessions.length }
+    },
+    async wipe(): Promise<void> {
+      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns], async () => {
+        await Promise.all([db.settings.clear(), db.stories.clear(), db.sessions.clear(), db.turns.clear()])
+      })
+    },
+  }
+}
+
+export type SettingsRepo = ReturnType<typeof createSettingsRepo>
+export type StoriesRepo = ReturnType<typeof createStoriesRepo>
+export type SessionsRepo = ReturnType<typeof createSessionsRepo>
+export type TurnsRepo = ReturnType<typeof createTurnsRepo>
+export type DataRepo = ReturnType<typeof createDataRepo>
+
+export interface Repositories {
+  settings: SettingsRepo
+  stories: StoriesRepo
+  sessions: SessionsRepo
+  turns: TurnsRepo
+  data: DataRepo
+}
+
+export function createRepositories(db: MeleteDb): Repositories {
+  return {
+    settings: createSettingsRepo(db),
+    stories: createStoriesRepo(db),
+    sessions: createSessionsRepo(db),
+    turns: createTurnsRepo(db),
+    data: createDataRepo(db),
+  }
+}
+
+let repos: Repositories | undefined
+export function getRepositories(): Repositories {
+  repos ??= createRepositories(getDb())
+  return repos
+}
