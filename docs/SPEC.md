@@ -425,6 +425,23 @@ Na ordem em que fazem sentido. Cada uma termina com teste ou com a tela funciona
 - [x] README: o que é, BYOK, privacidade (onde ficam key e dados, aviso da Web Speech), como rodar com Ollama de graça.
 - [ ] Deploy estático. *(Workflow pronto em `.github/workflows/ci.yml`; falta ligar o GitHub Pages, ver docs/DECISOES.md.)*
 
+## Depois do MVP
+
+Features que saíram do `docs/BACKLOG.md` a pedido do Mat. Cada uma vale como decisão, como o resto da spec.
+
+### Custo por sessão (pedido em 22/11/2026)
+
+Pra precificar o SaaS, cada sessão guarda quantos tokens gastou.
+
+- Cada requisição ao LLM durante a sessão vira um registro (`LlmCall`) com a sessão, o tipo de chamada (`planQuestions`, `classifyReply`, `decideFollowUp`, `evaluateAnswer`, `summarizeSession`), o modelo e o `usage` (`prompt_tokens` e `completion_tokens`). Cada nova tentativa da saída estruturada conta como uma chamada.
+- `usage` é opcional: alguns provedores não devolvem, e a falta dele não quebra nada. O relatório mostra "não informado pelo provedor".
+- As chamadas não usam streaming, então o `usage` vem no corpo da resposta e não precisa de `stream_options`. Se um dia usarem, mandar `stream_options: { include_usage: true }`.
+- Banco: tabela `llmCalls` (`id, sessionId`) na versão 2 do Dexie. A migração só adiciona a tabela; sessões antigas ficam sem chamadas e o relatório diz que são de antes da contagem.
+- Relatório: total de tokens de entrada e saída, número de chamadas e o detalhamento por etapa.
+- Export e import incluem as chamadas (arquivos antigos, sem elas, continuam importando); apagar a sessão apaga as chamadas.
+
+- [x] Feito em 22/11/2026, com testes da agregação, do gravador de chamadas, da migração e do motor.
+
 ## Decidido
 
 | Tema | Decisão |
