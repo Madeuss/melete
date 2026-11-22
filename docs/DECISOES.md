@@ -26,3 +26,8 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 19 | Salvar nas Configurações | O bloco do provedor tem botão "Salvar" (porque envolve key e teste); voz, idioma, tema salvam na hora em que você muda. | Tudo com um único salvar. |
 | 20 | Navegação | Barra lateral no desktop (Nova entrevista, Histórico, Histórias; Configurações embaixo) e barra no topo no celular. A sala de entrevista abre sem menu, em tela cheia. | — |
 | 21 | Ao trocar o idioma da entrevista | A voz escolhida é limpa (ela era do idioma antigo) e volta pra voz padrão do novo idioma. | — |
+| 22 | Idioma do feedback | `strengths`, `improvements` e o resumo da sessão saem no **idioma da interface** (você lê); `improvedAnswer` sai no idioma da entrevista (como o spec pede). | Tudo no idioma da entrevista. |
+| 23 | Avaliação de follow-up | A resposta do follow-up também é avaliada (é um turno), e o avaliador recebe a pergunta e a resposta principais como contexto. | Avaliar a resposta principal + follow-up juntas como uma só. |
+| 24 | Detalhe que falta na resposta melhorada | Quando falta um dado concreto, a `improvedAnswer` usa marcador entre colchetes (`[metric]`, `[timeframe]`) em vez de inventar. | — |
+| 25 | Proteção contra prompt injection | Transcrição, descrição da vaga e histórias vão entre tags (`<transcript>…`) com aviso de que são dados, não instruções. | — |
+| 26 | Pós-processamento do plano | Se o modelo devolver perguntas a mais, corto no número pedido; `storyId` inexistente ou repetido é descartado. Se devolver a menos, a sessão fica com menos perguntas. | Pedir de novo até ter o número exato. |
