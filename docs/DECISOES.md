@@ -57,6 +57,8 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 50 | Onde guardar o custo | Uma tabela própria, `llmCalls`, com um registro por requisição (sessão, tipo, modelo, tokens), em vez de campos na sessão: o plano e o resumo não pertencem a uma resposta, e um registro por tentativa deixa visível quanto as novas tentativas da saída estruturada custam. | Somar direto na sessão. |
 | 51 | Tipos de chamada | Além dos quatro pedidos, `classifyReply` (a checagem de "pode repetir?" do modo difícil) também é contada, como "Entender respostas curtas". | — |
 | 52 | Onde aparece | Só no relatório da sessão, no fim da página. Não entrou no histórico nem em totais de todas as sessões; dá pra somar depois se for útil pra precificação. | Coluna de tokens no histórico. |
+| 53 | Competências do mapa | As 10 tags sugeridas do editor, que já são as competências mais perguntadas. Tags próprias do usuário ficam fora do mapa, porque não dá pra saber se são competências. | Mostrar todas as tags usadas como colunas. |
+| 54 | Mapa só com histórias | O mapa cruza histórias com competências, não com o que já foi praticado nas entrevistas: o planejamento gera competências em texto livre ("system design", "ownership"…), que não batem com as tags. Pra cruzar com a prática, o `planQuestions` teria que escolher da mesma lista (nova versão do prompt). | Mudar o prompt de planejamento pra usar a lista fixa e mostrar também quantas vezes cada competência foi praticada. |
 
 ## O que ficou pra você
 

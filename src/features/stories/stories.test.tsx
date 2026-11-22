@@ -61,4 +61,18 @@ describe('story bank', () => {
 
     await waitFor(async () => expect(await repo.get(a.id)).toBeUndefined())
   })
+
+  it('maps stories to competencies and starts a story for a missing one', async () => {
+    const base = { situation: '', task: '', action: '', result: '' }
+    await getRepositories().stories.create({ ...base, title: 'Checkout outage', tags: ['ownership', 'deadline'] })
+    const user = userEvent.setup()
+    renderRoutes(routes, '/stories?view=coverage')
+
+    expect(await screen.findByRole('heading', { name: '8 competencies without a story' })).toBeInTheDocument()
+    expect(screen.getByRole('rowheader', { name: 'Checkout outage' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Failure' }))
+    // The editor opens with the competency already tagged.
+    expect(await screen.findByRole('button', { name: 'Remove tag failure' })).toBeInTheDocument()
+  })
 })

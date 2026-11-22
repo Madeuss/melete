@@ -442,6 +442,17 @@ Pra precificar o SaaS, cada sessão guarda quantos tokens gastou.
 
 - [x] Feito em 22/11/2026, com testes da agregação, do gravador de chamadas, da migração e do motor.
 
+### Mapa de cobertura (pedido em 22/11/2026)
+
+Mostra quais competências ainda não têm história, pra saber o que preparar em seguida.
+
+- Aba "Cobertura" na tela de Histórias (`/stories?view=coverage`), ao lado da lista.
+- Matriz histórias × competências. As competências são as tags sugeridas do editor (conflito, liderança, fracasso, ownership, trabalho em equipe, impacto, ambiguidade, prazo apertado, mentoria, técnica), com nome traduzido. Tags criadas pelo usuário não entram.
+- Acima da matriz, as competências sem nenhuma história, cada uma com um atalho que abre o editor com a tag já marcada (`/stories/new?tag=…`).
+- A linha de total destaca as competências com zero histórias.
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

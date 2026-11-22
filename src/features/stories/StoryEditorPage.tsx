@@ -1,7 +1,7 @@
 import { ArrowLeft, Trash2 } from 'lucide-react'
 import { useId, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, useNavigate, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { STORY_LIMITS, SUGGESTED_TAGS, normalizeTag, type Story, type StoryInput } from '../../schemas'
 import { useAllTags, useStory } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
@@ -40,7 +40,13 @@ function Editor({ story }: { story?: Story }) {
   const ids = useId()
   const navigate = useNavigate()
   const existingTags = useAllTags()
-  const [form, setForm] = useState<StoryInput>(story ?? empty)
+  // "Write a story for <competency>" from the coverage map arrives with ?tag=…
+  const [params] = useSearchParams()
+  const [form, setForm] = useState<StoryInput>(() => {
+    if (story) return story
+    const tag = normalizeTag(params.get('tag') ?? '')
+    return tag ? { ...empty, tags: [tag] } : empty
+  })
   const [tagDraft, setTagDraft] = useState('')
   const [titleError, setTitleError] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)

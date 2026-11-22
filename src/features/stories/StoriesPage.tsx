@@ -1,13 +1,14 @@
 import { Download, Plus, Search, Upload } from 'lucide-react'
 import { useId, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useSearchParams } from 'react-router'
 import { dateStamp, downloadJson, readJsonFile } from '../../app/files'
 import { formatDate } from '../../app/format'
 import { getRepositories } from '../../storage/repositories'
 import { useStories } from '../../storage/hooks'
-import { Button, Card, Chip, Input, Notice, ToggleChip, buttonClasses, iconPropsSm } from '../../ui'
+import { Button, Card, Chip, Input, Notice, SegmentedControl, ToggleChip, buttonClasses, iconPropsSm } from '../../ui'
 import { PageHeader } from '../../ui/PageHeader'
+import { CoverageView } from './CoverageView'
 
 export default function StoriesPage() {
   const { t, i18n } = useTranslation()
@@ -17,6 +18,9 @@ export default function StoriesPage() {
   const [activeTags, setActiveTags] = useState<string[]>([])
   const [message, setMessage] = useState<{ tone: 'success' | 'danger'; text: string }>()
   const fileInput = useRef<HTMLInputElement>(null)
+  // The view lives in the URL, so the coverage map can be linked to and survives going back.
+  const [params, setParams] = useSearchParams()
+  const view = params.get('view') === 'coverage' ? 'coverage' : 'list'
 
   const tags = useMemo(() => [...new Set((stories ?? []).flatMap((s) => s.tags))].sort(), [stories])
 
@@ -92,6 +96,22 @@ export default function StoriesPage() {
       )}
 
       {stories && stories.length > 0 && (
+        <div className="mb-8">
+          <SegmentedControl
+            aria-label={t('stories.views.label')}
+            value={view}
+            onChange={(v) => setParams(v === 'coverage' ? { view: v } : {}, { replace: true })}
+            options={[
+              { value: 'list', label: t('stories.views.list') },
+              { value: 'coverage', label: t('stories.views.coverage') },
+            ]}
+          />
+        </div>
+      )}
+
+      {stories && stories.length > 0 && view === 'coverage' && <CoverageView stories={stories} />}
+
+      {stories && stories.length > 0 && view === 'list' && (
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-4">
             <div className="relative">

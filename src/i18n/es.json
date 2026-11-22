@@ -224,7 +224,24 @@
       "deleteBody": "Las sesiones anteriores conservan sus preguntas y transcripciones.",
       "notFound": "Esta historia ya no existe."
     },
-    "charCount": "{{count}}/{{max}}"
+    "charCount": "{{count}}/{{max}}",
+    "views": {
+      "label": "Vista",
+      "list": "Lista",
+      "coverage": "Cobertura"
+    },
+    "coverage": {
+      "missingTitle_one": "{{count}} competencia sin historia",
+      "missingTitle_other": "{{count}} competencias sin historia",
+      "missingHint": "Los entrevistadores preguntan mucho sobre ellas. Escribe una historia para cada una, empezando por las más ligadas al puesto que buscas.",
+      "allCovered": "Cada competencia tiene al menos una historia.",
+      "caption": "Qué competencias cubre cada historia",
+      "story": "Historia",
+      "total": "Historias",
+      "covered": "cubre",
+      "notCovered": "no cubre",
+      "hint": "Según las etiquetas de cada historia. Las etiquetas que creaste tú no aparecen aquí."
+    }
   },
   "newInterview": {
     "title": "Nueva entrevista",
@@ -418,5 +435,17 @@
     "answers_other": "{{count}} respuestas",
     "average": "Promedio {{avg}}",
     "noScore": "Sin nota"
+  },
+  "competencies": {
+    "conflict": "Conflicto",
+    "leadership": "Liderazgo",
+    "failure": "Fracaso",
+    "ownership": "Ownership",
+    "teamwork": "Trabajo en equipo",
+    "impact": "Impacto",
+    "ambiguity": "Ambigüedad",
+    "deadline": "Plazo ajustado",
+    "mentoring": "Mentoría",
+    "technical": "Técnica"
   }
 }

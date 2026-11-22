@@ -224,7 +224,24 @@
       "deleteBody": "Past sessions keep their questions and transcripts.",
       "notFound": "This story doesn't exist anymore."
     },
-    "charCount": "{{count}}/{{max}}"
+    "charCount": "{{count}}/{{max}}",
+    "views": {
+      "label": "View",
+      "list": "List",
+      "coverage": "Coverage"
+    },
+    "coverage": {
+      "missingTitle_one": "{{count}} competency without a story",
+      "missingTitle_other": "{{count}} competencies without a story",
+      "missingHint": "Interviewers ask about these often. Write a story for each one, starting with the ones closest to the role you're going for.",
+      "allCovered": "Every competency has at least one story.",
+      "caption": "Which competencies each story covers",
+      "story": "Story",
+      "total": "Stories",
+      "covered": "covered",
+      "notCovered": "not covered",
+      "hint": "Based on each story's tags. Tags you created yourself don't appear here."
+    }
   },
   "newInterview": {
     "title": "New interview",
@@ -418,5 +435,17 @@
     "answers_other": "{{count}} answers",
     "average": "Average {{avg}}",
     "noScore": "No score"
+  },
+  "competencies": {
+    "conflict": "Conflict",
+    "leadership": "Leadership",
+    "failure": "Failure",
+    "ownership": "Ownership",
+    "teamwork": "Teamwork",
+    "impact": "Impact",
+    "ambiguity": "Ambiguity",
+    "deadline": "Tight deadline",
+    "mentoring": "Mentoring",
+    "technical": "Technical"
   }
 }
