@@ -490,6 +490,12 @@ export class InterviewEngine {
       this.set({ evaluationProgress: { done, total: pending.length } })
     }
 
+    // An "answer again" attempt has one question: the report compares it with the original instead.
+    if (this.session.retryOf) {
+      const session = await this.deps.repos.sessions.update(this.session.id, { status: 'finished' })
+      return this.set({ state: 'finished', session, evaluationProgress: undefined })
+    }
+
     const answers = this.snap.turns
       .filter((t): t is Turn & { feedback: Feedback } => !!t.feedback)
       .map((t) => ({ question: t.question, kind: t.kind, feedback: t.feedback }))

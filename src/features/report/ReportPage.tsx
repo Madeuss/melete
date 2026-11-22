@@ -5,10 +5,11 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { formatDate, formatNumber } from '../../app/format'
 import { listeningSummary, sessionAverage } from '../../interview/stats'
 import type { Turn } from '../../schemas'
-import { useLlmCalls, useSession, useTurns } from '../../storage/hooks'
+import { useLlmCalls, useRetries, useSession, useTurns } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
 import { Button, Card, Dialog, Notice, buttonClasses, iconPropsSm } from '../../ui'
 import { FeedbackView } from './FeedbackView'
+import { RetryAttempts, RetryButton, RetryComparison } from './RetryViews'
 import { UsageSection } from './UsageSection'
 
 function groupTurns(turns: Turn[]): Array<{ main: Turn; followUps: Turn[] }> {
@@ -76,6 +77,10 @@ export default function ReportPage() {
   const session = useSession(sessionId)
   const turns = useTurns(sessionId)
   const llmCalls = useLlmCalls(sessionId)
+  // "Answer again": attempts made from this session, or (for an attempt) the original it retries.
+  const retries = useRetries(sessionId)
+  const originalSession = useSession(session?.retryOf?.sessionId)
+  const originalTurns = useTurns(session?.retryOf?.sessionId)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   if (session === undefined || turns === undefined) return null
@@ -95,6 +100,7 @@ export default function ReportPage() {
   const { config, summary } = session
   const average = sessionAverage(turns)
   const groups = groupTurns(turns)
+  const retriedTurn = session.retryOf ? originalTurns?.find((x) => x.id === session.retryOf!.turnId) : undefined
 
   async function onDelete() {
     await getRepositories().sessions.remove(session!.id)
@@ -109,7 +115,7 @@ export default function ReportPage() {
       </Link>
 
       <header className="mb-10 flex flex-col gap-2">
-        <h1 className="text-2xl">{t('report.title')}</h1>
+        <h1 className="text-2xl">{session.retryOf ? t('report.retry.title') : t('report.title')}</h1>
         <p className="text-base text-text-muted">
           {t('report.meta', {
             type: t(`newInterview.types.${config.type}`),
@@ -159,6 +165,10 @@ export default function ReportPage() {
           </Card>
         )}
 
+        {originalSession && retriedTurn && turns[0] && (
+          <RetryComparison original={originalSession} before={retriedTurn} after={turns[0]} />
+        )}
+
         {config.difficulty === 'hard' && <ListeningCard turns={turns} />}
 
         {groups.length === 0 && <p className="text-text-muted">{t('report.noAnswers')}</p>}
@@ -171,6 +181,12 @@ export default function ReportPage() {
               <AidsLine turn={g.main} />
             </div>
             <FeedbackView turn={g.main} feedback={g.main.feedback} showAnswer />
+            {!session.retryOf && session.status !== 'in-progress' && (
+              <div className="flex flex-col items-start gap-4">
+                <RetryAttempts turn={g.main} attempts={retries?.get(g.main.id) ?? []} />
+                <RetryButton original={session} turn={g.main} />
+              </div>
+            )}
             {g.followUps.map((f) => (
               <div key={f.id} className="flex flex-col gap-6 rounded-card border border-border p-6">
                 <div className="flex flex-col gap-1">

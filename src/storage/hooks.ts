@@ -1,5 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { sessionAverage } from '../interview/stats'
+import type { Session, Turn } from '../schemas'
 import { getRepositories } from './repositories'
 
 /*
@@ -34,6 +35,26 @@ export function useTurns(sessionId: string | undefined) {
 
 export function useLlmCalls(sessionId: string | undefined) {
   return useLiveQuery(() => (sessionId ? getRepositories().llmCalls.listBySession(sessionId) : []), [sessionId])
+}
+
+/**
+ * "Answer again" attempts made from a session, grouped by the original turn, oldest first,
+ * each with its answer (when there is one yet).
+ */
+export function useRetries(sessionId: string | undefined) {
+  return useLiveQuery(async () => {
+    const byTurn = new Map<string, Array<{ session: Session; turn?: Turn }>>()
+    if (!sessionId) return byTurn
+    const repos = getRepositories()
+    const retries = (await repos.sessions.list()).filter((s) => s.retryOf?.sessionId === sessionId).reverse()
+    for (const session of retries) {
+      const [turn] = await repos.turns.listBySession(session.id)
+      const list = byTurn.get(session.retryOf!.turnId) ?? []
+      list.push({ session, turn })
+      byTurn.set(session.retryOf!.turnId, list)
+    }
+    return byTurn
+  }, [sessionId])
 }
 
 /** Sessions with answer count and average score, newest first. */

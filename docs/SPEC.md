@@ -453,6 +453,18 @@ Mostra quais competências ainda não têm história, pra saber o que preparar e
 
 - [x] Feito em 22/11/2026.
 
+### Refazer a pergunta (pedido em 22/11/2026)
+
+Responder de novo uma pergunta e ver o antes e depois lado a lado: é o ciclo de prática.
+
+- No relatório de uma sessão terminada (ou abandonada), cada pergunta principal tem "Responder de novo".
+- Isso cria uma sessão nova (`retryOf: { sessionId, turnId }`) com só aquela pergunta, a mesma configuração da original (tipo, cargo, senioridade, dificuldade), sem follow-up e com feedback logo depois de responder. A tentativa não gera resumo da sessão.
+- O relatório da tentativa mostra "Antes e depois": notas de cada parte do STAR, clareza e média, palavras, palavras por minuto e palavras de preenchimento, com a mudança de cada uma (seta na direção da mudança, cor pela melhora), e as duas respostas lado a lado. Dá pra tentar mais uma vez dali.
+- No relatório original, cada pergunta lista as tentativas feitas, com a média de antes e de depois.
+- No histórico, a tentativa aparece como "Pergunta refeita".
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

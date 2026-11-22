@@ -419,6 +419,28 @@
         "evaluateAnswer": "Evaluar las respuestas",
         "summarizeSession": "Resumen final"
       }
+    },
+    "retry": {
+      "title": "Respondiendo de nuevo",
+      "button": "Responder de nuevo",
+      "again": "Intentar otra vez",
+      "attempts_one": "{{count}} nuevo intento",
+      "attempts_other": "{{count}} nuevos intentos",
+      "attemptLine": "{{date}}: promedio {{before}} → {{after}}"
+    },
+    "compare": {
+      "title": "Antes y después",
+      "from": "Comparado con tu respuesta del {{date}}.",
+      "openOriginal": "Abrir esa entrevista",
+      "item": "Ítem",
+      "before": "Antes",
+      "after": "Después",
+      "change": "Cambio",
+      "average": "Promedio",
+      "words": "Palabras",
+      "wpm": "Palabras por minuto",
+      "better": "mejoró {{diff}}",
+      "worse": "empeoró {{diff}}"
     }
   },
   "history": {
@@ -434,7 +456,8 @@
     "answers_one": "{{count}} respuesta",
     "answers_other": "{{count}} respuestas",
     "average": "Promedio {{avg}}",
-    "noScore": "Sin nota"
+    "noScore": "Sin nota",
+    "retry": "Pregunta respondida de nuevo"
   },
   "competencies": {
     "conflict": "Conflicto",

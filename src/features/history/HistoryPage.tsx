@@ -36,7 +36,9 @@ export default function HistoryPage() {
                 >
                   <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-base font-semibold">{t(`newInterview.types.${session.config.type}`)}</h2>
+                      <h2 className="text-base font-semibold">
+                        {session.retryOf ? t('history.retry') : t(`newInterview.types.${session.config.type}`)}
+                      </h2>
                       {session.status !== 'finished' && <Chip>{t(`history.status.${session.status}`)}</Chip>}
                     </div>
                     <p className="truncate text-sm text-text-muted">

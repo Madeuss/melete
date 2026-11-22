@@ -51,5 +51,10 @@ export const Session = z.object({
   status: SessionStatus,
   plannedQuestions: z.array(PlannedQuestion),
   summary: SessionSummary.optional(),
+  /**
+   * Set when this session is a new attempt at one question of an earlier session ("answer again").
+   * It has that single question, no follow-ups and no summary; the report compares the two answers.
+   */
+  retryOf: z.object({ sessionId: z.string(), turnId: z.string() }).optional(),
 })
 export type Session = z.infer<typeof Session>

@@ -419,6 +419,28 @@
         "evaluateAnswer": "Evaluating answers",
         "summarizeSession": "Final summary"
       }
+    },
+    "retry": {
+      "title": "Answering again",
+      "button": "Answer again",
+      "again": "Try once more",
+      "attempts_one": "{{count}} new attempt",
+      "attempts_other": "{{count}} new attempts",
+      "attemptLine": "{{date}}: average {{before}} → {{after}}"
+    },
+    "compare": {
+      "title": "Before and after",
+      "from": "Compared with your answer from {{date}}.",
+      "openOriginal": "Open that interview",
+      "item": "Item",
+      "before": "Before",
+      "after": "After",
+      "change": "Change",
+      "average": "Average",
+      "words": "Words",
+      "wpm": "Words per minute",
+      "better": "better by {{diff}}",
+      "worse": "worse by {{diff}}"
     }
   },
   "history": {
@@ -434,7 +456,8 @@
     "answers_one": "{{count}} answer",
     "answers_other": "{{count}} answers",
     "average": "Average {{avg}}",
-    "noScore": "No score"
+    "noScore": "No score",
+    "retry": "Question answered again"
   },
   "competencies": {
     "conflict": "Conflict",

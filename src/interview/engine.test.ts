@@ -220,6 +220,28 @@ describe('InterviewEngine', () => {
     expect(calls.every((c) => c.usage === undefined)).toBe(true)
   })
 
+  it('an "answer again" attempt asks its one question and finishes without a summary', async () => {
+    const t = await setup()
+    const retry = await t.repos.sessions.create({
+      config: { ...baseConfig, questionCount: 1, followUps: false },
+      model: 'fake-model',
+      language: 'en',
+      status: 'in-progress',
+      plannedQuestions: [{ text: 'Tell me about a conflict.', competency: 'conflict' }],
+      retryOf: { sessionId: t.session.id, turnId: 'original-turn' },
+    })
+    await t.engine.open(retry.id)
+    expect(t.engine.getSnapshot().current?.text).toBe('Tell me about a conflict.')
+    await typeAnswer(t.engine, 'This time I explained the situation, my task, what I did and the result.')
+    expect(t.engine.getSnapshot().state).toBe('showingFeedback')
+    await t.engine.next()
+
+    const s = t.engine.getSnapshot()
+    expect(s.state).toBe('finished')
+    expect(s.session?.summary).toBeUndefined()
+    expect(t.kinds()).toEqual(['evaluate']) // no planning, no follow-up, no summary
+  })
+
   it('with feedback at the end, evaluates everything before the summary', async () => {
     const t = await setup({ feedbackTiming: 'end', followUps: false })
     await t.engine.open(t.session.id)
