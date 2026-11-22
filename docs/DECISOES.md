@@ -36,3 +36,20 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 29 | Encerrar antes | Botão "encerrar agora" na sala: avalia o que já foi respondido e gera o resumo com isso. | — |
 | 30 | Gravação | O microfone só abre quando você aperta o botão de gravar (não começa sozinho depois que a pergunta é lida). | Começar a ouvir automaticamente depois da pergunta. |
 | 31 | Evals | 8 respostas de exemplo com nota esperada (minha avaliação: confira se concorda). O script mede erro médio, % dentro da tolerância, acerto do "respondeu a pergunta" e se a resposta melhorada inventou números. Keys só por variável de ambiente; `evals/providers.json` e `evals/results/` ficam fora do git. | — |
+| 32 | Idioma do README | README em inglês (projeto open source); docs internas (SPEC, este arquivo) em português. | README em português. |
+| 33 | CSP | O build de produção tem uma Content-Security-Policy em `<meta>`: só scripts do próprio app; `connect-src *` porque cada um aponta pra qualquer URL (inclusive `http://localhost`). | — |
+| 34 | Gráfico de notas | As barras de 0–5 usam o rosa (`brand`), como o spec permite pra gráficos. Com muitas respostas o relatório fica bem rosa; se achar demais, dá pra trocar pra `text` neutro e deixar o rosa só na nota geral. | Barras neutras. |
+
+## O que ficou pra você
+
+1. **Revisar o visual** (o spec pedia pra parar depois do styleguide): `yarn dev` e abrir `http://localhost:5173/#/styleguide`.
+2. **Deploy**: eu não liguei o GitHub Pages (publicar é decisão sua, e Pages em repo privado depende do plano).
+   O workflow já está pronto. Pra publicar:
+   - Tornar o repo público (ou ter plano que permita Pages em privado);
+   - Settings → Pages → Source: **GitHub Actions**;
+   - Settings → Secrets and variables → Actions → Variables: `PAGES_ENABLED` = `true`;
+   - O próximo push na `main` publica em `https://madeuss.github.io/melete/`.
+   - Domínio (getmelete.dev ou usemelete.app) continua em aberto no SPEC.
+3. **Testar com key de verdade** em pelo menos um provedor (eu testei tudo com um servidor falso compatível com OpenAI).
+4. **Testar voz de verdade** (microfone + Web Speech + vozes), inclusive no Linux, como o spec pede.
+5. **Conferir as notas esperadas** das respostas de exemplo em `evals/fixtures/answers.json` e rodar `yarn evals`.

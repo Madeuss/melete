@@ -407,23 +407,23 @@ As revisões do Mat depois do MVP entram aqui, com data e o que mudar. Quando um
 
 Na ordem em que fazem sentido. Cada uma termina com teste ou com a tela funcionando.
 
-- [ ] Criar o projeto (Vite, React, TS strict, Zod, Dexie, Vitest, Tailwind, react-i18next) com o LICENSE AGPL-3.0 e o `CLAUDE.md` apontando pra `docs/SPEC.md`.
-- [ ] Tokens de cor e tipografia (claro e escuro), componentes base de `src/ui/` e a página `/styleguide`, seguindo a Direção visual. Parar aqui pro Mat revisar antes das telas.
-- [ ] Schemas Zod de `schemas/` e o banco Dexie com os repositórios.
-- [ ] Cliente LLM compatível com OpenAI, presets e "testar conexão".
-- [ ] `structuredOutput.ts`: os três modos de JSON, validação e até 2 novas tentativas, com testes.
-- [ ] Verificar CORS de cada preset de verdade no navegador e registrar no preset.
-- [ ] Tela de Configurações.
-- [ ] Banco de histórias: CRUD, tags, importar e exportar JSON.
-- [ ] `metrics.ts` com testes.
-- [ ] Prompts `v1` das quatro chamadas.
-- [ ] `engine.ts` (máquina de estados) testado com `FakeLlm`.
-- [ ] STT Web Speech + resposta digitada; TTS do navegador. Testar no Linux.
-- [ ] Telas Nova entrevista e Sala de entrevista.
-- [ ] Relatório da sessão e Histórico.
-- [ ] `evals/`: 5 a 10 respostas de exemplo e o script comparando provedores.
-- [ ] README: o que é, BYOK, privacidade (onde ficam key e dados, aviso da Web Speech), como rodar com Ollama de graça.
-- [ ] Deploy estático.
+- [x] Criar o projeto (Vite, React, TS strict, Zod, Dexie, Vitest, Tailwind, react-i18next) com o LICENSE AGPL-3.0 e o `CLAUDE.md` apontando pra `docs/SPEC.md`.
+- [x] Tokens de cor e tipografia (claro e escuro), componentes base de `src/ui/` e a página `/styleguide`, seguindo a Direção visual. Parar aqui pro Mat revisar antes das telas.
+- [x] Schemas Zod de `schemas/` e o banco Dexie com os repositórios.
+- [x] Cliente LLM compatível com OpenAI, presets e "testar conexão".
+- [x] `structuredOutput.ts`: os três modos de JSON, validação e até 2 novas tentativas, com testes.
+- [ ] Verificar CORS de cada preset de verdade no navegador e registrar no preset. *(Preflight real feito e registrado em 22/11; falta uma chamada com key de verdade em cada provedor e testar Ollama/LM Studio.)*
+- [x] Tela de Configurações.
+- [x] Banco de histórias: CRUD, tags, importar e exportar JSON.
+- [x] `metrics.ts` com testes.
+- [x] Prompts `v1` das quatro chamadas.
+- [x] `engine.ts` (máquina de estados) testado com `FakeLlm`.
+- [ ] STT Web Speech + resposta digitada; TTS do navegador. Testar no Linux. *(Implementado e testado com mocks; falta testar voz de verdade, inclusive no Linux.)*
+- [x] Telas Nova entrevista e Sala de entrevista.
+- [x] Relatório da sessão e Histórico.
+- [x] `evals/`: 5 a 10 respostas de exemplo e o script comparando provedores.
+- [x] README: o que é, BYOK, privacidade (onde ficam key e dados, aviso da Web Speech), como rodar com Ollama de graça.
+- [ ] Deploy estático. *(Workflow pronto em `.github/workflows/ci.yml`; falta ligar o GitHub Pages, ver docs/DECISOES.md.)*
 
 ## Decidido
 
