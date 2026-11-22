@@ -1,3 +1,4 @@
+import { beginSpeech, endSpeech, isCurrentSpeech } from './activeSpeech'
 import type { TextToSpeech } from './types'
 
 export function isBrowserTtsSupported(): boolean {
@@ -31,8 +32,9 @@ export function splitSentences(text: string): string[] {
   return (text.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) ?? [text]).map((s) => s.trim()).filter(Boolean)
 }
 
-/** speechSynthesis is one shared queue: a newer speak() (from any instance) stops older ones. */
-let currentSpeech = 0
+const stopBrowserSpeech = () => {
+  if (isBrowserTtsSupported()) speechSynthesis.cancel()
+}
 
 export class BrowserTts implements TextToSpeech {
   private readonly lang: string
@@ -48,14 +50,14 @@ export class BrowserTts implements TextToSpeech {
 
   async speak(text: string): Promise<void> {
     if (!isBrowserTtsSupported() || !text.trim()) return
-    const speech = (this.speech = ++currentSpeech)
+    const speech = (this.speech = beginSpeech(stopBrowserSpeech))
     speechSynthesis.cancel()
     const voices = await loadVoices()
     const voice =
       voices.find((v) => v.name === this.voiceName) ?? voicesFor(voices, this.lang.slice(0, 2))[0] ?? undefined
 
     for (const sentence of splitSentences(text)) {
-      if (speech !== currentSpeech) return
+      if (!isCurrentSpeech(speech)) return
       await new Promise<void>((resolve) => {
         // Chrome sometimes never fires onend (and never does without voices): cap the wait
         // at a generous estimate of the sentence length so the interview can't get stuck.
@@ -77,10 +79,8 @@ export class BrowserTts implements TextToSpeech {
   }
 
   cancel(): void {
-    // Only stop what this instance started; another one may be speaking by now.
-    if (this.speech !== currentSpeech) return
-    currentSpeech++
-    if (isBrowserTtsSupported()) speechSynthesis.cancel()
+    // Only stops what this instance started; another reading may have taken over by now.
+    endSpeech(this.speech)
   }
 }
 
