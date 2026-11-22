@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { formatDate, formatNumber } from '../../app/format'
-import { sessionAverage } from '../../interview/stats'
+import { listeningSummary, sessionAverage } from '../../interview/stats'
 import type { Turn } from '../../schemas'
 import { useSession, useTurns } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
@@ -20,6 +20,38 @@ function groupTurns(turns: Turn[]): Array<{ main: Turn; followUps: Turn[] }> {
     }
   }
   return groups
+}
+
+/** "Read the text · heard it again 2×" under a question, when help was used. */
+function AidsLine({ turn }: { turn: Turn }) {
+  const { t } = useTranslation()
+  const parts = [
+    turn.aids?.textShown ? t('report.aids.readText') : undefined,
+    turn.aids?.repeats ? t('report.aids.repeated', { count: turn.aids.repeats }) : undefined,
+  ].filter(Boolean)
+  if (!parts.length) return null
+  return <p className="text-caption text-text-subtle">{parts.join(' · ')}</p>
+}
+
+/** Hard sessions: how close the candidate got to answering by ear alone, as in a real interview. */
+function ListeningCard({ turns }: { turns: Turn[] }) {
+  const { t } = useTranslation()
+  const { questions, textShown, repeats } = listeningSummary(turns)
+  if (questions === 0) return null
+  const usedHelp = textShown > 0 || repeats > 0
+  return (
+    <Notice tone={usedHelp ? 'info' : 'success'} title={t('report.listening.title')}>
+      <p>
+        {usedHelp
+          ? [
+              t('report.listening.textShown', { count: textShown, total: questions }),
+              t('report.listening.repeats', { count: repeats }),
+            ].join(' ')
+          : t('report.listening.noHelp')}
+      </p>
+      {usedHelp && <p className="mt-1">{t('report.listening.tip')}</p>}
+    </Notice>
+  )
 }
 
 function SummaryList({ title, items }: { title: string; items: string[] }) {
@@ -82,6 +114,7 @@ export default function ReportPage() {
             role: config.role,
             seniority: t(`newInterview.seniorities.${config.seniority}`),
           })}
+          {config.difficulty === 'hard' && ` · ${t('newInterview.difficulties.hard')}`}
         </p>
         <p className="text-sm text-text-subtle">
           {t('report.metaModel', { date: formatDate(session.createdAt, i18n.language, true), model: session.model })}
@@ -124,6 +157,8 @@ export default function ReportPage() {
           </Card>
         )}
 
+        {config.difficulty === 'hard' && <ListeningCard turns={turns} />}
+
         {groups.length === 0 && <p className="text-text-muted">{t('report.noAnswers')}</p>}
 
         {groups.map((g, i) => (
@@ -131,6 +166,7 @@ export default function ReportPage() {
             <div className="flex flex-col gap-2">
               <p className="text-sm font-medium text-text-muted">{t('report.question', { n: i + 1 })}</p>
               <h2 className="text-xl">{g.main.question}</h2>
+              <AidsLine turn={g.main} />
             </div>
             <FeedbackView turn={g.main} feedback={g.main.feedback} showAnswer />
             {g.followUps.map((f) => (
@@ -138,6 +174,7 @@ export default function ReportPage() {
                 <div className="flex flex-col gap-1">
                   <p className="text-sm font-medium text-text-muted">{t('room.followUp')}</p>
                   <h3 className="text-lg">{f.question}</h3>
+                  <AidsLine turn={f} />
                 </div>
                 <FeedbackView turn={f} feedback={f.feedback} showAnswer />
               </div>

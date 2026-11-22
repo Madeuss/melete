@@ -150,7 +150,9 @@
       "accentUs": "Inglés americano",
       "accentGb": "Inglés británico",
       "female": "femenina",
-      "male": "masculina"
+      "male": "masculina",
+      "kokoroDownload": "Descargar Kokoro (110 MB)",
+      "kokoroNotDownloaded": "Hasta que descargues Kokoro, las preguntas se leen con la voz del navegador."
     },
     "language": {
       "title": "Idioma",
@@ -219,7 +221,8 @@
       "deleteTitle": "¿Borrar esta historia?",
       "deleteBody": "Las sesiones anteriores conservan sus preguntas y transcripciones.",
       "notFound": "Esta historia ya no existe."
-    }
+    },
+    "charCount": "{{count}}/{{max}}"
   },
   "newInterview": {
     "title": "Nueva entrevista",
@@ -260,13 +263,23 @@
     "languages": {
       "en": "inglés",
       "pt": "portugués"
-    }
+    },
+    "difficulty": "Dificultad",
+    "difficulties": {
+      "standard": "Normal",
+      "hard": "Difícil"
+    },
+    "difficultyHints": {
+      "standard": "La pregunta aparece escrita y puedes responder hablando o escribiendo.",
+      "hard": "Más cerca de una entrevista real: solo por voz, la pregunta aparece borrosa (puedes mostrarla si la necesitas) y puedes pedir en voz alta que la repitan."
+    },
+    "hardNeedsVoice": "El modo difícil necesita respuestas habladas y preguntas leídas en voz alta. Actívalos en Configuración."
   },
   "room": {
     "leave": "Salir",
     "leaveTitle": "¿Salir de la entrevista?",
     "leaveBody": "Las respuestas ya enviadas quedan guardadas. La sesión quedará como abandonada.",
-    "stay": "Seguir",
+    "stay": "Seguir con la entrevista",
     "finishNow": "Terminar y ver informe",
     "progress": "Pregunta {{current}} de {{total}}",
     "followUp": "Seguimiento",
@@ -299,7 +312,10 @@
     "notFound": "Esta entrevista no existe.",
     "openSettings": "Abrir ajustes",
     "preparingVoice": "Preparando la voz… {{percent}}%",
-    "preparingVoiceShort": "Preparando la voz…"
+    "preparingVoiceShort": "Preparando la voz…",
+    "questionHidden": "La pregunta está oculta: escúchala o usa \"Mostrar la pregunta\".",
+    "showQuestion": "Mostrar la pregunta",
+    "hardHint": "¿No la entendiste? Pide en voz alta que la repitan, como harías en una entrevista."
   },
   "feedback": {
     "star": {
@@ -344,7 +360,22 @@
     "delete": "Borrar sesión",
     "deleteTitle": "¿Borrar esta sesión?",
     "deleteBody": "Sus preguntas, transcripciones y feedback se eliminarán de este navegador.",
-    "notFound": "Esta sesión ya no existe."
+    "notFound": "Esta sesión ya no existe.",
+    "aids": {
+      "readText": "Leyó el texto",
+      "repeated": "La escuchó de nuevo {{count}}×"
+    },
+    "listening": {
+      "title": "Entendiendo las preguntas",
+      "textShown_zero": "No leíste el texto de ninguna pregunta.",
+      "textShown_one": "Leíste el texto de {{count}} de {{total}} preguntas.",
+      "textShown_other": "Leíste el texto de {{count}} de {{total}} preguntas.",
+      "repeats_zero": "No pediste que repitieran ninguna.",
+      "repeats_one": "Escuchaste una pregunta de nuevo {{count}} vez.",
+      "repeats_other": "Escuchaste preguntas de nuevo {{count}} veces.",
+      "noHelp": "Entendiste todas las preguntas solo escuchando, como en una entrevista real.",
+      "tip": "En una entrevista real no hay texto en pantalla. Pedir que repitan de vez en cuando es normal; el objetivo es entender todo de oído."
+    }
   },
   "history": {
     "title": "Historial",

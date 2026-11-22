@@ -7,16 +7,26 @@
  *            → evaluating → showingFeedback → asking next … → summarizing → finished
  *   plus abandoned (user left) and error (a call failed; retry() re-runs the step).
  *
+ * A short spoken reply like "could you repeat that?" isn't saved as an answer: the interviewer
+ * says so and asks the same question again.
+ *
  * Every answer is saved as soon as it's submitted, so leaving or reloading loses nothing.
  */
 import { isAbortError } from '../providers/llm/errors'
 import type { LlmProvider } from '../providers/llm/types'
 import { SttError, type SpeechToText } from '../providers/stt/types'
 import type { TextToSpeech } from '../providers/tts/types'
-import type { Feedback, PlannedQuestion, Session, Story, Turn, UiLanguage } from '../schemas'
+import type { Feedback, ListeningAids, PlannedQuestion, Session, Story, Turn, UiLanguage } from '../schemas'
 import type { SessionsRepo, StoriesRepo, TurnsRepo } from '../storage/repositories'
-import { callDecideFollowUp, callEvaluateAnswer, callPlanQuestions, callSummarizeSession } from './llmCalls'
-import { computeMetrics } from './metrics'
+import {
+  callClassifyReply,
+  callDecideFollowUp,
+  callEvaluateAnswer,
+  callPlanQuestions,
+  callSummarizeSession,
+} from './llmCalls'
+import { computeMetrics, countWords } from './metrics'
+import { MAX_REPEAT_REQUEST_WORDS, REPEAT_LEAD_IN, looksLikeRepeatRequest } from './repeatRequest'
 
 export type EngineState =
   | 'idle'
@@ -53,6 +63,8 @@ export interface EngineSnapshot {
   partial: string
   /** Transcript under review, editable before sending. */
   draft: string
+  /** Whether the current question's text was revealed (it starts blurred on hard difficulty). */
+  questionRevealed: boolean
   /** Turns saved so far, in order. */
   turns: Turn[]
   /** Feedback for the question just answered (per-answer timing). */
@@ -83,6 +95,7 @@ export class InterviewEngine {
     recording: false,
     partial: '',
     draft: '',
+    questionRevealed: false,
     turns: [],
   }
   private readonly listeners = new Set<Listener>()
@@ -94,6 +107,8 @@ export class InterviewEngine {
   /** Duration of the voice answer under review; undefined for typed answers. */
   private answerDurationMs?: number
   private stories = new Map<string, Story>()
+  /** Help used on the current question, saved with its answer. */
+  private aids: ListeningAids = { repeats: 0, textShown: false }
 
   constructor(deps: EngineDeps) {
     this.deps = deps
@@ -212,6 +227,7 @@ export class InterviewEngine {
   }
 
   private async ask(questionIndex: number, current: CurrentQuestion) {
+    this.aids = { repeats: 0, textShown: false }
     this.set({
       state: 'asking',
       questionIndex,
@@ -220,6 +236,7 @@ export class InterviewEngine {
       partial: '',
       lastFeedback: undefined,
       sttError: undefined,
+      questionRevealed: false,
     })
     this.answerDurationMs = undefined
     await this.deps.tts.speak(current.text)
@@ -240,8 +257,16 @@ export class InterviewEngine {
   async repeatQuestion() {
     const current = this.snap.current
     if (!current || (this.snap.state !== 'listening' && this.snap.state !== 'reviewing')) return
+    this.aids.repeats++
     this.deps.tts.cancel()
     await this.deps.tts.speak(current.text)
+  }
+
+  /** Shows the question as text (it starts blurred on hard difficulty). */
+  revealQuestionText() {
+    if (!this.snap.current || this.snap.questionRevealed) return
+    this.aids.textShown = true
+    this.set({ questionRevealed: true })
   }
 
   // ── answering ────────────────────────────────────────────────────────
@@ -300,6 +325,12 @@ export class InterviewEngine {
     if (!transcript || !current) return
     if (this.snap.recording) this.deps.stt.abort()
 
+    if (!opts.typed && (await this.isRepeatRequest(current.text, transcript))) {
+      if (this.stopped) return
+      return this.repeatOnRequest(current)
+    }
+    if (this.stopped) return
+
     const duration = opts.typed ? undefined : this.answerDurationMs
     const turn = await this.deps.repos.turns.add({
       sessionId: this.session.id,
@@ -311,10 +342,34 @@ export class InterviewEngine {
       transcript,
       ...(duration !== undefined ? { answerDurationMs: duration } : {}),
       metrics: computeMetrics(transcript, this.session.language, duration),
+      aids: { ...this.aids },
     })
     if (this.stopped) return
     this.set({ turns: [...this.snap.turns, turn], draft: '', recording: false })
     await this.run(() => this.afterAnswer(turn))
+  }
+
+  /**
+   * Whether a spoken reply asks to hear the question again. Common phrasings are matched
+   * locally; other short replies ask the model. If that call fails, it counts as an answer.
+   */
+  private async isRepeatRequest(question: string, transcript: string): Promise<boolean> {
+    if (countWords(transcript) > MAX_REPEAT_REQUEST_WORDS) return false
+    if (looksLikeRepeatRequest(transcript)) return true
+    this.set({ state: 'decidingFollowUp' }) // "listening to your answer…" while the model reads it
+    try {
+      return (await callClassifyReply(this.deps.llm, { question, transcript }, this.abort.signal)) === 'repeat'
+    } catch {
+      return false
+    }
+  }
+
+  private async repeatOnRequest(current: CurrentQuestion) {
+    this.aids.repeats++
+    this.answerDurationMs = undefined
+    this.set({ state: 'asking', draft: '', partial: '', recording: false })
+    await this.deps.tts.speak(`${REPEAT_LEAD_IN[this.session.language]} ${current.text}`)
+    if (!this.stopped && this.snap.state === 'asking') this.set({ state: 'listening' })
   }
 
   // ── after an answer ──────────────────────────────────────────────────

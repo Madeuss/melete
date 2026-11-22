@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Turn } from '../schemas'
-import { sessionAverage } from './stats'
+import { listeningSummary, sessionAverage } from './stats'
 
 const turn = (scores?: number[]): Turn => ({
   id: 'x',
@@ -32,5 +32,16 @@ describe('sessionAverage', () => {
   it('is undefined without evaluations', () => {
     expect(sessionAverage([turn()])).toBeUndefined()
     expect(sessionAverage([])).toBeUndefined()
+  })
+})
+
+describe('listeningSummary', () => {
+  it('counts revealed questions and repeats, treating old turns as no help', () => {
+    const turns = [
+      { ...turn(), aids: { repeats: 2, textShown: true } },
+      { ...turn(), aids: { repeats: 1, textShown: false } },
+      turn(),
+    ]
+    expect(listeningSummary(turns)).toEqual({ questions: 3, textShown: 1, repeats: 3 })
   })
 })

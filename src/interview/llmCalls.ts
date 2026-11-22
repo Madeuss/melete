@@ -2,17 +2,19 @@ import { generateStructured } from '../providers/llm/structuredOutput'
 import type { LlmProvider } from '../providers/llm/types'
 import type { Feedback, PlannedQuestion, SessionSummary } from '../schemas'
 import {
+  classifyReply,
   decideFollowUp,
   evaluateAnswer,
   planQuestions,
   summarizeSession,
+  type ClassifyReplyInput,
   type DecideFollowUpInput,
   type EvaluateAnswerInput,
   type PlanQuestionsInput,
   type SummarizeSessionInput,
 } from './prompts'
 
-/** The four LLM calls of a session, each with structured output and validation. */
+/** The LLM calls of a session, each with structured output and validation. */
 
 export async function callPlanQuestions(
   llm: LlmProvider,
@@ -40,6 +42,20 @@ export async function callDecideFollowUp(
     signal,
   })
   return decideFollowUp.postProcess(out)
+}
+
+export async function callClassifyReply(
+  llm: LlmProvider,
+  input: ClassifyReplyInput,
+  signal?: AbortSignal,
+): Promise<'answer' | 'repeat'> {
+  const out = await generateStructured(llm, {
+    messages: classifyReply.build(input),
+    schema: classifyReply.schema,
+    name: classifyReply.name,
+    signal,
+  })
+  return out.intent
 }
 
 export function callEvaluateAnswer(llm: LlmProvider, input: EvaluateAnswerInput, signal?: AbortSignal): Promise<Feedback> {

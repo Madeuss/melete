@@ -18,6 +18,14 @@ export type Seniority = z.infer<typeof Seniority>
 export const FeedbackTiming = z.enum(['per-answer', 'end'])
 export type FeedbackTiming = z.infer<typeof FeedbackTiming>
 
+/**
+ * standard: question shown as text, answers by voice or typing.
+ * hard: closer to a real interview: voice only, the question is blurred until the candidate
+ * reveals it, and asking out loud for a repeat works.
+ */
+export const Difficulty = z.enum(['standard', 'hard'])
+export type Difficulty = z.infer<typeof Difficulty>
+
 export const SessionConfig = z.object({
   type: InterviewType,
   role: z.string().trim().min(1),
@@ -26,6 +34,7 @@ export const SessionConfig = z.object({
   questionCount: z.number().int().min(1).max(15),
   followUps: z.boolean(),
   feedbackTiming: FeedbackTiming,
+  difficulty: Difficulty.default('standard'),
 })
 export type SessionConfig = z.infer<typeof SessionConfig>
 

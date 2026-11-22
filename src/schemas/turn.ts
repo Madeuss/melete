@@ -8,6 +8,15 @@ export const TurnMetrics = z.object({
 })
 export type TurnMetrics = z.infer<typeof TurnMetrics>
 
+/** Help the candidate used to understand the question (no such help in a real interview). */
+export const ListeningAids = z.object({
+  /** Times the question was heard again: the button or asking out loud. */
+  repeats: z.number().int().min(0),
+  /** Whether the blurred question text was revealed (hard difficulty only). */
+  textShown: z.boolean(),
+})
+export type ListeningAids = z.infer<typeof ListeningAids>
+
 export const Turn = z.object({
   id: z.string(),
   sessionId: z.string(),
@@ -20,6 +29,7 @@ export const Turn = z.object({
   answerDurationMs: z.number().optional(), // absent when typed
   metrics: TurnMetrics,
   feedback: Feedback.optional(),
+  aids: ListeningAids.optional(),
   createdAt: z.string(),
 })
 export type Turn = z.infer<typeof Turn>

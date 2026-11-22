@@ -150,7 +150,9 @@
       "accentUs": "American English",
       "accentGb": "British English",
       "female": "female",
-      "male": "male"
+      "male": "male",
+      "kokoroDownload": "Download Kokoro (110 MB)",
+      "kokoroNotDownloaded": "Until Kokoro is downloaded, questions are read with the browser voice."
     },
     "language": {
       "title": "Language",
@@ -219,7 +221,8 @@
       "deleteTitle": "Delete this story?",
       "deleteBody": "Past sessions keep their questions and transcripts.",
       "notFound": "This story doesn't exist anymore."
-    }
+    },
+    "charCount": "{{count}}/{{max}}"
   },
   "newInterview": {
     "title": "New interview",
@@ -260,13 +263,23 @@
     "languages": {
       "en": "English",
       "pt": "Portuguese"
-    }
+    },
+    "difficulty": "Difficulty",
+    "difficulties": {
+      "standard": "Standard",
+      "hard": "Hard"
+    },
+    "difficultyHints": {
+      "standard": "The question is shown as text and you can answer by speaking or typing.",
+      "hard": "Closer to a real interview: voice only, the question is blurred (you can reveal it if you need to) and you can ask out loud for it to be repeated."
+    },
+    "hardNeedsVoice": "Hard needs spoken answers and questions read aloud. Turn both on in Settings."
   },
   "room": {
     "leave": "Leave",
     "leaveTitle": "Leave the interview?",
     "leaveBody": "Answers you already sent stay saved. The session will be marked as abandoned.",
-    "stay": "Keep going",
+    "stay": "Back to the interview",
     "finishNow": "End and see report",
     "progress": "Question {{current}} of {{total}}",
     "followUp": "Follow-up",
@@ -299,7 +312,10 @@
     "notFound": "This interview doesn't exist.",
     "openSettings": "Open settings",
     "preparingVoice": "Preparing the voice… {{percent}}%",
-    "preparingVoiceShort": "Preparing the voice…"
+    "preparingVoiceShort": "Preparing the voice…",
+    "questionHidden": "The question is hidden: listen to it, or use \"Show the question\".",
+    "showQuestion": "Show the question",
+    "hardHint": "Didn't catch it? Ask out loud for it to be repeated, as you would in an interview."
   },
   "feedback": {
     "star": {
@@ -344,7 +360,22 @@
     "delete": "Delete session",
     "deleteTitle": "Delete this session?",
     "deleteBody": "Its questions, transcripts and feedback will be removed from this browser.",
-    "notFound": "This session doesn't exist anymore."
+    "notFound": "This session doesn't exist anymore.",
+    "aids": {
+      "readText": "Read the text",
+      "repeated": "Heard again {{count}}×"
+    },
+    "listening": {
+      "title": "Listening to the questions",
+      "textShown_zero": "You didn't read any question's text.",
+      "textShown_one": "You read the text of {{count}} of {{total}} questions.",
+      "textShown_other": "You read the text of {{count}} of {{total}} questions.",
+      "repeats_zero": "You didn't ask for a repeat.",
+      "repeats_one": "You heard a question again {{count}} time.",
+      "repeats_other": "You heard questions again {{count}} times.",
+      "noHelp": "You understood every question by ear, as in a real interview.",
+      "tip": "A real interview has no text on screen. Asking for a repeat now and then is normal; the goal is to understand everything by ear."
+    }
   },
   "history": {
     "title": "History",

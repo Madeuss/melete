@@ -1,12 +1,12 @@
 import { useEffect, useId, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
-import { preloadVoice } from '../../app/services'
+import { canUseVoice, preloadVoice } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
-import { InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
+import { Difficulty, InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
 import { useStories } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
-import { Button, Field, Input, SegmentedControl, Select, Textarea, Toggle, describedBy } from '../../ui'
+import { Button, Field, Input, Notice, SegmentedControl, Select, Textarea, Toggle, describedBy } from '../../ui'
 import { PageHeader } from '../../ui/PageHeader'
 
 const LAST_CONFIG_KEY = 'melete.lastConfig'
@@ -19,6 +19,7 @@ const defaults: SessionConfig = {
   questionCount: 5,
   followUps: true,
   feedbackTiming: 'per-answer',
+  difficulty: 'standard',
 }
 
 /** The last config is remembered in this browser as a convenience; losing it is harmless. */
@@ -49,6 +50,9 @@ export default function NewInterviewPage() {
   const [roleError, setRoleError] = useState(false)
   const [starting, setStarting] = useState(false)
 
+  // Hard is voice only and the question is heard, not read: it needs both directions of voice.
+  const hardBlocked = config.difficulty === 'hard' && (!canUseVoice(settings) || settings.tts.kind === 'off')
+
   // Warm up the voice model while the form is filled in, so the first question isn't delayed.
   useEffect(() => preloadVoice(settings), [settings])
 
@@ -67,7 +71,7 @@ export default function NewInterviewPage() {
       document.getElementById(`${ids}-role`)?.focus()
       return
     }
-    if (!settings.llm) return
+    if (!settings.llm || hardBlocked) return
     setStarting(true)
     saveLastConfig(parsed.data)
     const session = await getRepositories().sessions.create({
@@ -122,6 +126,30 @@ export default function NewInterviewPage() {
             onChange={(v) => set('seniority', v)}
             options={Seniority.options.map((v) => ({ value: v, label: t(`newInterview.seniorities.${v}`) }))}
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <span id={`${ids}-diff`} className="text-sm font-medium">
+            {t('newInterview.difficulty')}
+          </span>
+          <SegmentedControl
+            aria-labelledby={`${ids}-diff`}
+            value={config.difficulty}
+            onChange={(v) => set('difficulty', v)}
+            options={Difficulty.options.map((v) => ({ value: v, label: t(`newInterview.difficulties.${v}`) }))}
+          />
+          <p className="text-caption text-text-subtle">{t(`newInterview.difficultyHints.${config.difficulty}`)}</p>
+          {hardBlocked && (
+            <Notice
+              tone="warning"
+              title={t('newInterview.hardNeedsVoice')}
+              action={
+                <Link to="/settings" className="text-sm font-medium text-brand-text hover:underline">
+                  {t('newInterview.change')}
+                </Link>
+              }
+            />
+          )}
         </div>
 
         <Field
@@ -191,7 +219,7 @@ export default function NewInterviewPage() {
         </div>
 
         <div className="border-t border-border pt-8">
-          <Button type="submit" variant="primary" loading={starting}>
+          <Button type="submit" variant="primary" loading={starting} disabled={hardBlocked}>
             {t('newInterview.start')}
           </Button>
         </div>

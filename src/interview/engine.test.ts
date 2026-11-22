@@ -22,6 +22,7 @@ const baseConfig: SessionConfig = {
   questionCount: 2,
   followUps: true,
   feedbackTiming: 'per-answer',
+  difficulty: 'standard',
 }
 
 const feedback = (score: number) =>
@@ -34,11 +35,12 @@ const feedback = (score: number) =>
     improvedAnswer: 'Better answer with [metric].',
   })
 
-type Kind = 'plan' | 'followUp' | 'evaluate' | 'summary'
+type Kind = 'plan' | 'classify' | 'followUp' | 'evaluate' | 'summary'
 
 function kindOf(messages: ChatMessage[]): Kind {
   const system = messages[0].content
   if (system.includes('Plan exactly')) return 'plan'
+  if (system.includes('the candidate said something short')) return 'classify'
   if (system.includes('Decide whether one follow-up')) return 'followUp'
   if (system.includes('evaluating one answer')) return 'evaluate'
   if (system.includes('summary of a mock interview')) return 'summary'
@@ -57,6 +59,9 @@ function scriptedLlm(opts: { followUpFor?: string[] } = {}) {
             { text: 'Tell me about a failure.', competency: 'failure' },
           ],
         })
+      case 'classify':
+        // "what was it" stands for a repeat request the local patterns don't know.
+        return JSON.stringify({ intent: messages[1].content.includes('what was it') ? 'repeat' : 'answer' })
       case 'followUp': {
         const transcript = messages[1].content
         const needs = (opts.followUpFor ?? []).some((t) => transcript.includes(t))
@@ -113,6 +118,13 @@ async function setup(config: Partial<SessionConfig> = {}, llm = scriptedLlm()) {
 async function typeAnswer(engine: InterviewEngine, text: string) {
   engine.setDraft(text)
   await engine.submit({ typed: true })
+}
+
+async function sayAnswer(t: { engine: InterviewEngine; stt: FakeStt }, text: string) {
+  t.stt.transcript = text
+  t.engine.startRecording()
+  await t.engine.stopRecording()
+  await t.engine.submit()
 }
 
 describe('InterviewEngine', () => {
@@ -226,6 +238,67 @@ describe('InterviewEngine', () => {
     expect(turn.metrics.fillerWords).toEqual({ um: 1 })
     s = t.engine.getSnapshot()
     expect(s.current?.text).toBe('Tell me about a failure.')
+  })
+
+  it('repeats the question when asked out loud, without saving that as an answer', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end' })
+    await t.engine.open(t.session.id)
+    await sayAnswer(t, 'Sorry, could you repeat the question?')
+
+    expect(t.engine.getSnapshot()).toMatchObject({ state: 'listening', draft: '' })
+    expect(t.engine.getSnapshot().current?.text).toBe('Tell me about a conflict.')
+    expect(t.tts.spoken.at(-1)).toBe('Sure, let me repeat the question. Tell me about a conflict.')
+    expect(await t.repos.turns.listBySession(t.session.id)).toHaveLength(0)
+    expect(t.kinds()).toEqual(['plan']) // a common phrasing needs no model call
+
+    await sayAnswer(t, 'I disagreed with a teammate about the API design and we ran a spike to compare both options.')
+    const [turn] = await t.repos.turns.listBySession(t.session.id)
+    expect(turn.aids).toEqual({ repeats: 1, textShown: false })
+  })
+
+  it('asks the model about other short replies', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end' })
+    await t.engine.open(t.session.id)
+    await sayAnswer(t, 'hmm what was it')
+    expect(t.engine.getSnapshot().state).toBe('listening')
+    expect(await t.repos.turns.listBySession(t.session.id)).toHaveLength(0)
+
+    await sayAnswer(t, 'I never had a conflict')
+    expect(await t.repos.turns.listBySession(t.session.id)).toHaveLength(1)
+    expect(t.kinds()).toEqual(['plan', 'classify', 'classify'])
+  })
+
+  it('treats a short reply as an answer when the check fails, and never checks typed answers', async () => {
+    const llm = scriptedLlm()
+    const t = await setup({ followUps: false, feedbackTiming: 'end' }, llm)
+    await t.engine.open(t.session.id)
+    await typeAnswer(t.engine, 'Could you repeat?')
+    expect(await t.repos.turns.listBySession(t.session.id)).toHaveLength(1)
+
+    llm.route(() => {
+      throw new LlmError('network')
+    })
+    await sayAnswer(t, 'I failed once')
+    expect(await t.repos.turns.listBySession(t.session.id)).toHaveLength(2)
+  })
+
+  it('records revealing the text and hearing the question again, per question', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end', difficulty: 'hard' })
+    await t.engine.open(t.session.id)
+    expect(t.engine.getSnapshot().questionRevealed).toBe(false)
+    t.engine.revealQuestionText()
+    expect(t.engine.getSnapshot().questionRevealed).toBe(true)
+    await t.engine.repeatQuestion()
+    await t.engine.repeatQuestion()
+    await typeAnswer(t.engine, 'First answer.')
+
+    expect(t.engine.getSnapshot().questionRevealed).toBe(false) // next question starts hidden again
+    await typeAnswer(t.engine, 'Second answer.')
+    const turns = await t.repos.turns.listBySession(t.session.id)
+    expect(turns.map((x) => x.aids)).toEqual([
+      { repeats: 2, textShown: true },
+      { repeats: 0, textShown: false },
+    ])
   })
 
   it('typed answers have no words per minute', async () => {

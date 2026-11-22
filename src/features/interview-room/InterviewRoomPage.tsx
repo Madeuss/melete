@@ -1,4 +1,4 @@
-import { Keyboard, Loader2, Mic, Volume2, X } from 'lucide-react'
+import { Eye, Keyboard, Loader2, Mic, Volume2, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
@@ -65,8 +65,12 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
     if (s.state === 'asking') questionRef.current?.focus()
   }, [s.state, s.current?.text])
 
-  // A recognition failure switches to typing, keeping the error visible.
-  const effectiveMode = s.sttError ? 'typed' : mode
+  // Hard: like a real interview, answers are spoken and the question is heard, not read.
+  const hard = s.session?.config.difficulty === 'hard'
+  const questionHidden = hard && !s.questionRevealed && settings.tts.kind !== 'off'
+
+  // A recognition failure switches to typing (even on hard, so nobody gets stuck), keeping the error visible.
+  const effectiveMode = s.sttError ? 'typed' : hard ? 'voice' : mode
 
   useEffect(() => {
     if (s.state === 'finished') navigate(`/report/${sessionId}`, { replace: true })
@@ -142,7 +146,16 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
           <section aria-labelledby={`${ids}-q`} className="flex flex-col gap-4">
             {isFollowUp && <p className="text-sm font-medium text-text-muted">{t('room.followUp')}</p>}
             <h1 id={`${ids}-q`} ref={questionRef} tabIndex={-1} className="text-xl outline-none sm:text-2xl">
-              {s.current.text}
+              {questionHidden ? (
+                <>
+                  <span aria-hidden className="select-none blur-sm">
+                    {s.current.text}
+                  </span>
+                  <span className="sr-only">{t('room.questionHidden')}</span>
+                </>
+              ) : (
+                s.current.text
+              )}
             </h1>
             {answering && (
               <div className="flex flex-wrap items-center gap-2">
@@ -168,8 +181,14 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
                     </Button>
                   )
                 )}
+                {questionHidden && (
+                  <Button variant="ghost" size="sm" icon={<Eye {...iconPropsSm} />} onClick={() => engine.revealQuestionText()}>
+                    {t('room.showQuestion')}
+                  </Button>
+                )}
               </div>
             )}
+            {answering && hard && <p className="text-caption text-text-subtle">{t('room.hardHint')}</p>}
           </section>
         )}
 
@@ -193,7 +212,7 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
                 <p className="min-h-16 whitespace-pre-wrap text-reading text-text-muted">{s.partial || '…'}</p>
               </div>
             )}
-            {!s.recording && (
+            {!s.recording && !hard && (
               <Button variant="ghost" size="sm" icon={<Keyboard {...iconPropsSm} />} onClick={() => setMode('typed')}>
                 {t('room.preferTyping')}
               </Button>
@@ -225,7 +244,7 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
               <Button type="submit" variant="primary" disabled={!s.draft.trim()}>
                 {t('room.send')}
               </Button>
-              {voiceAvailable && !s.sttError && (
+              {voiceAvailable && !s.sttError && !hard && (
                 <Button variant="ghost" icon={<Mic {...iconPropsSm} />} onClick={() => setMode('voice')}>
                   {t('room.preferSpeaking')}
                 </Button>
