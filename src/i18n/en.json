@@ -542,5 +542,37 @@
     "delete": "Delete version",
     "deleteTitle": "Delete this version?",
     "deleteBody": "The text and its evaluation are removed from this browser."
+  },
+  "fluency": {
+    "title": "English fluency",
+    "description": "For non-native speakers. Pauses, repeated words and corrections are counted from this session; better phrasings come from the model when you ask.",
+    "pauses": {
+      "title": "Long pauses",
+      "noVoice": "No spoken answers in this session.",
+      "none": "No silence of {{seconds}} s or more while you answered.",
+      "some_one": "{{count}} silence of {{seconds}} s or more while you answered (the longest: {{longest}} s). Short pauses are fine; long ones usually mean searching for a word.",
+      "some_other": "{{count}} silences of {{seconds}} s or more while you answered (the longest: {{longest}} s). Short pauses are fine; long ones usually mean searching for a word."
+    },
+    "pronunciation": {
+      "title": "Pronunciation hints",
+      "hint": "Words you corrected in more than one answer: speech recognition kept mishearing them, which often points to pronunciation.",
+      "heardAs_one": "in {{count}} answer, heard as: {{heard}}",
+      "heardAs_other": "in {{count}} answers, heard as: {{heard}}",
+      "none": "No word was misheard more than once.",
+      "noCorrections": "You didn't correct the transcripts. When speech recognition gets a word wrong, fix it before sending: that's how this hint works."
+    },
+    "repeated": {
+      "title": "Repeated words",
+      "none": "No content word used {{min}} times or more."
+    },
+    "expressions": {
+      "title": "More natural phrasing",
+      "offer": "The model can point out phrases a native speaker would say differently. One call to your provider.",
+      "button": "Suggest better phrasing",
+      "none": "Nothing to change: your English sounded natural.",
+      "said": "You said",
+      "better": "More natural:",
+      "needsProvider": "Set up a provider to get phrasing suggestions."
+    }
   }
 }

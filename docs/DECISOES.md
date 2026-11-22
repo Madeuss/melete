@@ -69,6 +69,10 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 62 | Tempo de versão digitada | Estimado a 140 palavras por minuto (ritmo de conversa) e marcado com "~", pra a faixa de 60–90 s ainda servir de guia. | Não mostrar tempo pra versões digitadas. |
 | 63 | O que a etapa muda | Só o planejamento das perguntas (tom e foco). A avaliação continua a mesma (STAR + clareza) em todas as etapas, e o follow-up também. Se quiser, a avaliação pode pesar critérios diferentes por etapa (ex.: no recrutador, comunicação e motivação). | Avaliação com critérios por etapa (nova versão do evaluateAnswer). |
 | 64 | Competência das perguntas | No `planQuestions` v2, a competência vem da lista das tags de histórias quando alguma serve. Isso ainda não aparece em lugar nenhum, mas permite o mapa de cobertura mostrar também o que já foi praticado (decisão 54). | — |
+| 65 | Como medir pausas sem áudio | O app não grava áudio, então as pausas vêm do intervalo entre as atualizações do reconhecimento de voz do navegador. É uma aproximação: o reconhecimento às vezes demora pra atualizar mesmo com a pessoa falando. Por isso o limite é alto (3 s). | Analisar o volume do microfone pra achar silêncios (mais preciso, mais complexo). |
+| 66 | Pista de pronúncia pelas correções | Só funciona se a pessoa corrige a transcrição antes de enviar; a seção explica isso quando não houve correção. Uma palavra só vira pista quando é corrigida em duas respostas diferentes, pra não confundir erro pontual do reconhecimento com pronúncia. | Mostrar toda palavra corrigida. |
+| 67 | Sugestões de expressões sob demanda | A chamada só roda quando a pessoa clica, no relatório, e o resultado fica salvo. Não entra no custo por sessão (`llmCalls`), porque é pedida depois da entrevista. | Rodar junto com o resumo, sempre. |
+| 68 | Só em inglês | A seção aparece só nas entrevistas em inglês, que é pra quem a feature foi pensada. A lista de palavras comuns ignoradas também é de inglês. | Mostrar também em português. |
 
 ## O que ficou pra você
 

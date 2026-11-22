@@ -500,6 +500,17 @@ Simulação por etapa real, cada uma com o tom e o tipo de pergunta próprios.
 
 - [x] Feito em 22/11/2026.
 
+### Fluência em inglês (pedido em 22/11/2026)
+
+Pra quem não é nativo. Seção "Fluência em inglês" no relatório das entrevistas em inglês.
+
+- **Pausas longas** (calculado no código): enquanto grava, o motor mede o tempo entre as atualizações do reconhecimento de voz; silêncios de 3 s ou mais contam como pausa longa, incluindo a espera antes de começar a falar e excluindo o silêncio depois da última palavra. Fica em `TurnMetrics.pauses` (só respostas faladas).
+- **Pistas de pronúncia** (código): o motor compara o que o reconhecimento ouviu com o texto enviado depois da revisão e guarda as palavras trocadas (`Turn.corrections`, com o que foi ouvido e o que era). Uma palavra corrigida em duas ou mais respostas aparece como pista de pronúncia, com como foi ouvida. Mudanças só de pontuação ou maiúscula não contam.
+- **Palavras repetidas** (código): palavras de conteúdo (sem as gramaticais e de preenchimento comuns) usadas 4 vezes ou mais na sessão, as 8 mais frequentes.
+- **Expressões mais naturais** (modelo, só quando o usuário pede): prompt novo `suggestExpressions` (v1) com até 6 trechos que um nativo diria de outro jeito (tradução literal, preposição, falso cognato, combinação estranha), cada um com a versão natural e o porquê no idioma da interface. Trechos que não aparecem nas respostas são descartados. O resultado fica salvo na sessão (`Session.expressions`), então não é pedido de novo.
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

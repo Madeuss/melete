@@ -8,6 +8,7 @@ import {
   evaluatePitch,
   planQuestions,
   structureStory,
+  suggestExpressions,
   summarizeSession,
   type ClassifyReplyInput,
   type DecideFollowUpInput,
@@ -16,6 +17,8 @@ import {
   type PlanQuestionsInput,
   type StructureStoryInput,
   type StructureStoryOutput,
+  type Expression,
+  type SuggestExpressionsInput,
   type SummarizeSessionInput,
 } from './prompts'
 
@@ -108,4 +111,19 @@ export function callEvaluatePitch(llm: LlmProvider, input: EvaluatePitchInput, s
     name: evaluatePitch.name,
     signal,
   })
+}
+
+/** English fluency: more natural phrasings for what the candidate said, asked for from the report. */
+export async function callSuggestExpressions(
+  llm: LlmProvider,
+  input: SuggestExpressionsInput,
+  signal?: AbortSignal,
+): Promise<Expression[]> {
+  const out = await generateStructured(llm, {
+    messages: suggestExpressions.build(input),
+    schema: suggestExpressions.schema,
+    name: suggestExpressions.name,
+    signal,
+  })
+  return suggestExpressions.postProcess(out, input)
 }

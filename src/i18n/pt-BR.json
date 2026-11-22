@@ -542,5 +542,37 @@
     "delete": "Apagar versão",
     "deleteTitle": "Apagar esta versão?",
     "deleteBody": "O texto e a avaliação saem deste navegador."
+  },
+  "fluency": {
+    "title": "Fluência em inglês",
+    "description": "Pra quem não é nativo. Pausas, palavras repetidas e correções são contadas a partir desta sessão; as expressões mais naturais vêm do modelo quando você pedir.",
+    "pauses": {
+      "title": "Pausas longas",
+      "noVoice": "Nenhuma resposta falada nesta sessão.",
+      "none": "Nenhum silêncio de {{seconds}} s ou mais enquanto você respondia.",
+      "some_one": "{{count}} silêncio de {{seconds}} s ou mais enquanto você respondia (o mais longo: {{longest}} s). Pausas curtas são normais; as longas costumam ser busca por palavra.",
+      "some_other": "{{count}} silêncios de {{seconds}} s ou mais enquanto você respondia (o mais longo: {{longest}} s). Pausas curtas são normais; as longas costumam ser busca por palavra."
+    },
+    "pronunciation": {
+      "title": "Pistas de pronúncia",
+      "hint": "Palavras que você corrigiu em mais de uma resposta: o reconhecimento de voz errou várias vezes, o que costuma indicar pronúncia.",
+      "heardAs_one": "em {{count}} resposta, ouvido como: {{heard}}",
+      "heardAs_other": "em {{count}} respostas, ouvido como: {{heard}}",
+      "none": "Nenhuma palavra foi ouvida errado mais de uma vez.",
+      "noCorrections": "Você não corrigiu as transcrições. Quando o reconhecimento errar uma palavra, corrija antes de enviar: é assim que essa pista funciona."
+    },
+    "repeated": {
+      "title": "Palavras repetidas",
+      "none": "Nenhuma palavra de conteúdo usada {{min}} vezes ou mais."
+    },
+    "expressions": {
+      "title": "Expressões mais naturais",
+      "offer": "O modelo pode apontar frases que um nativo diria de outro jeito. É uma chamada ao seu provedor.",
+      "button": "Sugerir expressões",
+      "none": "Nada a mudar: seu inglês soou natural.",
+      "said": "Você disse",
+      "better": "Mais natural:",
+      "needsProvider": "Configure um provedor pra receber sugestões de expressões."
+    }
   }
 }

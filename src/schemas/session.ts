@@ -62,5 +62,7 @@ export const Session = z.object({
    * It has that single question, no follow-ups and no summary; the report compares the two answers.
    */
   retryOf: z.object({ sessionId: z.string(), turnId: z.string() }).optional(),
+  /** More natural English for phrases the candidate used, asked for from the report. */
+  expressions: z.array(z.object({ said: z.string(), better: z.string(), why: z.string() })).optional(),
 })
 export type Session = z.infer<typeof Session>

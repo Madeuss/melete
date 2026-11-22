@@ -5,6 +5,8 @@ export const TurnMetrics = z.object({
   fillerWords: z.record(z.string(), z.number()),
   wordsPerMinute: z.number().optional(),
   wordCount: z.number(),
+  /** Silences of 3 s or more while speaking (voice answers only). */
+  pauses: z.object({ count: z.number().int().min(0), longestMs: z.number().min(0) }).optional(),
 })
 export type TurnMetrics = z.infer<typeof TurnMetrics>
 
@@ -30,6 +32,8 @@ export const Turn = z.object({
   metrics: TurnMetrics,
   feedback: Feedback.optional(),
   aids: ListeningAids.optional(),
+  /** Words the user fixed in the transcript before sending: what speech recognition heard vs what they meant. */
+  corrections: z.array(z.object({ heard: z.string(), meant: z.string() })).optional(),
   createdAt: z.string(),
 })
 export type Turn = z.infer<typeof Turn>

@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import type { SessionConfig } from '../../schemas'
-import { decideFollowUp, evaluateAnswer, evaluatePitch, planQuestions, structureStory, summarizeSession } from './index'
+import {
+  decideFollowUp,
+  evaluateAnswer,
+  evaluatePitch,
+  planQuestions,
+  structureStory,
+  suggestExpressions,
+  summarizeSession,
+} from './index'
 
 const config: SessionConfig = {
   type: 'behavioral',
@@ -221,5 +229,30 @@ describe('planQuestions v2 (stages)', () => {
     const [system] = planQuestions.build(input)
     expect(system.content).toContain('use it exactly: conflict, leadership, failure')
     expect(planQuestions.version).toBe('v2')
+  })
+})
+
+describe('suggestExpressions v1', () => {
+  const input = { answers: ['I have 5 years of experience in React and I am responsible of the checkout.'], feedbackLanguage: 'pt-BR' as const }
+
+  it('fences each answer and asks for the why in the UI language', () => {
+    const [system, user] = suggestExpressions.build(input)
+    expect(system.content).toContain('in Brazilian Portuguese')
+    expect(system.content).toContain('literal translations')
+    expect(user.content).toContain('<answer_1>\nI have 5 years')
+  })
+
+  it('drops suggestions whose phrase is not in the answers or changes nothing', () => {
+    const out = suggestExpressions.postProcess(
+      {
+        suggestions: [
+          { said: 'responsible of', better: 'responsible for', why: 'Preposição.' },
+          { said: 'I leaded the team', better: 'I led the team', why: 'Inventada.' },
+          { said: 'in React', better: 'in React', why: 'Igual.' },
+        ],
+      },
+      input,
+    )
+    expect(out).toEqual([{ said: 'responsible of', better: 'responsible for', why: 'Preposição.' }])
   })
 })

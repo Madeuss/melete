@@ -25,6 +25,7 @@ import {
   callPlanQuestions,
   callSummarizeSession,
 } from './llmCalls'
+import { corrections, summarizePauses } from './fluency'
 import { computeMetrics, countWords } from './metrics'
 import { recordingLlm } from './usage'
 import { MAX_REPEAT_REQUEST_WORDS, REPEAT_LEAD_IN, looksLikeRepeatRequest } from './repeatRequest'
@@ -107,6 +108,11 @@ export class InterviewEngine {
   private recordingStartedAt?: number
   /** Duration of the voice answer under review; undefined for typed answers. */
   private answerDurationMs?: number
+  /** Silences between speech-recognition updates while recording (fluency: long pauses). */
+  private pauseGaps: number[] = []
+  private lastSpeechAt?: number
+  /** The transcript as speech recognition gave it, to see what the user corrected. */
+  private heardTranscript?: string
   private stories = new Map<string, Story>()
   /** Help used on the current question, saved with its answer. */
   private aids: ListeningAids = { repeats: 0, textShown: false }
@@ -287,10 +293,17 @@ export class InterviewEngine {
     if (this.snap.state !== 'listening' || this.snap.recording) return
     this.deps.tts.cancel()
     this.recordingStartedAt = this.now()
+    this.pauseGaps = []
+    this.lastSpeechAt = this.recordingStartedAt
     this.set({ recording: true, partial: '', sttError: undefined })
     this.deps.stt.start(
       (text) => {
-        if (this.snap.recording) this.set({ partial: text })
+        if (!this.snap.recording) return
+        // Time since the last thing recognized: a silence (the first one is the wait before speaking).
+        const now = this.now()
+        if (this.lastSpeechAt !== undefined) this.pauseGaps.push(now - this.lastSpeechAt)
+        this.lastSpeechAt = now
+        this.set({ partial: text })
       },
       (err) => {
         this.recordingStartedAt = undefined
@@ -307,7 +320,10 @@ export class InterviewEngine {
     if (this.stopped) return
     this.answerDurationMs = started !== undefined ? this.now() - started : undefined
     this.recordingStartedAt = undefined
-    this.set({ state: 'reviewing', draft: text || this.snap.partial, partial: '' })
+    // The silence after the last word (before pressing stop) isn't a pause in the answer.
+    this.lastSpeechAt = undefined
+    this.heardTranscript = text || this.snap.partial
+    this.set({ state: 'reviewing', draft: this.heardTranscript, partial: '' })
   }
 
   /** Edits the transcript under review. */
@@ -320,6 +336,8 @@ export class InterviewEngine {
   retake() {
     if (this.snap.state !== 'reviewing') return
     this.answerDurationMs = undefined
+    this.heardTranscript = undefined
+    this.pauseGaps = []
     this.set({ state: 'listening', draft: '', partial: '' })
   }
 
@@ -342,6 +360,12 @@ export class InterviewEngine {
     if (this.stopped) return
 
     const duration = opts.typed ? undefined : this.answerDurationMs
+    const spoken = !opts.typed && this.heardTranscript !== undefined
+    const fixes = spoken ? corrections(this.heardTranscript!, transcript) : []
+    const metrics = computeMetrics(transcript, this.session.language, duration)
+    if (spoken) metrics.pauses = summarizePauses(this.pauseGaps)
+    this.heardTranscript = undefined
+    this.pauseGaps = []
     const turn = await this.deps.repos.turns.add({
       sessionId: this.session.id,
       index: this.snap.turns.length,
@@ -351,8 +375,9 @@ export class InterviewEngine {
       ...(current.storyId ? { storyId: current.storyId } : {}),
       transcript,
       ...(duration !== undefined ? { answerDurationMs: duration } : {}),
-      metrics: computeMetrics(transcript, this.session.language, duration),
+      metrics,
       aids: { ...this.aids },
+      ...(fixes.length ? { corrections: fixes } : {}),
     })
     if (this.stopped) return
     this.set({ turns: [...this.snap.turns, turn], draft: '', recording: false })

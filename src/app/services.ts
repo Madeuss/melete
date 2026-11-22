@@ -3,8 +3,8 @@
  * (or the engine) instead of constructing providers themselves.
  */
 import { InterviewEngine } from '../interview/engine'
-import { callEvaluatePitch, callStructureStory } from '../interview/llmCalls'
-import type { EvaluatePitchInput, StructureStoryInput } from '../interview/prompts'
+import { callEvaluatePitch, callStructureStory, callSuggestExpressions } from '../interview/llmCalls'
+import type { EvaluatePitchInput, StructureStoryInput, SuggestExpressionsInput } from '../interview/prompts'
 import { SPEECH_LANG } from '../interview/samples'
 import { createLlmProvider, testConnection } from '../providers/llm/openaiCompatible'
 import type { LlmProvider } from '../providers/llm/types'
@@ -37,6 +37,11 @@ export function structureStory(llm: LlmSettings, input: StructureStoryInput, sig
 /** "Tell me about yourself" practice: evaluates one version of the pitch. */
 export function evaluatePitch(llm: LlmSettings, input: EvaluatePitchInput, signal?: AbortSignal) {
   return callEvaluatePitch(createLlmProvider(llm), input, signal)
+}
+
+/** English fluency (report): suggests more natural phrasings for what the candidate said. */
+export function suggestExpressions(llm: LlmSettings, input: SuggestExpressionsInput, signal?: AbortSignal) {
+  return callSuggestExpressions(createLlmProvider(llm), input, signal)
 }
 
 export function fetchModels(llm: LlmSettings, signal?: AbortSignal): Promise<string[]> {

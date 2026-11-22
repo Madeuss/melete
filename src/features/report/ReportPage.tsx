@@ -9,6 +9,7 @@ import { useLlmCalls, useRetries, useSession, useTurns } from '../../storage/hoo
 import { getRepositories } from '../../storage/repositories'
 import { Button, Card, Dialog, Notice, buttonClasses, iconPropsSm } from '../../ui'
 import { FeedbackView } from './FeedbackView'
+import { FluencySection } from './FluencySection'
 import { RetryAttempts, RetryButton, RetryComparison } from './RetryViews'
 import { UsageSection } from './UsageSection'
 
@@ -200,6 +201,8 @@ export default function ReportPage() {
             ))}
           </section>
         ))}
+
+        {session.language === 'en' && turns.length > 0 && <FluencySection session={session} turns={turns} />}
 
         {llmCalls && <UsageSection calls={llmCalls} />}
 

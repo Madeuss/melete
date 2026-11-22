@@ -542,5 +542,37 @@
     "delete": "Borrar versión",
     "deleteTitle": "¿Borrar esta versión?",
     "deleteBody": "El texto y su evaluación se borran de este navegador."
+  },
+  "fluency": {
+    "title": "Fluidez en inglés",
+    "description": "Para quienes no son nativos. Las pausas, palabras repetidas y correcciones se cuentan a partir de esta sesión; las expresiones más naturales vienen del modelo cuando las pidas.",
+    "pauses": {
+      "title": "Pausas largas",
+      "noVoice": "Ninguna respuesta hablada en esta sesión.",
+      "none": "Ningún silencio de {{seconds}} s o más mientras respondías.",
+      "some_one": "{{count}} silencio de {{seconds}} s o más mientras respondías (el más largo: {{longest}} s). Las pausas cortas son normales; las largas suelen ser búsqueda de palabras.",
+      "some_other": "{{count}} silencios de {{seconds}} s o más mientras respondías (el más largo: {{longest}} s). Las pausas cortas son normales; las largas suelen ser búsqueda de palabras."
+    },
+    "pronunciation": {
+      "title": "Pistas de pronunciación",
+      "hint": "Palabras que corregiste en más de una respuesta: el reconocimiento de voz las confundió varias veces, lo que suele indicar pronunciación.",
+      "heardAs_one": "en {{count}} respuesta, oída como: {{heard}}",
+      "heardAs_other": "en {{count}} respuestas, oída como: {{heard}}",
+      "none": "Ninguna palabra se oyó mal más de una vez.",
+      "noCorrections": "No corregiste las transcripciones. Cuando el reconocimiento se equivoque en una palabra, corrígela antes de enviar: así funciona esta pista."
+    },
+    "repeated": {
+      "title": "Palabras repetidas",
+      "none": "Ninguna palabra de contenido usada {{min}} veces o más."
+    },
+    "expressions": {
+      "title": "Expresiones más naturales",
+      "offer": "El modelo puede señalar frases que un nativo diría de otra forma. Es una llamada a tu proveedor.",
+      "button": "Sugerir expresiones",
+      "none": "Nada que cambiar: tu inglés sonó natural.",
+      "said": "Dijiste",
+      "better": "Más natural:",
+      "needsProvider": "Configura un proveedor para recibir sugerencias de expresiones."
+    }
   }
 }

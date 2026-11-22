@@ -353,6 +353,25 @@ describe('InterviewEngine', () => {
     ])
   })
 
+  it('measures long pauses while speaking and records what the user corrected', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end' })
+    await t.engine.open(t.session.id)
+    t.stt.transcript = 'i lead the migration'
+    t.engine.startRecording()
+    t.advanceClock(1_000)
+    t.stt.emitPartial('i lead')
+    t.advanceClock(4_500) // searching for a word
+    t.stt.emitPartial('i lead the migration')
+    t.advanceClock(6_000) // silence after the last word, before pressing stop: not a pause
+    await t.engine.stopRecording()
+    t.engine.setDraft('I led the migration')
+    await t.engine.submit()
+
+    const [turn] = await t.repos.turns.listBySession(t.session.id)
+    expect(turn.metrics.pauses).toEqual({ count: 1, longestMs: 4_500 })
+    expect(turn.corrections).toEqual([{ heard: 'lead', meant: 'led' }])
+  })
+
   it('typed answers have no words per minute', async () => {
     const t = await setup({ followUps: false, feedbackTiming: 'end' })
     await t.engine.open(t.session.id)
