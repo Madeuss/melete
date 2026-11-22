@@ -31,3 +31,7 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 24 | Detalhe que falta na resposta melhorada | Quando falta um dado concreto, a `improvedAnswer` usa marcador entre colchetes (`[metric]`, `[timeframe]`) em vez de inventar. | — |
 | 25 | Proteção contra prompt injection | Transcrição, descrição da vaga e histórias vão entre tags (`<transcript>…`) com aviso de que são dados, não instruções. | — |
 | 26 | Pós-processamento do plano | Se o modelo devolver perguntas a mais, corto no número pedido; `storyId` inexistente ou repetido é descartado. Se devolver a menos, a sessão fica com menos perguntas. | Pedir de novo até ter o número exato. |
+| 27 | Estados extras do motor | Além dos estados do spec, o motor tem `showingFeedback` (com feedback por resposta, espera você ler e apertar "próxima") e `error` (uma chamada falhou; "tentar de novo" refaz o mesmo passo sem perder nada). | — |
+| 28 | Retomar sessão | Recarregar a página no meio da entrevista retoma na próxima pergunta principal não respondida (sair pelo botão marca `abandoned`, recarregar não). Um follow-up pendente no momento do reload é pulado. | — |
+| 29 | Encerrar antes | Botão "encerrar agora" na sala: avalia o que já foi respondido e gera o resumo com isso. | — |
+| 30 | Gravação | O microfone só abre quando você aperta o botão de gravar (não começa sozinho depois que a pergunta é lida). | Começar a ouvir automaticamente depois da pergunta. |
