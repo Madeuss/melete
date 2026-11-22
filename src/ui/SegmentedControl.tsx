@@ -17,7 +17,7 @@ interface SegmentedControlProps<T extends string> {
   'aria-label'?: string
 }
 
-/** Single choice among a few options (radiogroup with arrow-key navigation). */
+/** Single choice among a few options (radiogroup; Tab visits each option, arrows also work). */
 export function SegmentedControl<T extends string>({
   value,
   options,
@@ -58,7 +58,8 @@ export function SegmentedControl<T extends string>({
             role="radio"
             aria-checked={selected}
             data-value={o.value}
-            tabIndex={selected ? 0 : -1}
+            // Every option is reachable with Tab (Enter/Space picks it); arrows still move and pick.
+            tabIndex={0}
             onClick={() => onChange(o.value)}
             className={cn(
               'h-9 rounded-pill border px-4 text-sm font-medium transition-colors duration-150 ease-out',
