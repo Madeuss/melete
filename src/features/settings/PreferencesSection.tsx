@@ -32,14 +32,16 @@ export function LanguageSection() {
             id={`${ids}-iv`}
             value={settings.interviewLanguage}
             aria-describedby={`${ids}-iv-hint`}
-            onChange={(e) =>
+            onChange={(e) => {
+              // Read now: the updater runs later, after React has reset the controlled select.
+              const interviewLanguage = InterviewLanguage.parse(e.target.value)
               void update((s) => ({
                 ...s,
-                interviewLanguage: InterviewLanguage.parse(e.target.value),
+                interviewLanguage,
                 // the chosen voice belongs to the old language
                 tts: { ...s.tts, voice: undefined },
               }))
-            }
+            }}
           >
             <option value="en" lang="en">
               English

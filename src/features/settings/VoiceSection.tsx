@@ -76,9 +76,11 @@ export function VoiceSection() {
                 <Select
                   id={`${ids}-voice`}
                   value={settings.tts.voice ?? ''}
-                  onChange={(e) =>
-                    void update((s) => ({ ...s, tts: { ...s.tts, voice: e.target.value || undefined } }))
-                  }
+                  onChange={(e) => {
+                    // Read now: the updater runs later, after React has reset the controlled select.
+                    const voice = e.target.value || undefined
+                    void update((s) => ({ ...s, tts: { ...s.tts, voice } }))
+                  }}
                 >
                   <option value="">{t('settings.voice.defaultVoice')}</option>
                   {langVoices.map((v) => (
@@ -92,7 +94,10 @@ export function VoiceSection() {
                 <Select
                   id={`${ids}-rate`}
                   value={String(settings.tts.rate)}
-                  onChange={(e) => void update((s) => ({ ...s, tts: { ...s.tts, rate: Number(e.target.value) } }))}
+                  onChange={(e) => {
+                    const rate = Number(e.target.value)
+                    void update((s) => ({ ...s, tts: { ...s.tts, rate } }))
+                  }}
                 >
                   {RATES.map((r) => (
                     <option key={r} value={r}>
