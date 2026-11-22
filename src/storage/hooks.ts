@@ -3,7 +3,8 @@ import { getRepositories } from './repositories'
 
 /*
  * Live views for components. They only call repositories (which parse everything),
- * and re-render when the underlying tables change. `undefined` means still loading.
+ * and re-render when the underlying tables change. `undefined` means still loading;
+ * single-item hooks return `null` when the item doesn't exist.
  */
 
 export function useStories() {
@@ -11,7 +12,7 @@ export function useStories() {
 }
 
 export function useStory(id: string | undefined) {
-  return useLiveQuery(() => (id ? getRepositories().stories.get(id) : undefined), [id])
+  return useLiveQuery(async () => (id ? ((await getRepositories().stories.get(id)) ?? null) : null), [id])
 }
 
 export function useAllTags() {
@@ -23,7 +24,7 @@ export function useSessions() {
 }
 
 export function useSession(id: string | undefined) {
-  return useLiveQuery(() => (id ? getRepositories().sessions.get(id) : undefined), [id])
+  return useLiveQuery(async () => (id ? ((await getRepositories().sessions.get(id)) ?? null) : null), [id])
 }
 
 export function useTurns(sessionId: string | undefined) {

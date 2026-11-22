@@ -162,5 +162,48 @@
       "wipeBody": "Stories, sessions, transcripts and settings (including the key) will be removed. Export first if you want a copy.",
       "wipeConfirm": "Delete everything"
     }
+  },
+  "stories": {
+    "title": "Stories",
+    "description": "Real situations from your work that you want to tell in interviews. The interviewer builds questions around them.",
+    "new": "New story",
+    "import": "Import",
+    "export": "Export",
+    "imported_one": "Imported {{count}} story.",
+    "imported_other": "Imported {{count}} stories.",
+    "importFailed": "This file isn't a Melete export.",
+    "search": "Search stories",
+    "filterByTag": "Filter by tag",
+    "emptyTitle": "No stories yet",
+    "emptyBody": "Write the first one: a real situation, what you had to do, what you did and how it ended. Interviews still work without stories, but questions get more personal with them.",
+    "noMatches": "No stories match this filter.",
+    "updated": "Updated {{date}}",
+    "count_one": "{{count}} story",
+    "count_other": "{{count}} stories",
+    "editor": {
+      "newTitle": "New story",
+      "editTitle": "Edit story",
+      "description": "Use the STAR structure. Write it the way you'd tell it, with real numbers when you have them.",
+      "title": "Title",
+      "titlePlaceholder": "Checkout outage on Black Friday",
+      "titleRequired": "Give the story a title",
+      "situation": "Situation",
+      "situationHint": "Context: where you were, what was going on.",
+      "task": "Task",
+      "taskHint": "What was expected of you.",
+      "action": "Action",
+      "actionHint": "What you did, in first person.",
+      "result": "Result",
+      "resultHint": "How it ended, with numbers when you have them.",
+      "tags": "Tags",
+      "tagsHint": "Type and press Enter. Tags help the interviewer pick the right story.",
+      "tagPlaceholder": "Add a tag",
+      "suggested": "Suggestions",
+      "removeTag": "Remove tag {{tag}}",
+      "save": "Save story",
+      "deleteTitle": "Delete this story?",
+      "deleteBody": "Past sessions keep their questions and transcripts.",
+      "notFound": "This story doesn't exist anymore."
+    }
   }
 }

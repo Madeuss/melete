@@ -15,8 +15,15 @@ export function Dialog({ open, onClose, title, children, actions }: DialogProps)
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    if (open && !el.open) el.showModal?.()
-    if (!open && el.open) el.close?.()
+    // Fallback to the attribute where showModal is missing (old browsers, jsdom).
+    if (open && !el.open) {
+      if (typeof el.showModal === 'function') el.showModal()
+      else el.setAttribute('open', '')
+    }
+    if (!open && el.open) {
+      if (typeof el.close === 'function') el.close()
+      else el.removeAttribute('open')
+    }
   }, [open])
 
   return (

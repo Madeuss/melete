@@ -162,5 +162,48 @@
       "wipeBody": "Se eliminarán historias, sesiones, transcripciones y ajustes (incluida la key). Exporta antes si quieres una copia.",
       "wipeConfirm": "Borrar todo"
     }
+  },
+  "stories": {
+    "title": "Historias",
+    "description": "Situaciones reales de tu trabajo que quieres contar en entrevistas. El entrevistador arma las preguntas a partir de ellas.",
+    "new": "Nueva historia",
+    "import": "Importar",
+    "export": "Exportar",
+    "imported_one": "Se importó {{count}} historia.",
+    "imported_other": "Se importaron {{count}} historias.",
+    "importFailed": "Este archivo no es una exportación de Melete.",
+    "search": "Buscar historias",
+    "filterByTag": "Filtrar por etiqueta",
+    "emptyTitle": "Todavía no hay historias",
+    "emptyBody": "Escribe la primera: una situación real, qué tenías que hacer, qué hiciste y cómo terminó. Puedes practicar sin historias, pero con ellas las preguntas son más personales.",
+    "noMatches": "Ninguna historia coincide con este filtro.",
+    "updated": "Actualizada el {{date}}",
+    "count_one": "{{count}} historia",
+    "count_other": "{{count}} historias",
+    "editor": {
+      "newTitle": "Nueva historia",
+      "editTitle": "Editar historia",
+      "description": "Usa la estructura STAR. Escríbela como la contarías, con números reales cuando los tengas.",
+      "title": "Título",
+      "titlePlaceholder": "Caída del checkout en Black Friday",
+      "titleRequired": "Ponle un título a la historia",
+      "situation": "Situación",
+      "situationHint": "Contexto: dónde estabas, qué estaba pasando.",
+      "task": "Tarea",
+      "taskHint": "Qué se esperaba de ti.",
+      "action": "Acción",
+      "actionHint": "Qué hiciste tú, en primera persona.",
+      "result": "Resultado",
+      "resultHint": "Cómo terminó, con números cuando los tengas.",
+      "tags": "Etiquetas",
+      "tagsHint": "Escribe y pulsa Enter. Las etiquetas ayudan al entrevistador a elegir la historia adecuada.",
+      "tagPlaceholder": "Añadir etiqueta",
+      "suggested": "Sugerencias",
+      "removeTag": "Quitar la etiqueta {{tag}}",
+      "save": "Guardar historia",
+      "deleteTitle": "¿Borrar esta historia?",
+      "deleteBody": "Las sesiones anteriores conservan sus preguntas y transcripciones.",
+      "notFound": "Esta historia ya no existe."
+    }
   }
 }

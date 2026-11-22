@@ -162,5 +162,48 @@
       "wipeBody": "Histórias, sessões, transcrições e configurações (inclusive a key) serão removidas. Exporte antes se quiser uma cópia.",
       "wipeConfirm": "Apagar tudo"
     }
+  },
+  "stories": {
+    "title": "Histórias",
+    "description": "Situações reais do seu trabalho que você quer contar nas entrevistas. O entrevistador monta as perguntas a partir delas.",
+    "new": "Nova história",
+    "import": "Importar",
+    "export": "Exportar",
+    "imported_one": "{{count}} história importada.",
+    "imported_other": "{{count}} histórias importadas.",
+    "importFailed": "Este arquivo não é um export do Melete.",
+    "search": "Buscar histórias",
+    "filterByTag": "Filtrar por tag",
+    "emptyTitle": "Nenhuma história ainda",
+    "emptyBody": "Escreva a primeira: uma situação real, o que você precisava fazer, o que fez e como terminou. Dá pra treinar sem histórias, mas com elas as perguntas ficam mais pessoais.",
+    "noMatches": "Nenhuma história com esse filtro.",
+    "updated": "Atualizada em {{date}}",
+    "count_one": "{{count}} história",
+    "count_other": "{{count}} histórias",
+    "editor": {
+      "newTitle": "Nova história",
+      "editTitle": "Editar história",
+      "description": "Use a estrutura STAR. Escreva do jeito que você contaria, com números reais quando tiver.",
+      "title": "Título",
+      "titlePlaceholder": "Queda do checkout na Black Friday",
+      "titleRequired": "Dê um título pra história",
+      "situation": "Situação",
+      "situationHint": "Contexto: onde você estava, o que estava acontecendo.",
+      "task": "Tarefa",
+      "taskHint": "O que esperavam de você.",
+      "action": "Ação",
+      "actionHint": "O que você fez, em primeira pessoa.",
+      "result": "Resultado",
+      "resultHint": "Como terminou, com números quando tiver.",
+      "tags": "Tags",
+      "tagsHint": "Digite e aperte Enter. As tags ajudam o entrevistador a escolher a história certa.",
+      "tagPlaceholder": "Adicionar tag",
+      "suggested": "Sugestões",
+      "removeTag": "Remover a tag {{tag}}",
+      "save": "Salvar história",
+      "deleteTitle": "Apagar esta história?",
+      "deleteBody": "As sessões antigas continuam com as perguntas e transcrições.",
+      "notFound": "Esta história não existe mais."
+    }
   }
 }

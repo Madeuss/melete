@@ -47,7 +47,7 @@ describe('OpenAiCompatibleProvider.chat', () => {
       messages: [{ role: 'user', content: 'hello' }],
       response_format: { type: 'json_object' },
     })
-    expect((init?.headers as Record<string, string>).Authorization).toBe(`Bearer ${KEY}`)
+    expect((init!.headers as Record<string, string>).Authorization).toBe(`Bearer ${KEY}`)
   })
 
   it('sends preset extra headers and no Authorization when the key is empty', async () => {
