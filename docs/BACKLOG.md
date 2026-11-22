@@ -106,4 +106,4 @@ O SaaS precisa de um backend, que o MVP não tem. A versão open source com BYOK
 - **LGPD:** CV e respostas de entrevista são dados pessoais. Guardar no servidor exige política de privacidade, exclusão de conta e dados, criptografia e prazo de retenção. Uma saída mais simples: manter o histórico no navegador mesmo no SaaS, e o servidor só processa a chamada sem guardar o conteúdo.
 - **AGPL e contribuições:** como autor do código, o Mat pode rodar a versão hospedada. Mas o código que outras pessoas contribuírem chega em AGPL. Se um dia ele quiser recursos fechados no SaaS, precisa de um acordo de licença de contribuidor (CLA) desde o primeiro PR externo. Vale confirmar com alguém da área jurídica antes de abrir pra contribuições.
 
-**Ordem sugerida:** medir o custo (feito em 22/11/2026, foi pra spec) → features de prática de prioridade alta → currículo → pesquisa da empresa → SaaS.
+**Ordem sugerida:** medir o custo e as features de prática de prioridade alta (feitos em 22/11/2026, foram pra spec) → currículo → pesquisa da empresa → SaaS.
