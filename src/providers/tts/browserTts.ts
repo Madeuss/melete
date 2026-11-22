@@ -31,11 +31,14 @@ export function splitSentences(text: string): string[] {
   return (text.match(/[^.!?]+[.!?]+["')\]]*|[^.!?]+$/g) ?? [text]).map((s) => s.trim()).filter(Boolean)
 }
 
+/** speechSynthesis is one shared queue: a newer speak() (from any instance) stops older ones. */
+let currentSpeech = 0
+
 export class BrowserTts implements TextToSpeech {
   private readonly lang: string
   private readonly voiceName?: string
   private readonly rate: number
-  private cancelled = false
+  private speech = 0
 
   constructor(opts: { lang: string; voiceName?: string; rate?: number }) {
     this.lang = opts.lang
@@ -45,14 +48,14 @@ export class BrowserTts implements TextToSpeech {
 
   async speak(text: string): Promise<void> {
     if (!isBrowserTtsSupported() || !text.trim()) return
-    this.cancelled = false
+    const speech = (this.speech = ++currentSpeech)
     speechSynthesis.cancel()
     const voices = await loadVoices()
     const voice =
       voices.find((v) => v.name === this.voiceName) ?? voicesFor(voices, this.lang.slice(0, 2))[0] ?? undefined
 
     for (const sentence of splitSentences(text)) {
-      if (this.cancelled) return
+      if (speech !== currentSpeech) return
       await new Promise<void>((resolve) => {
         // Chrome sometimes never fires onend (and never does without voices): cap the wait
         // at a generous estimate of the sentence length so the interview can't get stuck.
@@ -74,7 +77,9 @@ export class BrowserTts implements TextToSpeech {
   }
 
   cancel(): void {
-    this.cancelled = true
+    // Only stop what this instance started; another one may be speaking by now.
+    if (this.speech !== currentSpeech) return
+    currentSpeech++
     if (isBrowserTtsSupported()) speechSynthesis.cancel()
   }
 }
