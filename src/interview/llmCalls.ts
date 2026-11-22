@@ -6,11 +6,14 @@ import {
   decideFollowUp,
   evaluateAnswer,
   planQuestions,
+  structureStory,
   summarizeSession,
   type ClassifyReplyInput,
   type DecideFollowUpInput,
   type EvaluateAnswerInput,
   type PlanQuestionsInput,
+  type StructureStoryInput,
+  type StructureStoryOutput,
   type SummarizeSessionInput,
 } from './prompts'
 
@@ -78,4 +81,19 @@ export function callSummarizeSession(
     name: summarizeSession.name,
     signal,
   })
+}
+
+/** Story assistant: a loosely told story → STAR fields, tags and what's missing. Not part of a session. */
+export async function callStructureStory(
+  llm: LlmProvider,
+  input: StructureStoryInput,
+  signal?: AbortSignal,
+): Promise<StructureStoryOutput> {
+  const out = await generateStructured(llm, {
+    messages: structureStory.build(input),
+    schema: structureStory.schema,
+    name: structureStory.name,
+    signal,
+  })
+  return structureStory.postProcess(out)
 }

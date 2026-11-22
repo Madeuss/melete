@@ -241,6 +241,22 @@
       "covered": "covered",
       "notCovered": "not covered",
       "hint": "Based on each story's tags. Tags you created yourself don't appear here."
+    },
+    "assistant": {
+      "title": "Organize it with help",
+      "intro": "Tell the story however it comes, even out of order. The model splits it into Situation, Task, Action and Result and asks about what's missing.",
+      "open": "Tell the story",
+      "how": "The fields below are filled in for you to review. Nothing is made up: what's missing becomes a question.",
+      "narrative": "Your story",
+      "narrativeHint": "What happened, what you did and how it ended. Any language: the fields come out in the same one.",
+      "missingTitle": "To make the story stronger",
+      "missingHint": "Answer what you can and add your answers. Leave blank what you don't know.",
+      "complete": "Nothing important is missing.",
+      "review": "The fields below were filled in. Review them before saving.",
+      "organize": "Organize into STAR",
+      "refine": "Add my answers",
+      "needsProvider": "Set up a provider to use the assistant.",
+      "privacy": "The story goes to the provider you set up, like in interviews. Nothing is saved until you save the story."
     }
   },
   "newInterview": {

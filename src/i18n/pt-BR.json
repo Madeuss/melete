@@ -241,6 +241,22 @@
       "covered": "cobre",
       "notCovered": "não cobre",
       "hint": "Com base nas tags de cada história. Tags que você mesmo criou não aparecem aqui."
+    },
+    "assistant": {
+      "title": "Organizar com ajuda",
+      "intro": "Conte a história do jeito que vier, fora de ordem mesmo. O modelo separa em Situação, Tarefa, Ação e Resultado e pergunta o que estiver faltando.",
+      "open": "Contar a história",
+      "how": "Os campos abaixo são preenchidos pra você revisar. Nada é inventado: o que faltar vira pergunta.",
+      "narrative": "Sua história",
+      "narrativeHint": "O que aconteceu, o que você fez e como terminou. Em qualquer idioma: os campos saem no mesmo.",
+      "missingTitle": "Pra deixar a história mais forte",
+      "missingHint": "Responda o que souber e complete. Deixe em branco o que não souber.",
+      "complete": "Nada importante está faltando.",
+      "review": "Os campos abaixo foram preenchidos. Revise antes de salvar.",
+      "organize": "Organizar em STAR",
+      "refine": "Completar com as respostas",
+      "needsProvider": "Configure um provedor pra usar o assistente.",
+      "privacy": "A história vai pro provedor que você configurou, como nas entrevistas. Nada é guardado até você salvar a história."
     }
   },
   "newInterview": {

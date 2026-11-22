@@ -62,6 +62,8 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 55 | Tentativa sem follow-up | A nova tentativa não tem follow-up, mesmo que a entrevista original tivesse: assim as duas respostas principais são comparadas do mesmo jeito, e a ideia é justamente acertar de primeira. A comparação é só da resposta principal. | Manter os follow-ups da configuração original e comparar o grupo inteiro. |
 | 56 | Tentativa sem resumo | A tentativa termina sem chamar `summarizeSession`: com uma pergunta só, o resumo repetiria o feedback, e economiza uma chamada. | — |
 | 57 | Onde refazer | Só pelo relatório, depois da entrevista. Não pus o botão na tela de feedback no meio da entrevista, pra não interromper a sessão; refazer no meio seria outro fluxo. | Botão "Responder de novo" também no feedback depois de cada resposta. |
+| 58 | Assistente não entra no custo por sessão | As chamadas do assistente de história não são gravadas em `llmCalls`, porque não pertencem a uma entrevista. Se o custo do SaaS precisar contar tudo, dá pra gravar com uma sessão nula ou numa tabela de uso geral. | Gravar também, sem sessão. |
+| 59 | O que o assistente sobrescreve | Substitui Situação, Tarefa, Ação e Resultado quando traz algo (o painel diz que os campos são preenchidos pra revisar); mantém o título já escrito; soma as tags. | Pedir confirmação antes de substituir o que já estava escrito. |
 
 ## O que ficou pra você
 

@@ -241,6 +241,22 @@
       "covered": "cubre",
       "notCovered": "no cubre",
       "hint": "Según las etiquetas de cada historia. Las etiquetas que creaste tú no aparecen aquí."
+    },
+    "assistant": {
+      "title": "Organizar con ayuda",
+      "intro": "Cuenta la historia como te salga, aunque sea desordenada. El modelo la separa en Situación, Tarea, Acción y Resultado y pregunta lo que falte.",
+      "open": "Contar la historia",
+      "how": "Los campos de abajo se rellenan para que los revises. No se inventa nada: lo que falte se convierte en pregunta.",
+      "narrative": "Tu historia",
+      "narrativeHint": "Qué pasó, qué hiciste y cómo terminó. En cualquier idioma: los campos salen en el mismo.",
+      "missingTitle": "Para que la historia sea más fuerte",
+      "missingHint": "Responde lo que sepas y complétala. Deja en blanco lo que no sepas.",
+      "complete": "No falta nada importante.",
+      "review": "Los campos de abajo se rellenaron. Revísalos antes de guardar.",
+      "organize": "Organizar en STAR",
+      "refine": "Completar con las respuestas",
+      "needsProvider": "Configura un proveedor para usar el asistente.",
+      "privacy": "La historia va al proveedor que configuraste, como en las entrevistas. No se guarda nada hasta que guardes la historia."
     }
   },
   "newInterview": {

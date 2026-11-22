@@ -19,6 +19,7 @@ import {
   iconPropsSm,
 } from '../../ui'
 import { PageHeader } from '../../ui/PageHeader'
+import { StoryAssistant } from './StoryAssistant'
 
 const STAR = ['situation', 'task', 'action', 'result'] as const
 
@@ -102,6 +103,22 @@ function Editor({ story }: { story?: Story }) {
         title={story ? t('stories.editor.editTitle') : t('stories.editor.newTitle')}
         description={t('stories.editor.description')}
       />
+      <div className="mb-10">
+        <StoryAssistant
+          onResult={(r) =>
+            // The assistant fills the STAR parts it found; what it left empty keeps what was typed.
+            // The title is only filled in when there isn't one yet.
+            setForm((f) => ({
+              title: f.title.trim() ? f.title : r.title,
+              situation: r.situation || f.situation,
+              task: r.task || f.task,
+              action: r.action || f.action,
+              result: r.result || f.result,
+              tags: [...new Set([...f.tags, ...r.tags])],
+            }))
+          }
+        />
+      </div>
       <form onSubmit={onSubmit} noValidate className="flex flex-col gap-8">
         <Field
           id={`${ids}-title`}

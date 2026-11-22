@@ -465,6 +465,17 @@ Responder de novo uma pergunta e ver o antes e depois lado a lado: é o ciclo de
 
 - [x] Feito em 22/11/2026.
 
+### Assistente de história (pedido em 22/11/2026)
+
+Transforma um relato solto em STAR e pergunta o que falta.
+
+- No editor de histórias, um painel "Organizar com ajuda" (fechado por padrão): o usuário conta a história do jeito que vier, em qualquer idioma.
+- Prompt novo `structureStory` (v1): devolve título, situação, tarefa, ação, resultado, até 3 tags da lista sugerida e até 3 perguntas sobre o que falta (papel exato, ações concretas, resultado com número), no idioma da interface. Usa só fatos do relato e das respostas: nunca inventa números, nomes ou resultados. Os campos saem no idioma em que a história foi contada.
+- O resultado preenche o formulário pra revisão: as partes que vieram vazias mantêm o que já estava escrito, o título só é preenchido se ainda não houver, e as tags somam às existentes. Nada é salvo sem o usuário salvar.
+- O usuário responde as perguntas ali mesmo e completa; as respostas de todas as rodadas vão juntas na próxima chamada.
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |
