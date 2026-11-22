@@ -1,12 +1,16 @@
 import { act, render, screen } from '@testing-library/react'
+import { useEffect } from 'react'
 import { beforeEach, expect, it } from 'vitest'
 import { getRepositories } from '../storage/repositories'
 import { SettingsProvider } from './SettingsProvider'
 import { useSettings, type SettingsContextValue } from './settingsContext'
 
-let ctx: SettingsContextValue
+const probe: { ctx?: SettingsContextValue } = {}
 function Probe() {
-  ctx = useSettings()
+  const ctx = useSettings()
+  useEffect(() => {
+    probe.ctx = ctx
+  })
   return <p>{`${ctx.settings.stt.kind}/${ctx.settings.tts.kind}`}</p>
 }
 
@@ -24,8 +28,8 @@ it('applies quick successive updates on top of each other', async () => {
 
   await act(async () => {
     // Fired in the same tick, like two clicks before a re-render.
-    const a = ctx.update({ stt: { kind: 'typed-only' } })
-    const b = ctx.update((s) => ({ ...s, tts: { ...s.tts, kind: 'off' } }))
+    const a = probe.ctx!.update({ stt: { kind: 'typed-only' } })
+    const b = probe.ctx!.update((s) => ({ ...s, tts: { ...s.tts, kind: 'off' } }))
     await Promise.all([a, b])
   })
 
