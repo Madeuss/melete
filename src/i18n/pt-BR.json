@@ -140,7 +140,7 @@
       "engineBrowser": "Voz do navegador",
       "engineKokoro": "Kokoro",
       "kokoroTitle": "Uma voz natural que roda no seu aparelho",
-      "kokoroInfo": "O Kokoro é um modelo de voz aberto que roda dentro deste navegador: as perguntas não saem daqui. Na primeira vez ele baixa uns 110 MB (o modelo vem do Hugging Face); depois fica guardado no navegador.",
+      "kokoroInfo": "O Kokoro é um modelo de voz aberto que roda dentro deste navegador: as perguntas não saem daqui. Na primeira vez ele baixa uns {{size}} MB (o modelo vem do Hugging Face); depois fica guardado no navegador.",
       "kokoroEnglishOnly": "O Kokoro só fala inglês. Entrevistas em outros idiomas usam a voz do navegador.",
       "kokoroDownloading": "Baixando o Kokoro… {{percent}}%",
       "kokoroPreparing": "Preparando o Kokoro…",
@@ -151,8 +151,9 @@
       "accentGb": "Inglês britânico",
       "female": "feminina",
       "male": "masculina",
-      "kokoroDownload": "Baixar o Kokoro (110 MB)",
-      "kokoroNotDownloaded": "Enquanto o Kokoro não for baixado, as perguntas são lidas com a voz do navegador."
+      "kokoroDownload": "Baixar o Kokoro ({{size}} MB)",
+      "kokoroNotDownloaded": "Enquanto o Kokoro não for baixado, as perguntas são lidas com a voz do navegador.",
+      "kokoroSlow": "Este navegador não consegue rodar o Kokoro na placa de vídeo, então cada frase leva alguns segundos pra ser gerada."
     },
     "language": {
       "title": "Idioma",

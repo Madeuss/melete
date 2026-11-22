@@ -3,7 +3,7 @@ import { FakeTts } from '../fakes/FakeTts'
 import { KokoroClient, type KokoroAudio } from './kokoro/client'
 import type { AudioPlayer } from './kokoro/player'
 import type { KokoroRequest, KokoroResponse } from './kokoro/protocol'
-import { kokoroVoiceOrDefault } from './kokoro/voices'
+import { kokoroVoiceOrDefault, type KokoroDevice } from './kokoro/voices'
 import { KokoroTts } from './kokoroTts'
 
 const audioFor = (text: string): KokoroAudio => ({ samples: new Float32Array([text.length]), sampleRate: 24000 })
@@ -104,13 +104,15 @@ describe('KokoroTts', () => {
 class FakeWorker extends EventTarget {
   readonly requests: KokoroRequest[] = []
   failLoad = false
+  /** Pretend WebGPU failed and the worker fell back to wasm. */
+  fallBackToWasm = false
   postMessage(request: KokoroRequest) {
     this.requests.push(request)
     queueMicrotask(() => {
       if (request.type === 'load') {
         if (this.failLoad) return this.reply({ type: 'loadError', message: 'offline' })
         this.reply({ type: 'progress', loaded: 50, total: 100 })
-        this.reply({ type: 'ready' })
+        this.reply({ type: 'ready', device: this.fallBackToWasm ? 'wasm' : request.device })
       } else {
         this.reply({ type: 'audio', id: request.id, samples: new Float32Array(3), sampleRate: 24000 })
       }
@@ -118,6 +120,15 @@ class FakeWorker extends EventTarget {
   }
   reply(data: KokoroResponse) {
     this.dispatchEvent(new MessageEvent('message', { data }))
+  }
+}
+
+/** Test environment: which device is detected and whether its weights are cached. */
+function env(opts: { device?: KokoroDevice; cached?: boolean; onReady?: (r: KokoroDevice, a: KokoroDevice) => void } = {}) {
+  return {
+    detectDevice: () => Promise.resolve(opts.device ?? 'wasm'),
+    isCached: () => Promise.resolve(opts.cached ?? false),
+    onReady: opts.onReady,
   }
 }
 
@@ -130,7 +141,7 @@ describe('KokoroClient', () => {
         created++
         return worker as unknown as Worker
       },
-      () => Promise.resolve(true), // already downloaded
+      env({ cached: true }), // already downloaded
     )
     const states: string[] = []
     client.subscribe(() => states.push(client.getStatus().state))
@@ -151,7 +162,7 @@ describe('KokoroClient', () => {
         created++
         return new FakeWorker() as unknown as Worker
       },
-      () => Promise.resolve(false),
+      env({ cached: false }),
     )
     await expect(client.synthesize('Hello.', 'af_heart', 1)).rejects.toThrow('not downloaded')
     expect(client.getStatus()).toEqual({ state: 'notDownloaded' })
@@ -162,10 +173,24 @@ describe('KokoroClient', () => {
     await expect(client.synthesize('Hello.', 'af_heart', 1)).resolves.toMatchObject({ sampleRate: 24000 })
   })
 
+  it('asks the worker for the detected device and reports a fallback to wasm', async () => {
+    const worker = new FakeWorker()
+    worker.fallBackToWasm = true
+    const ready: string[] = []
+    const client = new KokoroClient(
+      () => worker as unknown as Worker,
+      env({ device: 'webgpu', onReady: (requested, actual) => ready.push(`${requested}->${actual}`) }),
+    )
+    expect(await client.device()).toBe('webgpu')
+    await client.load()
+    expect(worker.requests[0]).toEqual({ type: 'load', device: 'webgpu' })
+    expect(ready).toEqual(['webgpu->wasm'])
+  })
+
   it('reports a failed download and lets the user try again', async () => {
     const worker = new FakeWorker()
     worker.failLoad = true
-    const client = new KokoroClient(() => worker as unknown as Worker)
+    const client = new KokoroClient(() => worker as unknown as Worker, env())
     await expect(client.load()).rejects.toThrow('offline')
     expect(client.getStatus()).toEqual({ state: 'error', message: 'offline' })
 

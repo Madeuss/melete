@@ -7,7 +7,7 @@ import { useKokoroStatus } from '../../app/useKokoroStatus'
 import { SAMPLE_QUESTION } from '../../interview/samples'
 import { isWebSpeechSupported } from '../../providers/stt/webSpeech'
 import { isBrowserTtsSupported, loadVoices, voicesFor } from '../../providers/tts/browserTts'
-import { KOKORO_VOICES, kokoroVoiceOrDefault } from '../../providers/tts/kokoro/voices'
+import { KOKORO_VARIANTS, KOKORO_VOICES, kokoroVoiceOrDefault, type KokoroDevice } from '../../providers/tts/kokoro/voices'
 import type { Settings } from '../../schemas'
 import { Button, Field, Notice, Progress, SegmentedControl, Select, iconProps, iconPropsSm } from '../../ui'
 import { Section } from '../../ui/PageHeader'
@@ -162,8 +162,8 @@ function KokoroFields() {
   const { settings, update } = useSettings()
   const ids = useId()
   const status = useKokoroStatus()
+  const device = useKokoroDevice()
 
-  // Coming back to Settings with Kokoro already chosen: load it (from cache) to show its status.
   // Already downloaded: load it from the cache to show it's ready. Otherwise show the download button.
   useEffect(() => {
     kokoro.loadIfDownloaded().catch(() => {}) // the status line shows why
@@ -172,11 +172,14 @@ function KokoroFields() {
   return (
     <div className="flex flex-col gap-6">
       <Notice tone="info" title={t('settings.voice.kokoroTitle')}>
-        {t('settings.voice.kokoroInfo')}
+        {t('settings.voice.kokoroInfo', { size: device ? KOKORO_VARIANTS[device].sizeMb : '110–350' })}
         {settings.interviewLanguage !== 'en' && <> {t('settings.voice.kokoroEnglishOnly')}</>}
       </Notice>
 
-      <KokoroStatusLine />
+      <KokoroStatusLine device={device} />
+      {status.state === 'ready' && device === 'wasm' && (
+        <p className="text-caption text-text-subtle">{t('settings.voice.kokoroSlow')}</p>
+      )}
 
       {status.state === 'ready' && (
         <div className="grid gap-6 sm:grid-cols-[1fr_auto]">
@@ -207,7 +210,20 @@ function KokoroFields() {
   )
 }
 
-function KokoroStatusLine() {
+/** Where Kokoro runs in this browser (decides the download size); undefined while detecting. */
+function useKokoroDevice(): KokoroDevice | undefined {
+  const [device, setDevice] = useState<KokoroDevice>()
+  useEffect(() => {
+    let alive = true
+    void kokoro.device().then((d) => alive && setDevice(d))
+    return () => {
+      alive = false
+    }
+  }, [])
+  return device
+}
+
+function KokoroStatusLine({ device }: { device?: KokoroDevice }) {
   const { t } = useTranslation()
   const status = useKokoroStatus()
 
@@ -248,10 +264,10 @@ function KokoroStatusLine() {
       <Button
         variant="primary"
         icon={<Download {...iconPropsSm} />}
-        disabled={status.state === 'idle'}
+        disabled={status.state === 'idle' || !device}
         onClick={() => void kokoro.load().catch(() => {})}
       >
-        {t('settings.voice.kokoroDownload')}
+        {t('settings.voice.kokoroDownload', { size: device ? KOKORO_VARIANTS[device].sizeMb : '…' })}
       </Button>
       <p className="text-caption text-text-subtle">{t('settings.voice.kokoroNotDownloaded')}</p>
     </div>

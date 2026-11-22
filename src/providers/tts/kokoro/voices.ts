@@ -7,8 +7,20 @@
  */
 
 export const KOKORO_MODEL = 'onnx-community/Kokoro-82M-v1.0-ONNX'
-/** q8 weights: ~90 MB to download once, good quality on CPU (wasm). */
-export const KOKORO_DTYPE = 'q8'
+
+export type KokoroDevice = 'webgpu' | 'wasm'
+
+/**
+ * Where the model runs and which weights it uses. Measured on a desktop (first sentence of the sample):
+ * - webgpu + fp32: ~0.5 s per sentence once warmed up, but a bigger download.
+ * - wasm + q8: ~5 s per sentence (slower than speech), smaller download. Used without WebGPU.
+ * fp16 and q4f16 on WebGPU are fast but produce NaN (silence), so they're not options.
+ * sizeMb includes the ONNX runtime (~21 MB) the app serves.
+ */
+export const KOKORO_VARIANTS = {
+  webgpu: { dtype: 'fp32', file: 'onnx/model.onnx', sizeMb: 350 },
+  wasm: { dtype: 'q8', file: 'onnx/model_quantized.onnx', sizeMb: 110 },
+} as const satisfies Record<KokoroDevice, { dtype: string; file: string; sizeMb: number }>
 
 export interface KokoroVoice {
   id: string
