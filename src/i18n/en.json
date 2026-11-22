@@ -141,7 +141,7 @@
       "engineKokoro": "Kokoro",
       "kokoroTitle": "A natural voice that runs on your device",
       "kokoroInfo": "Kokoro is an open speech model that runs inside this browser: the questions never leave it. The first time, it downloads about {{size}} MB (the model comes from Hugging Face); after that it's kept in the browser.",
-      "kokoroEnglishOnly": "Kokoro only speaks English. Interviews in other languages use the browser voice.",
+      "kokoroEnglishOnly": "Kokoro doesn't speak Portuguese yet. In this interview, questions are read with the browser voice.",
       "kokoroDownloading": "Downloading Kokoro… {{percent}}%",
       "kokoroPreparing": "Preparing Kokoro…",
       "kokoroReady": "Kokoro is ready in this browser.",

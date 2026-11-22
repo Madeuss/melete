@@ -141,7 +141,7 @@
       "engineKokoro": "Kokoro",
       "kokoroTitle": "Uma voz natural que roda no seu aparelho",
       "kokoroInfo": "O Kokoro é um modelo de voz aberto que roda dentro deste navegador: as perguntas não saem daqui. Na primeira vez ele baixa uns {{size}} MB (o modelo vem do Hugging Face); depois fica guardado no navegador.",
-      "kokoroEnglishOnly": "O Kokoro só fala inglês. Entrevistas em outros idiomas usam a voz do navegador.",
+      "kokoroEnglishOnly": "O Kokoro ainda não fala português. Nesta entrevista, as perguntas são lidas com a voz do navegador.",
       "kokoroDownloading": "Baixando o Kokoro… {{percent}}%",
       "kokoroPreparing": "Preparando o Kokoro…",
       "kokoroReady": "O Kokoro está pronto neste navegador.",

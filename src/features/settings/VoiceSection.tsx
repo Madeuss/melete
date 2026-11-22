@@ -163,6 +163,7 @@ function KokoroFields() {
   const ids = useId()
   const status = useKokoroStatus()
   const device = useKokoroDevice()
+  const englishInterview = settings.interviewLanguage === 'en'
 
   // Already downloaded: load it from the cache to show it's ready. Otherwise show the download button.
   useEffect(() => {
@@ -173,15 +174,18 @@ function KokoroFields() {
     <div className="flex flex-col gap-6">
       <Notice tone="info" title={t('settings.voice.kokoroTitle')}>
         {t('settings.voice.kokoroInfo', { size: device ? KOKORO_VARIANTS[device].sizeMb : '110–350' })}
-        {settings.interviewLanguage !== 'en' && <> {t('settings.voice.kokoroEnglishOnly')}</>}
       </Notice>
+
+      {!englishInterview && <Notice tone="warning" title={t('settings.voice.kokoroEnglishOnly')} />}
 
       <KokoroStatusLine device={device} />
       {status.state === 'ready' && device === 'wasm' && (
         <p className="text-caption text-text-subtle">{t('settings.voice.kokoroSlow')}</p>
       )}
 
-      {status.state === 'ready' && (
+      {/* Kokoro's voices only read English; in another language the browser voice reads instead. */}
+      {status.state === 'ready' && !englishInterview && <RateAndPreview />}
+      {status.state === 'ready' && englishInterview && (
         <div className="grid gap-6 sm:grid-cols-[1fr_auto]">
           <Field id={`${ids}-voice`} label={t('settings.voice.voice')}>
             <Select
