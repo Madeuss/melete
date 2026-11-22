@@ -126,9 +126,7 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
 
         {s.current && (answering || s.state === 'decidingFollowUp' || s.state === 'evaluating') && (
           <section aria-labelledby={`${ids}-q`} className="flex flex-col gap-4">
-            <p className="text-sm font-medium text-text-muted">
-              {isFollowUp ? t('room.followUp') : progressLabel}
-            </p>
+            {isFollowUp && <p className="text-sm font-medium text-text-muted">{t('room.followUp')}</p>}
             <h1 id={`${ids}-q`} ref={questionRef} tabIndex={-1} className="text-xl outline-none sm:text-2xl">
               {s.current.text}
             </h1>
