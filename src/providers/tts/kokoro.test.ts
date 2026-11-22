@@ -200,8 +200,11 @@ describe('KokoroClient', () => {
   })
 })
 
-it('falls back to the default Kokoro voice for unknown or browser voice names', () => {
-  expect(kokoroVoiceOrDefault('bm_george')).toBe('bm_george')
-  expect(kokoroVoiceOrDefault('Microsoft Zira - English (United States)')).toBe('af_heart')
-  expect(kokoroVoiceOrDefault(undefined)).toBe('af_heart')
+it('picks a Kokoro voice for the interview language, falling back to its default', () => {
+  expect(kokoroVoiceOrDefault('bm_george', 'en')).toBe('bm_george')
+  expect(kokoroVoiceOrDefault('Microsoft Zira - English (United States)', 'en')).toBe('af_heart')
+  expect(kokoroVoiceOrDefault(undefined, 'en')).toBe('af_heart')
+  expect(kokoroVoiceOrDefault('pm_alex', 'pt')).toBe('pm_alex')
+  // An English voice can't read a Portuguese interview.
+  expect(kokoroVoiceOrDefault('af_heart', 'pt')).toBe('pf_dora')
 })

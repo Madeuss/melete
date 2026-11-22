@@ -7,12 +7,19 @@ import { useKokoroStatus } from '../../app/useKokoroStatus'
 import { SAMPLE_QUESTION } from '../../interview/samples'
 import { isWebSpeechSupported } from '../../providers/stt/webSpeech'
 import { isBrowserTtsSupported, loadVoices, voicesFor } from '../../providers/tts/browserTts'
-import { KOKORO_VARIANTS, KOKORO_VOICES, kokoroVoiceOrDefault, type KokoroDevice } from '../../providers/tts/kokoro/voices'
+import { KOKORO_VARIANTS, kokoroVoiceOrDefault, kokoroVoicesFor, type KokoroDevice } from '../../providers/tts/kokoro/voices'
 import type { Settings } from '../../schemas'
 import { Button, Field, Notice, Progress, SegmentedControl, Select, iconProps, iconPropsSm } from '../../ui'
 import { Section } from '../../ui/PageHeader'
 
 const RATES = [0.8, 0.9, 1, 1.1, 1.25] as const
+
+const ACCENTS = ['us', 'gb', 'br'] as const
+const ACCENT_LABEL = {
+  us: 'settings.voice.accentUs',
+  gb: 'settings.voice.accentGb',
+  br: 'settings.voice.accentBr',
+} as const
 
 type TtsKind = Settings['tts']['kind']
 
@@ -163,7 +170,8 @@ function KokoroFields() {
   const ids = useId()
   const status = useKokoroStatus()
   const device = useKokoroDevice()
-  const englishInterview = settings.interviewLanguage === 'en'
+  // Only the interview language's voices: the voice reads the questions.
+  const voices = kokoroVoicesFor(settings.interviewLanguage)
 
   // Already downloaded: load it from the cache to show it's ready. Otherwise show the download button.
   useEffect(() => {
@@ -174,31 +182,28 @@ function KokoroFields() {
     <div className="flex flex-col gap-6">
       <Notice tone="info" title={t('settings.voice.kokoroTitle')}>
         {t('settings.voice.kokoroInfo', { size: device ? KOKORO_VARIANTS[device].sizeMb : '110–350' })}
+        {settings.interviewLanguage === 'pt' && <> {t('settings.voice.kokoroPortugueseData')}</>}
       </Notice>
-
-      {!englishInterview && <Notice tone="warning" title={t('settings.voice.kokoroEnglishOnly')} />}
 
       <KokoroStatusLine device={device} />
       {status.state === 'ready' && device === 'wasm' && (
         <p className="text-caption text-text-subtle">{t('settings.voice.kokoroSlow')}</p>
       )}
 
-      {/* Kokoro's voices only read English; in another language the browser voice reads instead. */}
-      {status.state === 'ready' && !englishInterview && <RateAndPreview />}
-      {status.state === 'ready' && englishInterview && (
+      {status.state === 'ready' && (
         <div className="grid gap-6 sm:grid-cols-[1fr_auto]">
           <Field id={`${ids}-voice`} label={t('settings.voice.voice')}>
             <Select
               id={`${ids}-voice`}
-              value={kokoroVoiceOrDefault(settings.tts.voice)}
+              value={kokoroVoiceOrDefault(settings.tts.voice, settings.interviewLanguage)}
               onChange={(e) => {
                 const voice = e.target.value
                 void update((s) => ({ ...s, tts: { ...s.tts, voice } }))
               }}
             >
-              {(['us', 'gb'] as const).map((accent) => (
-                <optgroup key={accent} label={t(accent === 'us' ? 'settings.voice.accentUs' : 'settings.voice.accentGb')}>
-                  {KOKORO_VOICES.filter((v) => v.accent === accent).map((v) => (
+              {ACCENTS.filter((accent) => voices.some((v) => v.accent === accent)).map((accent) => (
+                <optgroup key={accent} label={t(ACCENT_LABEL[accent])}>
+                  {voices.filter((v) => v.accent === accent).map((v) => (
                     <option key={v.id} value={v.id}>
                       {v.name} ({t(v.gender === 'female' ? 'settings.voice.female' : 'settings.voice.male')})
                     </option>

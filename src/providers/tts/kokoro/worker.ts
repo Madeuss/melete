@@ -5,8 +5,10 @@
  */
 import { KokoroTTS, env } from 'kokoro-js'
 import ortWasm from 'ort-dist/ort-wasm-simd-threaded.jsep.wasm?url'
+import { fromEspeakIpa } from './phonemes'
 import type { KokoroRequest, KokoroResponse } from './protocol'
-import { KOKORO_MODEL, KOKORO_VARIANTS, type KokoroDevice } from './voices'
+import { KOKORO_MODEL, KOKORO_VARIANTS, isPortugueseVoice, type KokoroDevice } from './voices'
+import type { EspeakNgWorker } from '@echogarden/espeak-ng-emscripten'
 
 // Only the .wasm needs a URL: the bundled runtime already embeds its JS glue (setting `mjs`
 // too makes it import that glue's source text as a URL and fail).
@@ -66,6 +68,60 @@ function load(device: KokoroDevice = 'wasm'): Promise<{ tts: KokoroTTS; device: 
   return model
 }
 
+/*
+ * Portuguese needs espeak-ng with its Portuguese data: the phonemizer bundled with kokoro-js only
+ * ships English. Echogarden's Emscripten build is loaded the first time a Portuguese voice speaks;
+ * it fetches its ~25 MB language data (espeak-ng.data) from next to its own script, which the app
+ * serves (see vite.config.ts).
+ */
+let espeak: Promise<EspeakNgWorker> | undefined
+
+function getEspeak(): Promise<EspeakNgWorker> {
+  espeak ??= (async () => {
+    const { default: initEspeak } = await import('@echogarden/espeak-ng-emscripten')
+    const module = await initEspeak()
+    const worker = new module.eSpeakNGWorker()
+    worker.set_voice('pt-br')
+    return worker
+  })().catch((err: unknown) => {
+    espeak = undefined
+    throw err
+  })
+  return espeak
+}
+
+async function phonemize(text: string): Promise<string> {
+  const { code, ipa } = (await getEspeak()).synthesize_ipa(text)
+  if (code !== 0) throw new Error(`espeak-ng failed (${code})`)
+  return fromEspeakIpa(ipa)
+}
+
+/** Punctuation is kept as is (it shapes the prosody); only the words between it are phonemized. */
+const PUNCTUATION = /(\s*[;:,.!?¡¿—…"«»“”(){}[\]]+\s*)+/g
+
+/**
+ * Text → phonemes for Brazilian Portuguese, as Kokoro's Python pipeline does for non-English
+ * languages: espeak-ng ('pt-br') phonemes, keeping the punctuation.
+ */
+async function portuguesePhonemes(text: string): Promise<string> {
+  const parts: string[] = []
+  let last = 0
+  for (const m of text.matchAll(PUNCTUATION)) {
+    if (m.index > last) parts.push(await phonemize(text.slice(last, m.index)))
+    parts.push(m[0])
+    last = m.index + m[0].length
+  }
+  if (last < text.length) parts.push(await phonemize(text.slice(last)))
+  return parts.join('').trim()
+}
+
+async function generate(tts: KokoroTTS, text: string, voice: string, speed: number) {
+  // The voice ids come from our own list (voices.ts), which matches the model's voice files.
+  if (!isPortugueseVoice(voice)) return tts.generate(text, { voice: voice as never, speed })
+  const { input_ids } = tts.tokenizer(await portuguesePhonemes(text), { truncation: true })
+  return tts.generate_from_ids(input_ids, { voice: voice as never, speed })
+}
+
 // One generation at a time: the model session isn't meant to run calls concurrently.
 let queue: Promise<unknown> = Promise.resolve()
 
@@ -83,8 +139,7 @@ scope.addEventListener('message', ({ data }) => {
   queue = queue.then(async () => {
     try {
       const { tts } = await load()
-      // The voice ids come from our own list (voices.ts), which matches kokoro-js's.
-      const audio = await tts.generate(text, { voice: voice as never, speed })
+      const audio = await generate(tts, text, voice, speed)
       const samples = new Float32Array(audio.audio)
       scope.postMessage({ type: 'audio', id, samples, sampleRate: audio.sampling_rate }, [samples.buffer])
     } catch (err) {

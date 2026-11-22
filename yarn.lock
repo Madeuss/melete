@@ -26,6 +26,11 @@
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.29.15.tgz#fd047349f32c2e89c28527e023af277e3dc747b6"
   integrity sha512-304gsbbGVmQc+cNGHzwHBlqepYdWLKj3VXCQBGt/EGcV7PUPfKI7kAUNW1FZEOCwlQiLvQjg1JEaAlRQ616h+Q==
 
+"@echogarden/espeak-ng-emscripten@0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@echogarden/espeak-ng-emscripten/-/espeak-ng-emscripten-0.3.5.tgz#4817314c0a9aed9653785e4b4b45802960ac8c5a"
+  integrity sha512-Izbkm7NWccwb//RKgOp1/0k21StKN1DFIn+K7GU1XN7n6pmSi4bsk/0tYUsgQbysC4GVyrVompNmLInU/BFE+A==
+
 "@emnapi/core@2.0.0-beta.2":
   version "2.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/@emnapi/core/-/core-2.0.0-beta.2.tgz#ff0e7979b1c52afc59df7ebc792adc821f8f74d7"

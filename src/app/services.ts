@@ -40,9 +40,8 @@ export function sttFromSettings(settings: Settings): SpeechToText {
   return canUseVoice(settings) ? new WebSpeechStt(SPEECH_LANG[settings.interviewLanguage]) : new TypedStt()
 }
 
-/** Kokoro only speaks English; other interview languages use the browser voice. */
 export function usesKokoro(settings: Settings): boolean {
-  return settings.tts.kind === 'kokoro' && settings.interviewLanguage === 'en' && isKokoroSupported()
+  return settings.tts.kind === 'kokoro' && isKokoroSupported()
 }
 
 const audioPlayer = new WebAudioPlayer()
@@ -58,7 +57,7 @@ export function ttsFromSettings(settings: Settings): TextToSpeech {
       })
     : new SilentTts()
   if (!usesKokoro(settings)) return browser
-  const voice = kokoroVoiceOrDefault(settings.tts.voice)
+  const voice = kokoroVoiceOrDefault(settings.tts.voice, settings.interviewLanguage)
   return new KokoroTts({
     synthesize: (sentence) => kokoro.synthesize(sentence, voice, settings.tts.rate),
     player: audioPlayer,

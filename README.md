@@ -81,9 +81,11 @@ retries up to twice; if it keeps failing, try a larger model.
 Typed answers always work.
 
 For a better voice than the browser's, pick **Kokoro** in Settings: an open speech model
-([Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)) that runs in the browser, in English
-only. With WebGPU it runs on the graphics card and starts speaking in about half a second; without
-it, each sentence takes a few seconds (the next main question is generated while you answer).
+([Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)) that runs in the browser, in English and
+Brazilian Portuguese (Portuguese pronunciation comes from [eSpeak NG](https://github.com/espeak-ng/espeak-ng),
+whose ~25 MB of language data is downloaded the first time a Portuguese voice speaks). With WebGPU
+it runs on the graphics card and starts speaking in about half a second; without it, each sentence
+takes a few seconds (the next main question is generated while you answer).
 
 ## Development
 
