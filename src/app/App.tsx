@@ -12,6 +12,7 @@ const NewInterviewPage = lazy(() => import('../features/new-interview/NewIntervi
 const InterviewRoomPage = lazy(() => import('../features/interview-room/InterviewRoomPage'))
 const ReportPage = lazy(() => import('../features/report/ReportPage'))
 const HistoryPage = lazy(() => import('../features/history/HistoryPage'))
+const PitchPage = lazy(() => import('../features/pitch/PitchPage'))
 // Dev-only: behind import.meta.env.DEV so production builds drop it.
 const StyleguidePage = import.meta.env.DEV ? lazy(() => import('../features/styleguide/StyleguidePage')) : null
 
@@ -67,6 +68,7 @@ export function App() {
               <Route path="/stories/new" element={<StoryEditorPage />} />
               <Route path="/stories/:storyId" element={<StoryEditorPage />} />
               <Route path="/history" element={<HistoryPage />} />
+              <Route path="/pitch" element={<PitchPage />} />
               <Route path="/report/:sessionId" element={<ReportPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

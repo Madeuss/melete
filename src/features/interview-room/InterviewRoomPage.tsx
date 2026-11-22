@@ -3,9 +3,10 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { llmErrorMessage, sttErrorMessage } from '../../app/errors'
-import { canUseVoice, createEngine, createMicLevelMeter, usesKokoro } from '../../app/services'
+import { canUseVoice, createEngine, usesKokoro } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
 import { useKokoroStatus } from '../../app/useKokoroStatus'
+import { useMicLevel } from '../../app/useMicLevel'
 import type { EngineSnapshot, InterviewEngine } from '../../interview/engine'
 import { Button, Dialog, Logo, Notice, Progress, RecordButton, Textarea, buttonClasses, iconPropsSm } from '../../ui'
 import { FeedbackView } from '../report/FeedbackView'
@@ -31,21 +32,6 @@ function SpeakingLabel() {
       : t('room.preparingVoice', { percent: Math.round(kokoro.progress * 100) })
   }
   return t('room.speaking')
-}
-
-/** Keeps a mic level (0..1) while recording, for the ring around the record button. */
-function useMicLevel(active: boolean) {
-  const [level, setLevel] = useState(0)
-  useEffect(() => {
-    if (!active) return
-    const meter = createMicLevelMeter()
-    meter.start(setLevel).catch(() => {}) // the meter is decoration; recognition has its own errors
-    return () => {
-      meter.stop()
-      setLevel(0)
-    }
-  }, [active])
-  return active ? level : 0
 }
 
 function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: string }) {

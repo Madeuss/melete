@@ -57,6 +57,11 @@ export function useRetries(sessionId: string | undefined) {
   }, [sessionId])
 }
 
+/** Saved "Tell me about yourself" versions, newest first. */
+export function usePitches() {
+  return useLiveQuery(() => getRepositories().pitches.list(), [])
+}
+
 /** Sessions with answer count and average score, newest first. */
 export function useHistory() {
   return useLiveQuery(async () => {

@@ -53,7 +53,6 @@ A prioridade é sugestão: o Mat decide a ordem. As de prioridade alta são bara
 
 | Feature | O que faz | Prioridade sugerida |
 | --- | --- | --- |
-| Treino do "Tell me about yourself" | Modo só pro pitch de abertura, com cronômetro (alvo de 60 a 90 segundos), versões salvas e comparação entre elas | Alta: é a pergunta mais comum de qualquer entrevista |
 | Fluência em inglês | Para quem não é nativo: pausas longas, palavras que o reconhecimento de voz errou várias vezes (pista de pronúncia), vocabulário repetido e sugestões de expressões | Alta: diferencial pro público brasileiro e latino |
 | Etapas do processo | Simulação por etapa real (recrutador, gestor, técnica, valores, final), cada uma com tom e tipo de pergunta próprios | Alta |
 | Personas de entrevistador | Amigável, neutro ou cético (aperta nos detalhes, corta resposta longa) | Média |

@@ -8,7 +8,8 @@
     "newInterview": "Nueva entrevista",
     "history": "Historial",
     "stories": "Historias",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "pitch": "Presentación"
   },
   "common": {
     "save": "Guardar",
@@ -486,5 +487,43 @@
     "deadline": "Plazo ajustado",
     "mentoring": "Mentoría",
     "technical": "Técnica"
+  },
+  "pitch": {
+    "title": "Tell me about yourself",
+    "description": "La pregunta de apertura de casi toda entrevista. Practica una respuesta de 60 a 90 segundos, guarda cada versión y compáralas.",
+    "role": "Puesto",
+    "roleHint": "La presentación se evalúa según cuánto encaja con este puesto.",
+    "tapToStart": "Toca y preséntate",
+    "yourPitch": "Tu presentación",
+    "typeHint": "Escríbela como la dirías. Las versiones escritas reciben un tiempo estimado a un ritmo normal.",
+    "evaluate": "Evaluar y guardar",
+    "saveOnly": "Guardar",
+    "needsProvider": "Sin un proveedor la versión se guarda, pero no se evalúa.",
+    "savedWithoutFeedback": "La versión se guardó sin evaluación.",
+    "timing": {
+      "short": "Menos de {{min}} s",
+      "onTarget": "En el objetivo ({{min}}–{{max}} s)",
+      "long": "Más de {{max}} s"
+    },
+    "estimated": "Escrita: tiempo estimado a 140 palabras por minuto.",
+    "scores": {
+      "structure": "Estructura",
+      "relevance": "Relación con el puesto",
+      "specificity": "Datos concretos",
+      "conciseness": "Duración",
+      "clarity": "Claridad"
+    },
+    "improvedVersion": "Una versión más concisa",
+    "versions_one": "{{count}} versión guardada",
+    "versions_other": "{{count}} versiones guardadas",
+    "compareHint": "Marca dos versiones para compararlas.",
+    "compare": "Comparar",
+    "compareTitle": "Dos versiones lado a lado",
+    "duration": "Duración",
+    "average": "promedio {{avg}}",
+    "notEvaluated": "sin evaluación",
+    "delete": "Borrar versión",
+    "deleteTitle": "¿Borrar esta versión?",
+    "deleteBody": "El texto y su evaluación se borran de este navegador."
   }
 }

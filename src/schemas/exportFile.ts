@@ -1,13 +1,14 @@
 import { z } from 'zod'
 import { LlmCall } from './llmCall'
+import { Pitch } from './pitch'
 import { Session } from './session'
 import { Story } from './story'
 import { Turn } from './turn'
 
 /**
  * The user's JSON export. Never contains settings (and so never the API key).
- * The stories screen exports only `stories`; "export everything" adds sessions, turns and
- * LLM calls. Files from before LLM calls were recorded still import (`llmCalls` defaults to []).
+ * The stories screen exports only `stories`; "export everything" adds sessions, turns, LLM calls
+ * and pitch versions. Older files without the newer lists still import (they default to []).
  */
 export const ExportFile = z.object({
   app: z.literal('melete'),
@@ -17,5 +18,6 @@ export const ExportFile = z.object({
   sessions: z.array(Session).default([]),
   turns: z.array(Turn).default([]),
   llmCalls: z.array(LlmCall).default([]),
+  pitches: z.array(Pitch).default([]),
 })
 export type ExportFile = z.infer<typeof ExportFile>

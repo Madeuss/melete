@@ -8,7 +8,8 @@
     "newInterview": "New interview",
     "history": "History",
     "stories": "Stories",
-    "settings": "Settings"
+    "settings": "Settings",
+    "pitch": "Introduction"
   },
   "common": {
     "save": "Save",
@@ -486,5 +487,43 @@
     "deadline": "Tight deadline",
     "mentoring": "Mentoring",
     "technical": "Technical"
+  },
+  "pitch": {
+    "title": "Tell me about yourself",
+    "description": "The opening question of almost every interview. Practice a 60 to 90 second answer, save each version and compare them.",
+    "role": "Role",
+    "roleHint": "The pitch is judged on how well it fits this role.",
+    "tapToStart": "Tap and introduce yourself",
+    "yourPitch": "Your introduction",
+    "typeHint": "Write it the way you'd say it. Typed versions get an estimated time at a normal pace.",
+    "evaluate": "Evaluate and save",
+    "saveOnly": "Save",
+    "needsProvider": "Without a provider the version is saved, but not evaluated.",
+    "savedWithoutFeedback": "The version was saved without an evaluation.",
+    "timing": {
+      "short": "Under {{min}} s",
+      "onTarget": "On target ({{min}}–{{max}} s)",
+      "long": "Over {{max}} s"
+    },
+    "estimated": "Typed: estimated at 140 words per minute.",
+    "scores": {
+      "structure": "Structure",
+      "relevance": "Fit for the role",
+      "specificity": "Specifics",
+      "conciseness": "Length",
+      "clarity": "Clarity"
+    },
+    "improvedVersion": "A tighter version",
+    "versions_one": "{{count}} saved version",
+    "versions_other": "{{count}} saved versions",
+    "compareHint": "Pick two versions to compare them.",
+    "compare": "Compare",
+    "compareTitle": "Two versions side by side",
+    "duration": "Duration",
+    "average": "average {{avg}}",
+    "notEvaluated": "not evaluated",
+    "delete": "Delete version",
+    "deleteTitle": "Delete this version?",
+    "deleteBody": "The text and its evaluation are removed from this browser."
   }
 }

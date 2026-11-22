@@ -1,16 +1,18 @@
 import { generateStructured } from '../providers/llm/structuredOutput'
 import type { LlmProvider } from '../providers/llm/types'
-import type { Feedback, PlannedQuestion, SessionSummary } from '../schemas'
+import type { Feedback, PitchFeedback, PlannedQuestion, SessionSummary } from '../schemas'
 import {
   classifyReply,
   decideFollowUp,
   evaluateAnswer,
+  evaluatePitch,
   planQuestions,
   structureStory,
   summarizeSession,
   type ClassifyReplyInput,
   type DecideFollowUpInput,
   type EvaluateAnswerInput,
+  type EvaluatePitchInput,
   type PlanQuestionsInput,
   type StructureStoryInput,
   type StructureStoryOutput,
@@ -96,4 +98,14 @@ export async function callStructureStory(
     signal,
   })
   return structureStory.postProcess(out)
+}
+
+/** "Tell me about yourself" practice: scores and feedback for one version of the pitch. Not part of a session. */
+export function callEvaluatePitch(llm: LlmProvider, input: EvaluatePitchInput, signal?: AbortSignal): Promise<PitchFeedback> {
+  return generateStructured(llm, {
+    messages: evaluatePitch.build(input),
+    schema: evaluatePitch.schema,
+    name: evaluatePitch.name,
+    signal,
+  })
 }

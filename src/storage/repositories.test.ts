@@ -134,7 +134,7 @@ describe('export and import', () => {
 })
 
 describe('llm calls and the v2 database', () => {
-  it('upgrades a v1 database without losing its sessions and turns', async () => {
+  it('upgrades a v1 database to the current version without losing its sessions and turns', async () => {
     const name = `test-${crypto.randomUUID()}`
     // A database exactly as the MVP created it (version 1, no llmCalls table).
     const { default: Dexie } = await import('dexie')
@@ -170,7 +170,7 @@ describe('llm calls and the v2 database', () => {
     const db = new MeleteDb(name)
     dbs.push(db)
     const r = createRepositories(db)
-    expect(db.verno).toBe(2)
+    expect(db.verno).toBe(3)
     const session = await r.sessions.get('old-session')
     expect(session?.config.difficulty).toBe('standard') // default filled in on read
     expect(await r.turns.listBySession('old-session')).toHaveLength(1)
@@ -178,6 +178,7 @@ describe('llm calls and the v2 database', () => {
 
     await r.llmCalls.add({ sessionId: 'old-session', kind: 'summarizeSession', model: 'm' })
     expect(await r.llmCalls.listBySession('old-session')).toHaveLength(1)
+    expect(await r.pitches.list()).toEqual([]) // v3 table, empty
   })
 
   it('exports, imports and deletes llm calls with their session', async () => {

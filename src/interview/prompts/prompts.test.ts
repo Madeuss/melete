@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { SessionConfig } from '../../schemas'
-import { decideFollowUp, evaluateAnswer, planQuestions, structureStory, summarizeSession } from './index'
+import { decideFollowUp, evaluateAnswer, evaluatePitch, planQuestions, structureStory, summarizeSession } from './index'
 
 const config: SessionConfig = {
   type: 'behavioral',
@@ -172,5 +172,35 @@ describe('structureStory v1', () => {
     expect(out.situation).toBe('s')
     expect(out.tags).toEqual(['ownership', 'deadline'])
     expect(out.missing).toEqual(['q1', 'q2', 'q3'])
+  })
+})
+
+describe('evaluatePitch v1', () => {
+  it('states the target, the role, the delivery facts and the languages', () => {
+    const [system, user] = evaluatePitch.build({
+      transcript: 'I am a frontend engineer with five years of experience.',
+      role: 'Senior Frontend Engineer',
+      seconds: 48,
+      metrics: { wordCount: 110, wordsPerMinute: 137, fillerWords: { um: 2 } },
+      language: 'en',
+      feedbackLanguage: 'pt-BR',
+    })
+    expect(system.content).toContain('for a Senior Frontend Engineer role')
+    expect(system.content).toContain('60 to 90 seconds')
+    expect(system.content).toContain('in Brazilian Portuguese')
+    expect(system.content).toContain('placeholder in brackets')
+    expect(user.content).toContain('<transcript>\nI am a frontend engineer')
+    expect(user.content).toContain('Spoken duration: 48 seconds')
+    expect(user.content).toContain('Filler words: um ×2')
+  })
+
+  it('says when the pitch was typed', () => {
+    const [, user] = evaluatePitch.build({
+      transcript: 'x',
+      metrics: { wordCount: 1, fillerWords: {} },
+      language: 'en',
+      feedbackLanguage: 'en',
+    })
+    expect(user.content).toContain('Typed, not spoken')
   })
 })

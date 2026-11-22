@@ -476,6 +476,18 @@ Transforma um relato solto em STAR e pergunta o que falta.
 
 - [x] Feito em 22/11/2026.
 
+### Treino do "Tell me about yourself" (pedido em 22/11/2026)
+
+Um modo só pro pitch de abertura, com cronômetro, versões salvas e comparação.
+
+- Tela nova "Apresentação" (`/pitch`) no menu. Funciona sem provedor (só salva); com provedor, avalia.
+- Prática: cargo opcional (lembrado; o padrão é o cargo da última entrevista), gravar por voz com cronômetro e uma barra até 2 minutos com a faixa-alvo de 60 a 90 s marcada, ou digitar. Depois de gravar, a transcrição pode ser corrigida antes de avaliar. Versões digitadas ganham um tempo estimado a 140 palavras por minuto.
+- Prompt novo `evaluatePitch` (v1): notas 0–5 de estrutura (presente → passado → futuro), ligação com a vaga, fatos concretos, duração e clareza; até 3 pontos fortes e 3 melhorias no idioma da interface; e uma versão mais enxuta no idioma da entrevista, só com fatos da transcrição (marcadores como [metric] no que faltar).
+- Cada versão é salva (tabela `pitches`, versão 3 do Dexie) antes da avaliação, então uma falha do provedor não perde a versão. Export, import e "apagar todos os dados" incluem as versões.
+- Versões: lista da mais nova pra mais antiga, com duração, cargo e média; abrir mostra a avaliação; apagar pede confirmação; marcar duas mostra a comparação (notas, duração, palavras por minuto e palavras de preenchimento, com a mudança de cada uma, e os dois textos lado a lado).
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

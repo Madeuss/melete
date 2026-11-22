@@ -64,6 +64,9 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 57 | Onde refazer | Só pelo relatório, depois da entrevista. Não pus o botão na tela de feedback no meio da entrevista, pra não interromper a sessão; refazer no meio seria outro fluxo. | Botão "Responder de novo" também no feedback depois de cada resposta. |
 | 58 | Assistente não entra no custo por sessão | As chamadas do assistente de história não são gravadas em `llmCalls`, porque não pertencem a uma entrevista. Se o custo do SaaS precisar contar tudo, dá pra gravar com uma sessão nula ou numa tabela de uso geral. | Gravar também, sem sessão. |
 | 59 | O que o assistente sobrescreve | Substitui Situação, Tarefa, Ação e Resultado quando traz algo (o painel diz que os campos são preenchidos pra revisar); mantém o título já escrito; soma as tags. | Pedir confirmação antes de substituir o que já estava escrito. |
+| 60 | Nome no menu | "Apresentação" no menu e "Tell me about yourself" como título da tela, que é como a pergunta aparece nas entrevistas em inglês. | "Pitch" ou "Fale sobre você". |
+| 61 | Avaliação do pitch fora do custo por sessão | Como no assistente de história, as chamadas de `evaluatePitch` não entram em `llmCalls`, porque não pertencem a uma entrevista. | Gravar também, sem sessão. |
+| 62 | Tempo de versão digitada | Estimado a 140 palavras por minuto (ritmo de conversa) e marcado com "~", pra a faixa de 60–90 s ainda servir de guia. | Não mostrar tempo pra versões digitadas. |
 
 ## O que ficou pra você
 

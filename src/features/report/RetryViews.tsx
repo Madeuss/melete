@@ -58,7 +58,7 @@ export function RetryAttempts({ turn, attempts }: { turn: Turn; attempts: Array<
 }
 
 /** The arrow shows which way the number moved; the color, whether that's better. */
-function Delta({ before, after, lowerIsBetter = false }: { before?: number; after?: number; lowerIsBetter?: boolean }) {
+export function Delta({ before, after, lowerIsBetter = false }: { before?: number; after?: number; lowerIsBetter?: boolean }) {
   const { t, i18n } = useTranslation()
   if (before === undefined || after === undefined || before === after) return <span className="text-text-subtle">–</span>
   const up = after > before

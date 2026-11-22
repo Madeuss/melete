@@ -1,6 +1,7 @@
 import {
   ExportFile,
   LlmCall,
+  Pitch,
   Session,
   Settings,
   Story,
@@ -158,15 +159,40 @@ export function createLlmCallsRepo(db: MeleteDb) {
   }
 }
 
+export function createPitchesRepo(db: MeleteDb) {
+  return {
+    async add(data: Omit<Pitch, 'id' | 'createdAt'>): Promise<Pitch> {
+      const pitch = Pitch.parse({ ...data, id: newId(), createdAt: nowIso() })
+      await db.pitches.add(pitch)
+      return pitch
+    },
+    /** Newest first. */
+    async list(): Promise<Pitch[]> {
+      return parseAll(Pitch, await db.pitches.orderBy('createdAt').reverse().toArray())
+    },
+    async update(id: string, patch: Partial<Omit<Pitch, 'id' | 'createdAt'>>): Promise<Pitch> {
+      const row = await db.pitches.get(id)
+      if (!row) throw new Error(`Pitch ${id} not found`)
+      const next = Pitch.parse({ ...Pitch.parse(row), ...patch })
+      await db.pitches.put(next)
+      return next
+    },
+    async remove(id: string): Promise<void> {
+      await db.pitches.delete(id)
+    },
+  }
+}
+
 export function createDataRepo(db: MeleteDb) {
   return {
     /** Full export. Settings (and so the API key) are never included. */
     async exportAll(): Promise<ExportFile> {
-      const [stories, sessions, turns, llmCalls] = await Promise.all([
+      const [stories, sessions, turns, llmCalls, pitches] = await Promise.all([
         db.stories.toArray(),
         db.sessions.toArray(),
         db.turns.toArray(),
         db.llmCalls.toArray(),
+        db.pitches.toArray(),
       ])
       return ExportFile.parse({
         app: 'melete',
@@ -176,6 +202,7 @@ export function createDataRepo(db: MeleteDb) {
         sessions,
         turns,
         llmCalls,
+        pitches,
       })
     },
     async exportStories(): Promise<ExportFile> {
@@ -189,22 +216,24 @@ export function createDataRepo(db: MeleteDb) {
     /** Validates the whole file first, then upserts everything in one transaction. */
     async importFile(raw: unknown): Promise<{ stories: number; sessions: number }> {
       const file = ExportFile.parse(raw)
-      await db.transaction('rw', [db.stories, db.sessions, db.turns, db.llmCalls], async () => {
+      await db.transaction('rw', [db.stories, db.sessions, db.turns, db.llmCalls, db.pitches], async () => {
         await db.stories.bulkPut(file.stories)
         await db.sessions.bulkPut(file.sessions)
         await db.turns.bulkPut(file.turns)
         await db.llmCalls.bulkPut(file.llmCalls)
+        await db.pitches.bulkPut(file.pitches)
       })
       return { stories: file.stories.length, sessions: file.sessions.length }
     },
     async wipe(): Promise<void> {
-      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns, db.llmCalls], async () => {
+      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns, db.llmCalls, db.pitches], async () => {
         await Promise.all([
           db.settings.clear(),
           db.stories.clear(),
           db.sessions.clear(),
           db.turns.clear(),
           db.llmCalls.clear(),
+          db.pitches.clear(),
         ])
       })
     },
@@ -216,6 +245,7 @@ export type StoriesRepo = ReturnType<typeof createStoriesRepo>
 export type SessionsRepo = ReturnType<typeof createSessionsRepo>
 export type TurnsRepo = ReturnType<typeof createTurnsRepo>
 export type LlmCallsRepo = ReturnType<typeof createLlmCallsRepo>
+export type PitchesRepo = ReturnType<typeof createPitchesRepo>
 export type DataRepo = ReturnType<typeof createDataRepo>
 
 export interface Repositories {
@@ -224,6 +254,7 @@ export interface Repositories {
   sessions: SessionsRepo
   turns: TurnsRepo
   llmCalls: LlmCallsRepo
+  pitches: PitchesRepo
   data: DataRepo
 }
 
@@ -234,6 +265,7 @@ export function createRepositories(db: MeleteDb): Repositories {
     sessions: createSessionsRepo(db),
     turns: createTurnsRepo(db),
     llmCalls: createLlmCallsRepo(db),
+    pitches: createPitchesRepo(db),
     data: createDataRepo(db),
   }
 }

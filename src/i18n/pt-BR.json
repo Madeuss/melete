@@ -8,7 +8,8 @@
     "newInterview": "Nova entrevista",
     "history": "Histórico",
     "stories": "Histórias",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "pitch": "Apresentação"
   },
   "common": {
     "save": "Salvar",
@@ -486,5 +487,43 @@
     "deadline": "Prazo apertado",
     "mentoring": "Mentoria",
     "technical": "Técnica"
+  },
+  "pitch": {
+    "title": "Tell me about yourself",
+    "description": "A pergunta de abertura de quase toda entrevista. Treine uma resposta de 60 a 90 segundos, salve cada versão e compare.",
+    "role": "Cargo",
+    "roleHint": "A apresentação é avaliada pelo quanto combina com esse cargo.",
+    "tapToStart": "Toque e se apresente",
+    "yourPitch": "Sua apresentação",
+    "typeHint": "Escreva do jeito que você falaria. Versões digitadas ganham um tempo estimado num ritmo normal de fala.",
+    "evaluate": "Avaliar e salvar",
+    "saveOnly": "Salvar",
+    "needsProvider": "Sem um provedor a versão é salva, mas não é avaliada.",
+    "savedWithoutFeedback": "A versão foi salva sem avaliação.",
+    "timing": {
+      "short": "Abaixo de {{min}} s",
+      "onTarget": "No alvo ({{min}}–{{max}} s)",
+      "long": "Acima de {{max}} s"
+    },
+    "estimated": "Digitada: tempo estimado a 140 palavras por minuto.",
+    "scores": {
+      "structure": "Estrutura",
+      "relevance": "Ligação com a vaga",
+      "specificity": "Fatos concretos",
+      "conciseness": "Duração",
+      "clarity": "Clareza"
+    },
+    "improvedVersion": "Uma versão mais enxuta",
+    "versions_one": "{{count}} versão salva",
+    "versions_other": "{{count}} versões salvas",
+    "compareHint": "Marque duas versões pra comparar.",
+    "compare": "Comparar",
+    "compareTitle": "Duas versões lado a lado",
+    "duration": "Duração",
+    "average": "média {{avg}}",
+    "notEvaluated": "sem avaliação",
+    "delete": "Apagar versão",
+    "deleteTitle": "Apagar esta versão?",
+    "deleteBody": "O texto e a avaliação saem deste navegador."
   }
 }

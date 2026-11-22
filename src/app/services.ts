@@ -3,8 +3,8 @@
  * (or the engine) instead of constructing providers themselves.
  */
 import { InterviewEngine } from '../interview/engine'
-import { callStructureStory } from '../interview/llmCalls'
-import type { StructureStoryInput } from '../interview/prompts'
+import { callEvaluatePitch, callStructureStory } from '../interview/llmCalls'
+import type { EvaluatePitchInput, StructureStoryInput } from '../interview/prompts'
 import { SPEECH_LANG } from '../interview/samples'
 import { createLlmProvider, testConnection } from '../providers/llm/openaiCompatible'
 import type { LlmProvider } from '../providers/llm/types'
@@ -32,6 +32,11 @@ export function checkConnection(llm: LlmSettings, signal?: AbortSignal): Promise
 /** Story assistant (Stories editor): organizes a loosely told story into STAR with the user's provider. */
 export function structureStory(llm: LlmSettings, input: StructureStoryInput, signal?: AbortSignal) {
   return callStructureStory(createLlmProvider(llm), input, signal)
+}
+
+/** "Tell me about yourself" practice: evaluates one version of the pitch. */
+export function evaluatePitch(llm: LlmSettings, input: EvaluatePitchInput, signal?: AbortSignal) {
+  return callEvaluatePitch(createLlmProvider(llm), input, signal)
 }
 
 export function fetchModels(llm: LlmSettings, signal?: AbortSignal): Promise<string[]> {

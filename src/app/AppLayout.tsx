@@ -1,4 +1,4 @@
-import { BookOpen, History, Mic, Settings as SettingsIcon, type LucideIcon } from 'lucide-react'
+import { BookOpen, History, Mic, Settings as SettingsIcon, UserRound, type LucideIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet } from 'react-router'
 import { Logo, cn } from '../ui'
@@ -37,6 +37,7 @@ export function AppLayout() {
     { to: '/new', label: t('nav.newInterview'), icon: Mic },
     { to: '/history', label: t('nav.history'), icon: History },
     { to: '/stories', label: t('nav.stories'), icon: BookOpen },
+    { to: '/pitch', label: t('nav.pitch'), icon: UserRound },
   ]
   const settings: Item = { to: '/settings', label: t('nav.settings'), icon: SettingsIcon }
 
