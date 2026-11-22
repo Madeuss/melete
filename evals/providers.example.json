@@ -14,6 +14,13 @@
     "apiKeyEnv": "GROQ_API_KEY"
   },
   {
+    "name": "aihub llama-3.3-70b",
+    "preset": "custom",
+    "baseUrl": "https://api.inferencia.llm.mglu.io/v1",
+    "model": "nvidia-llama-3.3-70b-instruct-fp8",
+    "apiKeyEnv": "MGC_API_KEY"
+  },
+  {
     "name": "ollama qwen3:8b",
     "preset": "ollama",
     "baseUrl": "http://localhost:11434/v1",

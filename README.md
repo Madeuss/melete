@@ -91,6 +91,19 @@ yarn build      # static site in dist/
 yarn evals      # compare providers on example answers (see evals/README.md)
 ```
 
+### Providers that block browser calls
+
+Some OpenAI-compatible providers (Magalu's AI Hub, for example) don't send CORS headers, so the
+browser refuses to call them directly. For local use, the dev server can forward the calls:
+
+```bash
+echo "MELETE_DEV_PROXY=https://api.inferencia.llm.mglu.io" > .env.local   # gitignored
+yarn dev
+```
+
+Then pick **Custom** in Settings with the base URL `http://localhost:5173/proxy/v1`. This only
+works with `yarn dev` and `yarn preview`; the deployed static site has no server to proxy through.
+
 The spec and the decisions behind the code are in [docs/SPEC.md](docs/SPEC.md).
 
 ### Layout

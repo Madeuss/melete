@@ -39,6 +39,7 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 32 | Idioma do README | README em inglês (projeto open source); docs internas (SPEC, este arquivo) em português. | README em português. |
 | 33 | CSP | O build de produção tem uma Content-Security-Policy em `<meta>`: só scripts do próprio app; `connect-src *` porque cada um aponta pra qualquer URL (inclusive `http://localhost`). | — |
 | 34 | Gráfico de notas | As barras de 0–5 usam o rosa (`brand`), como o spec permite pra gráficos. Com muitas respostas o relatório fica bem rosa; se achar demais, dá pra trocar pra `text` neutro e deixar o rosa só na nota geral. | Barras neutras. |
+| 35 | AI Hub da Magalu sem CORS | O AI Hub (`https://api.inferencia.llm.mglu.io/v1`) responde 404 ao preflight, então o navegador não consegue chamar direto. Adicionei um proxy **só de desenvolvimento** (`MELETE_DEV_PROXY` no `.env.local`, base URL `http://localhost:5173/proxy/v1`). Não virou preset no app, porque no site publicado não funciona. Os evals (Node) chamam direto, sem proxy. | Um proxy de CORS hospedado (ex.: Cloudflare Worker): resolve no site publicado, mas é um backend e a key passaria por ele. |
 
 ## O que ficou pra você
 

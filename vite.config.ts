@@ -1,7 +1,7 @@
 /// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { defineConfig, type Plugin } from 'vite'
+import { defineConfig, loadEnv, type Plugin, type ProxyOptions } from 'vite'
 
 /*
  * CSP for the production build (static hosts like GitHub Pages can't send headers, so it goes
@@ -31,14 +31,37 @@ function cspMeta(): Plugin {
   }
 }
 
+/*
+ * Optional local proxy for providers that don't allow browser calls (no CORS), e.g. Magalu's AI Hub.
+ * Set MELETE_DEV_PROXY=https://provider.host in .env.local, then use http://localhost:5173/proxy/v1
+ * as the base URL. Only `yarn dev` and `yarn preview` have it: the deployed static site can't proxy.
+ */
+function devProxy(target: string | undefined): Record<string, ProxyOptions> | undefined {
+  if (!target) return undefined
+  return {
+    '/proxy': {
+      target,
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/proxy/, ''),
+      // The provider sees a server-to-server call, like it would from any SDK.
+      configure: (proxy) => proxy.on('proxyReq', (req) => req.removeHeader('origin')),
+    },
+  }
+}
+
 // Relative base: the build works on GitHub Pages (served from /melete/) and on any static host.
-export default defineConfig({
-  base: './',
-  plugins: [react(), tailwindcss(), cspMeta()],
-  test: {
-    environment: 'jsdom',
-    setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}', 'evals/**/*.test.ts'],
-    restoreMocks: true,
-  },
+export default defineConfig(({ mode }) => {
+  const proxy = devProxy(loadEnv(mode, process.cwd(), 'MELETE_').MELETE_DEV_PROXY)
+  return {
+    base: './',
+    plugins: [react(), tailwindcss(), cspMeta()],
+    server: { proxy },
+    preview: { proxy },
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
+      include: ['src/**/*.test.{ts,tsx}', 'evals/**/*.test.ts'],
+      restoreMocks: true,
+    },
+  }
 })
