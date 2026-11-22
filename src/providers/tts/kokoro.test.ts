@@ -125,10 +125,13 @@ describe('KokoroClient', () => {
   it('creates the worker lazily, loads once and synthesizes', async () => {
     const worker = new FakeWorker()
     let created = 0
-    const client = new KokoroClient(() => {
-      created++
-      return worker as unknown as Worker
-    })
+    const client = new KokoroClient(
+      () => {
+        created++
+        return worker as unknown as Worker
+      },
+      () => Promise.resolve(true), // already downloaded
+    )
     const states: string[] = []
     client.subscribe(() => states.push(client.getStatus().state))
     expect(created).toBe(0)
@@ -139,6 +142,24 @@ describe('KokoroClient', () => {
     expect(created).toBe(1)
     expect(worker.requests.filter((r) => r.type === 'load')).toHaveLength(1)
     expect(states).toEqual(['loading', 'loading', 'ready'])
+  })
+
+  it('never downloads on its own: without the model, synthesizing fails so the browser voice reads', async () => {
+    let created = 0
+    const client = new KokoroClient(
+      () => {
+        created++
+        return new FakeWorker() as unknown as Worker
+      },
+      () => Promise.resolve(false),
+    )
+    await expect(client.synthesize('Hello.', 'af_heart', 1)).rejects.toThrow('not downloaded')
+    expect(client.getStatus()).toEqual({ state: 'notDownloaded' })
+    expect(created).toBe(0)
+
+    await client.load() // the user pressed "Download"
+    expect(client.getStatus().state).toBe('ready')
+    await expect(client.synthesize('Hello.', 'af_heart', 1)).resolves.toMatchObject({ sampleRate: 24000 })
   })
 
   it('reports a failed download and lets the user try again', async () => {

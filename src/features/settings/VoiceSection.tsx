@@ -1,4 +1,4 @@
-import { CircleCheck, Volume2 } from 'lucide-react'
+import { CircleCheck, Download, Volume2 } from 'lucide-react'
 import { useEffect, useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isKokoroSupported, kokoro, ttsFromSettings } from '../../app/services'
@@ -32,7 +32,6 @@ export function VoiceSection() {
   function chooseEngine(next: TtsKind) {
     // A saved voice belongs to one engine: browser voices are names, Kokoro voices are ids.
     void update((s) => ({ ...s, tts: { ...s.tts, kind: next, voice: undefined } }))
-    if (next === 'kokoro') kokoro.load().catch(() => {}) // start the download right away
   }
 
   return (
@@ -165,8 +164,9 @@ function KokoroFields() {
   const status = useKokoroStatus()
 
   // Coming back to Settings with Kokoro already chosen: load it (from cache) to show its status.
+  // Already downloaded: load it from the cache to show it's ready. Otherwise show the download button.
   useEffect(() => {
-    kokoro.load().catch(() => {}) // the status line shows the error
+    kokoro.loadIfDownloaded().catch(() => {}) // the status line shows why
   }, [])
 
   return (
@@ -178,7 +178,7 @@ function KokoroFields() {
 
       <KokoroStatusLine />
 
-      {status.state !== 'error' && (
+      {status.state === 'ready' && (
         <div className="grid gap-6 sm:grid-cols-[1fr_auto]">
           <Field id={`${ids}-voice`} label={t('settings.voice.voice')}>
             <Select
@@ -242,5 +242,18 @@ function KokoroStatusLine() {
       </Notice>
     )
   }
-  return null
+  // Not downloaded (or still checking): downloading is the user's call.
+  return (
+    <div className="flex flex-col items-start gap-3">
+      <Button
+        variant="primary"
+        icon={<Download {...iconPropsSm} />}
+        disabled={status.state === 'idle'}
+        onClick={() => void kokoro.load().catch(() => {})}
+      >
+        {t('settings.voice.kokoroDownload')}
+      </Button>
+      <p className="text-caption text-text-subtle">{t('settings.voice.kokoroNotDownloaded')}</p>
+    </div>
+  )
 }

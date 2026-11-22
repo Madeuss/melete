@@ -1,7 +1,11 @@
 import type { KokoroRequest, KokoroResponse } from './protocol'
+import { KOKORO_MODEL } from './voices'
 
 export type KokoroStatus =
+  /** Not checked yet. */
   | { state: 'idle' }
+  /** Not in this browser: only downloaded when the user asks (it's ~110 MB). */
+  | { state: 'notDownloaded' }
   /** progress is 0–1, or undefined while the file sizes aren't known yet (or it's from cache). */
   | { state: 'loading'; progress?: number }
   | { state: 'ready' }
@@ -12,13 +16,24 @@ export interface KokoroAudio {
   sampleRate: number
 }
 
+/** Whether the model weights are already in transformers.js's cache (so loading downloads nothing). */
+export async function isKokoroCached(): Promise<boolean> {
+  try {
+    const cache = await caches.open('transformers-cache')
+    const keys = await cache.keys()
+    return keys.some((r) => r.url.includes(KOKORO_MODEL) && r.url.endsWith('.onnx'))
+  } catch {
+    return false // no Cache Storage (private mode, old browser)
+  }
+}
+
 export function isKokoroSupported(): boolean {
   return typeof Worker !== 'undefined' && typeof WebAssembly !== 'undefined' && typeof AudioContext !== 'undefined'
 }
 
 /**
- * Main-thread side of the Kokoro worker. The worker (and the ~90 MB model) is only created
- * when something asks for it, so people who never pick Kokoro never download it.
+ * Main-thread side of the Kokoro worker. The model is only downloaded by load(), which the UI
+ * calls when the user asks for it; everything else only uses Kokoro if it's already cached.
  */
 export class KokoroClient {
   private worker?: Worker
@@ -28,9 +43,19 @@ export class KokoroClient {
   private readonly pending = new Map<number, { resolve: (a: KokoroAudio) => void; reject: (e: Error) => void }>()
   private nextId = 1
   private readonly createWorker: () => Worker
+  private readonly isCached: () => Promise<boolean>
 
-  constructor(createWorker: () => Worker) {
+  constructor(createWorker: () => Worker, isCached: () => Promise<boolean> = isKokoroCached) {
     this.createWorker = createWorker
+    this.isCached = isCached
+  }
+
+  /** Loads the model if it's already downloaded; otherwise just records that it isn't. Never downloads. */
+  async loadIfDownloaded(): Promise<void> {
+    if (this.status.state === 'ready' || this.status.state === 'loading') return this.load()
+    if (await this.isCached()) return this.load()
+    if (this.status.state === 'idle') this.setStatus({ state: 'notDownloaded' })
+    throw new Error('Kokoro is not downloaded')
   }
 
   subscribe = (listener: () => void) => {
@@ -40,7 +65,7 @@ export class KokoroClient {
 
   getStatus = () => this.status
 
-  /** Downloads (or reads from cache) and initializes the model. Safe to call repeatedly. */
+  /** Downloads (or reads from cache) and initializes the model. Safe to call repeatedly. Only on user request. */
   load(): Promise<void> {
     if (this.status.state === 'ready') return Promise.resolve()
     if (this.loading) return this.loading.promise
@@ -56,8 +81,9 @@ export class KokoroClient {
     return promise
   }
 
+  /** Fails (and the caller falls back to the browser voice) when the model was never downloaded. */
   async synthesize(text: string, voice: string, speed: number): Promise<KokoroAudio> {
-    await this.load()
+    await this.loadIfDownloaded()
     const id = this.nextId++
     return new Promise((resolve, reject) => {
       this.pending.set(id, { resolve, reject })

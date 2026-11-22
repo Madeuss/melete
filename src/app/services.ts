@@ -66,9 +66,9 @@ export function ttsFromSettings(settings: Settings): TextToSpeech {
   })
 }
 
-/** Starts loading the Kokoro model ahead of time (a no-op unless Kokoro is in use). */
+/** Starts loading the Kokoro model ahead of time if it's in use and already downloaded. */
 export function preloadVoice(settings: Settings): void {
-  if (usesKokoro(settings)) kokoro.load().catch(() => {}) // the status shows the error
+  if (usesKokoro(settings)) kokoro.loadIfDownloaded().catch(() => {}) // the status shows why
 }
 
 export { kokoro, isKokoroSupported }
