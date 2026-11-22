@@ -28,8 +28,20 @@ export interface LlmCapabilities {
   extraHeaders: Record<string, string>
 }
 
+/** Tokens the provider says the call used. Not every provider reports it. */
+export interface TokenUsage {
+  promptTokens: number
+  completionTokens: number
+}
+
+export interface ChatResult {
+  content: string
+  /** Absent when the provider doesn't report usage. */
+  usage?: TokenUsage
+}
+
 export interface LlmProvider {
   readonly model: string
   readonly capabilities: LlmCapabilities
-  chat(messages: ChatMessage[], opts?: ChatOptions): Promise<string>
+  chat(messages: ChatMessage[], opts?: ChatOptions): Promise<ChatResult>
 }

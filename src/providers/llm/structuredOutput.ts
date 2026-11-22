@@ -124,11 +124,13 @@ export async function generateStructured<T>(llm: LlmProvider, req: StructuredReq
   for (let attempt = 0; attempt <= maxRetries; ) {
     let raw: string
     try {
-      raw = await llm.chat(messages, {
-        responseFormat: responseFormatFor(mode, req.name, jsonSchema),
-        signal: req.signal,
-        temperature: req.temperature,
-      })
+      raw = (
+        await llm.chat(messages, {
+          responseFormat: responseFormatFor(mode, req.name, jsonSchema),
+          signal: req.signal,
+          temperature: req.temperature,
+        })
+      ).content
     } catch (err) {
       if (isAbortError(err)) throw err instanceof LlmError ? err : new LlmError('aborted', { cause: err })
       const downgrade = err instanceof LlmError && err.kind === 'bad-request' ? nextMode(mode, llm.capabilities) : undefined

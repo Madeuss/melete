@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { LlmError, kindFromStatus, redact } from './errors'
 import { getPreset, isLocalUrl } from './presets'
-import type { ChatMessage, ChatOptions, LlmCapabilities, LlmConfig, LlmProvider } from './types'
+import type { ChatMessage, ChatOptions, ChatResult, LlmCapabilities, LlmConfig, LlmProvider, TokenUsage } from './types'
 
 const DEFAULT_TIMEOUT_MS = 90_000
 
@@ -14,6 +14,17 @@ const ChatResponse = z.object({
     )
     .min(1),
 })
+
+/** Read on its own: a missing or odd `usage` must never break the call. */
+const UsageBody = z.object({
+  usage: z.object({ prompt_tokens: z.number().int().min(0), completion_tokens: z.number().int().min(0) }),
+})
+
+function usageOf(json: unknown): TokenUsage | undefined {
+  const parsed = UsageBody.safeParse(json)
+  if (!parsed.success) return undefined
+  return { promptTokens: parsed.data.usage.prompt_tokens, completionTokens: parsed.data.usage.completion_tokens }
+}
 
 const ModelsResponse = z.object({
   data: z.array(z.object({ id: z.string() })),
@@ -97,7 +108,8 @@ export class OpenAiCompatibleProvider implements LlmProvider {
     return res
   }
 
-  async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<string> {
+  /** Not streamed, so `usage` comes in the response body (no `stream_options` needed). */
+  async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
     const body: Record<string, unknown> = { model: this.config.model, messages }
     if (opts.responseFormat) body.response_format = opts.responseFormat
     if (opts.temperature !== undefined) body.temperature = opts.temperature
@@ -113,7 +125,8 @@ export class OpenAiCompatibleProvider implements LlmProvider {
     const parsed = ChatResponse.safeParse(json)
     const content = parsed.success ? parsed.data.choices[0].message.content : undefined
     if (!content) throw new LlmError('invalid-response', { detail: 'No message content in the response' })
-    return content
+    const usage = usageOf(json)
+    return usage ? { content, usage } : { content }
   }
 
   /** GET {baseUrl}/models, used to suggest model names. Not all providers support it. */

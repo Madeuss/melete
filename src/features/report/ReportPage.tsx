@@ -5,10 +5,11 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { formatDate, formatNumber } from '../../app/format'
 import { listeningSummary, sessionAverage } from '../../interview/stats'
 import type { Turn } from '../../schemas'
-import { useSession, useTurns } from '../../storage/hooks'
+import { useLlmCalls, useSession, useTurns } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
 import { Button, Card, Dialog, Notice, buttonClasses, iconPropsSm } from '../../ui'
 import { FeedbackView } from './FeedbackView'
+import { UsageSection } from './UsageSection'
 
 function groupTurns(turns: Turn[]): Array<{ main: Turn; followUps: Turn[] }> {
   const groups: Array<{ main: Turn; followUps: Turn[] }> = []
@@ -74,6 +75,7 @@ export default function ReportPage() {
   const { sessionId } = useParams()
   const session = useSession(sessionId)
   const turns = useTurns(sessionId)
+  const llmCalls = useLlmCalls(sessionId)
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   if (session === undefined || turns === undefined) return null
@@ -181,6 +183,8 @@ export default function ReportPage() {
             ))}
           </section>
         ))}
+
+        {llmCalls && <UsageSection calls={llmCalls} />}
 
         <div className="flex flex-wrap items-center gap-3 border-t border-border pt-8">
           {session.status !== 'in-progress' && (

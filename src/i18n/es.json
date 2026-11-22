@@ -377,6 +377,31 @@
       "repeats_other": "Escuchaste preguntas de nuevo {{count}} veces.",
       "noHelp": "Entendiste todas las preguntas solo escuchando, como en una entrevista real.",
       "tip": "En una entrevista real no hay texto en pantalla. Pedir que repitan de vez en cuando es normal; el objetivo es entender todo de oído."
+    },
+    "usage": {
+      "title": "Tokens usados",
+      "totals": "Entrada: {{input}} · Salida: {{output}}",
+      "calls_one": "{{count}} llamada al modelo",
+      "calls_other": "{{count}} llamadas al modelo",
+      "notReported": "no informado por el proveedor",
+      "notReportedTotal": "No informado por el proveedor",
+      "partial_one": "{{count}} llamada sin conteo de tokens (no informado por el proveedor) no está en los totales.",
+      "partial_other": "{{count}} llamadas sin conteo de tokens (no informado por el proveedor) no están en los totales.",
+      "none": "Esta sesión es de antes del conteo de tokens.",
+      "hint": "Conteo informado por el proveedor. Los reintentos (cuando el modelo devuelve el formato incorrecto) cuentan como llamadas.",
+      "columns": {
+        "step": "Etapa",
+        "calls": "Llamadas",
+        "input": "Entrada",
+        "output": "Salida"
+      },
+      "kinds": {
+        "planQuestions": "Planificar las preguntas",
+        "classifyReply": "Entender respuestas cortas",
+        "decideFollowUp": "Decidir preguntas de seguimiento",
+        "evaluateAnswer": "Evaluar las respuestas",
+        "summarizeSession": "Resumen final"
+      }
     }
   },
   "history": {

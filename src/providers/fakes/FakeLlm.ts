@@ -1,4 +1,4 @@
-import type { ChatMessage, ChatOptions, LlmCapabilities, LlmProvider } from '../llm/types'
+import type { ChatMessage, ChatOptions, ChatResult, LlmCapabilities, LlmProvider, TokenUsage } from '../llm/types'
 
 type Reply = string | Error | ((messages: ChatMessage[], opts: ChatOptions) => string | Promise<string>)
 
@@ -19,6 +19,8 @@ export class FakeLlm implements LlmProvider {
   private router?: (messages: ChatMessage[], opts: ChatOptions) => Reply
   /** Delay before replying, to test cancellation. */
   delayMs = 0
+  /** Usage reported with every reply; undefined = a provider that doesn't report it. */
+  usage?: TokenUsage
 
   constructor(
     replies: Reply[] = [],
@@ -41,7 +43,7 @@ export class FakeLlm implements LlmProvider {
     return this
   }
 
-  async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<string> {
+  async chat(messages: ChatMessage[], opts: ChatOptions = {}): Promise<ChatResult> {
     this.calls.push({ messages: structuredClone(messages), opts: { ...opts, signal: undefined } })
     if (this.delayMs > 0 || opts.signal) {
       await new Promise<void>((resolve, reject) => {
@@ -56,6 +58,7 @@ export class FakeLlm implements LlmProvider {
     const reply = this.router ? this.router(messages, opts) : this.queue.shift()
     if (reply === undefined) throw new Error('FakeLlm: no reply queued')
     if (reply instanceof Error) throw reply
-    return typeof reply === 'function' ? reply(messages, opts) : reply
+    const content = typeof reply === 'function' ? await reply(messages, opts) : reply
+    return this.usage ? { content, usage: { ...this.usage } } : { content }
   }
 }

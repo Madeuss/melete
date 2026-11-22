@@ -132,3 +132,74 @@ describe('export and import', () => {
     await expect(r.data.importFile({ stories: [] })).rejects.toThrow()
   })
 })
+
+describe('llm calls and the v2 database', () => {
+  it('upgrades a v1 database without losing its sessions and turns', async () => {
+    const name = `test-${crypto.randomUUID()}`
+    // A database exactly as the MVP created it (version 1, no llmCalls table).
+    const { default: Dexie } = await import('dexie')
+    const v1 = new Dexie(name)
+    v1.version(1).stores({
+      settings: 'id',
+      stories: 'id, *tags, updatedAt',
+      sessions: 'id, createdAt, status',
+      turns: 'id, sessionId, [sessionId+index]',
+    })
+    const old = {
+      id: 'old-session',
+      createdAt: '2026-11-22T10:00:00.000Z',
+      config: { ...config, difficulty: undefined },
+      model: 'gpt-4.1-mini',
+      language: 'en',
+      status: 'finished',
+      plannedQuestions: [{ text: 'Q1', competency: 'ownership' }],
+    }
+    await v1.table('sessions').add(old)
+    await v1.table('turns').add({
+      id: 't1',
+      sessionId: 'old-session',
+      index: 0,
+      kind: 'main',
+      question: 'Q1',
+      transcript: 'An answer',
+      metrics: { fillerWords: {}, wordCount: 2 },
+      createdAt: '2026-11-22T10:01:00.000Z',
+    })
+    v1.close()
+
+    const db = new MeleteDb(name)
+    dbs.push(db)
+    const r = createRepositories(db)
+    expect(db.verno).toBe(2)
+    const session = await r.sessions.get('old-session')
+    expect(session?.config.difficulty).toBe('standard') // default filled in on read
+    expect(await r.turns.listBySession('old-session')).toHaveLength(1)
+    expect(await r.llmCalls.listBySession('old-session')).toEqual([]) // older sessions just have no calls
+
+    await r.llmCalls.add({ sessionId: 'old-session', kind: 'summarizeSession', model: 'm' })
+    expect(await r.llmCalls.listBySession('old-session')).toHaveLength(1)
+  })
+
+  it('exports, imports and deletes llm calls with their session', async () => {
+    const r = setup()
+    const s = await r.sessions.create({ config, model: 'm', language: 'en', status: 'finished', plannedQuestions: [] })
+    await r.llmCalls.add({ sessionId: s.id, kind: 'planQuestions', model: 'm', usage: { promptTokens: 10, completionTokens: 5 } })
+    await r.llmCalls.add({ sessionId: s.id, kind: 'evaluateAnswer', model: 'm' })
+
+    const file = await r.data.exportAll()
+    expect(file.llmCalls).toHaveLength(2)
+
+    const other = setup()
+    await other.data.importFile(JSON.parse(JSON.stringify(file)))
+    expect(await other.llmCalls.listBySession(s.id)).toHaveLength(2)
+
+    await r.sessions.remove(s.id)
+    expect(await r.llmCalls.listBySession(s.id)).toEqual([])
+  })
+
+  it('imports files exported before llm calls were recorded', async () => {
+    const r = setup()
+    const { llmCalls: _omitted, ...oldFile } = await setup().data.exportAll()
+    await expect(r.data.importFile(oldFile)).resolves.toEqual({ stories: 0, sessions: 0 })
+  })
+})

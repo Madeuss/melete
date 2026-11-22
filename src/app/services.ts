@@ -84,7 +84,7 @@ export function createEngine(settings: Settings): InterviewEngine {
     llm: createLlmProvider(settings.llm),
     stt: sttFromSettings(settings),
     tts: ttsFromSettings(settings),
-    repos: { sessions: repos.sessions, turns: repos.turns, stories: repos.stories },
+    repos: { sessions: repos.sessions, turns: repos.turns, stories: repos.stories, llmCalls: repos.llmCalls },
     feedbackLanguage: settings.uiLanguage,
   })
 }

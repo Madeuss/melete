@@ -1,5 +1,6 @@
 import {
   ExportFile,
+  LlmCall,
   Session,
   Settings,
   Story,
@@ -108,10 +109,11 @@ export function createSessionsRepo(db: MeleteDb) {
     async setStatus(id: string, status: SessionStatus): Promise<void> {
       await db.sessions.update(id, { status })
     },
-    /** Deletes a session and its turns. */
+    /** Deletes a session, its turns and its LLM calls. */
     async remove(id: string): Promise<void> {
-      await db.transaction('rw', db.sessions, db.turns, async () => {
+      await db.transaction('rw', [db.sessions, db.turns, db.llmCalls], async () => {
         await db.turns.where('sessionId').equals(id).delete()
+        await db.llmCalls.where('sessionId').equals(id).delete()
         await db.sessions.delete(id)
       })
     },
@@ -142,14 +144,29 @@ export function createTurnsRepo(db: MeleteDb) {
   }
 }
 
+export function createLlmCallsRepo(db: MeleteDb) {
+  return {
+    async add(data: Omit<LlmCall, 'id' | 'createdAt'>): Promise<LlmCall> {
+      const call = LlmCall.parse({ ...data, id: newId(), createdAt: nowIso() })
+      await db.llmCalls.add(call)
+      return call
+    },
+    async listBySession(sessionId: string): Promise<LlmCall[]> {
+      const rows = await db.llmCalls.where('sessionId').equals(sessionId).sortBy('createdAt')
+      return parseAll(LlmCall, rows)
+    },
+  }
+}
+
 export function createDataRepo(db: MeleteDb) {
   return {
     /** Full export. Settings (and so the API key) are never included. */
     async exportAll(): Promise<ExportFile> {
-      const [stories, sessions, turns] = await Promise.all([
+      const [stories, sessions, turns, llmCalls] = await Promise.all([
         db.stories.toArray(),
         db.sessions.toArray(),
         db.turns.toArray(),
+        db.llmCalls.toArray(),
       ])
       return ExportFile.parse({
         app: 'melete',
@@ -158,6 +175,7 @@ export function createDataRepo(db: MeleteDb) {
         stories,
         sessions,
         turns,
+        llmCalls,
       })
     },
     async exportStories(): Promise<ExportFile> {
@@ -171,16 +189,23 @@ export function createDataRepo(db: MeleteDb) {
     /** Validates the whole file first, then upserts everything in one transaction. */
     async importFile(raw: unknown): Promise<{ stories: number; sessions: number }> {
       const file = ExportFile.parse(raw)
-      await db.transaction('rw', db.stories, db.sessions, db.turns, async () => {
+      await db.transaction('rw', [db.stories, db.sessions, db.turns, db.llmCalls], async () => {
         await db.stories.bulkPut(file.stories)
         await db.sessions.bulkPut(file.sessions)
         await db.turns.bulkPut(file.turns)
+        await db.llmCalls.bulkPut(file.llmCalls)
       })
       return { stories: file.stories.length, sessions: file.sessions.length }
     },
     async wipe(): Promise<void> {
-      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns], async () => {
-        await Promise.all([db.settings.clear(), db.stories.clear(), db.sessions.clear(), db.turns.clear()])
+      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns, db.llmCalls], async () => {
+        await Promise.all([
+          db.settings.clear(),
+          db.stories.clear(),
+          db.sessions.clear(),
+          db.turns.clear(),
+          db.llmCalls.clear(),
+        ])
       })
     },
   }
@@ -190,6 +215,7 @@ export type SettingsRepo = ReturnType<typeof createSettingsRepo>
 export type StoriesRepo = ReturnType<typeof createStoriesRepo>
 export type SessionsRepo = ReturnType<typeof createSessionsRepo>
 export type TurnsRepo = ReturnType<typeof createTurnsRepo>
+export type LlmCallsRepo = ReturnType<typeof createLlmCallsRepo>
 export type DataRepo = ReturnType<typeof createDataRepo>
 
 export interface Repositories {
@@ -197,6 +223,7 @@ export interface Repositories {
   stories: StoriesRepo
   sessions: SessionsRepo
   turns: TurnsRepo
+  llmCalls: LlmCallsRepo
   data: DataRepo
 }
 
@@ -206,6 +233,7 @@ export function createRepositories(db: MeleteDb): Repositories {
     stories: createStoriesRepo(db),
     sessions: createSessionsRepo(db),
     turns: createTurnsRepo(db),
+    llmCalls: createLlmCallsRepo(db),
     data: createDataRepo(db),
   }
 }

@@ -16,8 +16,8 @@ import { isAbortError } from '../providers/llm/errors'
 import type { LlmProvider } from '../providers/llm/types'
 import { SttError, type SpeechToText } from '../providers/stt/types'
 import type { TextToSpeech } from '../providers/tts/types'
-import type { Feedback, ListeningAids, PlannedQuestion, Session, Story, Turn, UiLanguage } from '../schemas'
-import type { SessionsRepo, StoriesRepo, TurnsRepo } from '../storage/repositories'
+import type { Feedback, ListeningAids, LlmCallKind, PlannedQuestion, Session, Story, Turn, UiLanguage } from '../schemas'
+import type { LlmCallsRepo, SessionsRepo, StoriesRepo, TurnsRepo } from '../storage/repositories'
 import {
   callClassifyReply,
   callDecideFollowUp,
@@ -26,6 +26,7 @@ import {
   callSummarizeSession,
 } from './llmCalls'
 import { computeMetrics, countWords } from './metrics'
+import { recordingLlm } from './usage'
 import { MAX_REPEAT_REQUEST_WORDS, REPEAT_LEAD_IN, looksLikeRepeatRequest } from './repeatRequest'
 
 export type EngineState =
@@ -79,7 +80,7 @@ export interface EngineDeps {
   llm: LlmProvider
   stt: SpeechToText
   tts: TextToSpeech
-  repos: { sessions: SessionsRepo; turns: TurnsRepo; stories: StoriesRepo }
+  repos: { sessions: SessionsRepo; turns: TurnsRepo; stories: StoriesRepo; llmCalls: LlmCallsRepo }
   /** Language for strengths/improvements/summary. */
   feedbackLanguage: UiLanguage
   now?: () => number
@@ -190,6 +191,15 @@ export class InterviewEngine {
     }
   }
 
+  /** The provider, recording each request of this kind (with its token usage) for the session. */
+  private llmFor(kind: LlmCallKind): LlmProvider {
+    const { llm, repos } = this.deps
+    const sessionId = this.session.id
+    return recordingLlm(llm, (usage) =>
+      repos.llmCalls.add({ sessionId, kind, model: llm.model, ...(usage ? { usage } : {}) }),
+    )
+  }
+
   private async loadStories() {
     const ids = new Set(this.session.plannedQuestions.map((q) => q.storyId).filter((x): x is string => !!x))
     for (const id of ids) {
@@ -204,7 +214,7 @@ export class InterviewEngine {
     this.set({ state: 'planning' })
     const stories = await this.deps.repos.stories.list()
     const questions = await callPlanQuestions(
-      this.deps.llm,
+      this.llmFor('planQuestions'),
       {
         config: this.session.config,
         stories: stories.map((s) => ({ id: s.id, title: s.title, tags: s.tags })),
@@ -358,7 +368,7 @@ export class InterviewEngine {
     if (looksLikeRepeatRequest(transcript)) return true
     this.set({ state: 'decidingFollowUp' }) // "listening to your answer…" while the model reads it
     try {
-      return (await callClassifyReply(this.deps.llm, { question, transcript }, this.abort.signal)) === 'repeat'
+      return (await callClassifyReply(this.llmFor('classifyReply'), { question, transcript }, this.abort.signal)) === 'repeat'
     } catch {
       return false
     }
@@ -380,7 +390,7 @@ export class InterviewEngine {
     if (turn.kind === 'main' && config.followUps) {
       this.set({ state: 'decidingFollowUp' })
       const decision = await callDecideFollowUp(
-        this.deps.llm,
+        this.llmFor('decideFollowUp'),
         { question: turn.question, transcript: turn.transcript, language: this.session.language },
         this.abort.signal,
       )
@@ -426,7 +436,7 @@ export class InterviewEngine {
     const story = turn.storyId ? this.stories.get(turn.storyId) : undefined
     const plannedIdx = this.session.plannedQuestions.findIndex((q) => q.text === (parent ?? turn).question)
     const feedback = await callEvaluateAnswer(
-      this.deps.llm,
+      this.llmFor('evaluateAnswer'),
       {
         question: turn.question,
         competency: plannedIdx >= 0 ? this.session.plannedQuestions[plannedIdx].competency : undefined,
@@ -484,7 +494,7 @@ export class InterviewEngine {
       .filter((t): t is Turn & { feedback: Feedback } => !!t.feedback)
       .map((t) => ({ question: t.question, kind: t.kind, feedback: t.feedback }))
     const summary = await callSummarizeSession(
-      this.deps.llm,
+      this.llmFor('summarizeSession'),
       { config: this.session.config, answers, feedbackLanguage: this.deps.feedbackLanguage },
       this.abort.signal,
     )

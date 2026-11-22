@@ -190,6 +190,36 @@ describe('InterviewEngine', () => {
     expect((await t.repos.sessions.get(t.session.id))?.plannedQuestions[0].storyId).toBeUndefined()
   })
 
+  it('records every LLM call of the session with its kind and token usage', async () => {
+    const llm = scriptedLlm({ followUpFor: ['talked to them'] })
+    llm.usage = { promptTokens: 100, completionTokens: 20 }
+    const t = await setup({ questionCount: 1 }, llm)
+    await t.engine.open(t.session.id)
+    await typeAnswer(t.engine, 'I talked to them.')
+    await typeAnswer(t.engine, 'We shipped on time.')
+    await t.engine.next()
+    expect(t.engine.getSnapshot().state).toBe('finished')
+
+    const calls = await t.repos.llmCalls.listBySession(t.session.id)
+    expect(calls.map((c) => c.kind)).toEqual([
+      'planQuestions',
+      'decideFollowUp',
+      'evaluateAnswer',
+      'evaluateAnswer',
+      'summarizeSession',
+    ])
+    expect(calls.every((c) => c.model === 'fake-model' && c.usage?.promptTokens === 100)).toBe(true)
+  })
+
+  it('still records the calls when the provider reports no usage', async () => {
+    const t = await setup({ questionCount: 1, followUps: false, feedbackTiming: 'end' })
+    await t.engine.open(t.session.id)
+    await typeAnswer(t.engine, 'An answer.')
+    const calls = await t.repos.llmCalls.listBySession(t.session.id)
+    expect(calls.map((c) => c.kind)).toEqual(['planQuestions', 'evaluateAnswer', 'summarizeSession'])
+    expect(calls.every((c) => c.usage === undefined)).toBe(true)
+  })
+
   it('with feedback at the end, evaluates everything before the summary', async () => {
     const t = await setup({ feedbackTiming: 'end', followUps: false })
     await t.engine.open(t.session.id)

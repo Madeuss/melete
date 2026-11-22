@@ -377,6 +377,31 @@
       "repeats_other": "You heard questions again {{count}} times.",
       "noHelp": "You understood every question by ear, as in a real interview.",
       "tip": "A real interview has no text on screen. Asking for a repeat now and then is normal; the goal is to understand everything by ear."
+    },
+    "usage": {
+      "title": "Tokens used",
+      "totals": "Input: {{input}} · Output: {{output}}",
+      "calls_one": "{{count}} model call",
+      "calls_other": "{{count}} model calls",
+      "notReported": "not reported by the provider",
+      "notReportedTotal": "Not reported by the provider",
+      "partial_one": "{{count}} call has no token count (not reported by the provider) and isn't in the totals.",
+      "partial_other": "{{count}} calls have no token count (not reported by the provider) and aren't in the totals.",
+      "none": "This session is from before token counting.",
+      "hint": "Counts as reported by the provider. Retries (when the model returns the wrong format) count as calls.",
+      "columns": {
+        "step": "Step",
+        "calls": "Calls",
+        "input": "Input",
+        "output": "Output"
+      },
+      "kinds": {
+        "planQuestions": "Planning the questions",
+        "classifyReply": "Understanding short replies",
+        "decideFollowUp": "Deciding follow-ups",
+        "evaluateAnswer": "Evaluating answers",
+        "summarizeSession": "Final summary"
+      }
     }
   },
   "history": {

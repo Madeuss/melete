@@ -39,7 +39,7 @@ describe('OpenAiCompatibleProvider.chat', () => {
     const out = await provider(f).chat([{ role: 'user', content: 'hello' }], {
       responseFormat: { type: 'json_object' },
     })
-    expect(out).toBe('hi')
+    expect(out).toEqual({ content: 'hi' }) // no usage in the response, none in the result
     const [url, init] = f.mock.calls[0]
     expect(url).toBe('https://api.openai.com/v1/chat/completions')
     expect(JSON.parse(String(init?.body))).toEqual({
@@ -48,6 +48,20 @@ describe('OpenAiCompatibleProvider.chat', () => {
       response_format: { type: 'json_object' },
     })
     expect((init!.headers as Record<string, string>).Authorization).toBe(`Bearer ${KEY}`)
+  })
+
+  it('returns the token usage when the provider reports it', async () => {
+    const f = vi.fn<typeof fetch>(async () =>
+      json({ choices: [{ message: { content: 'hi' } }], usage: { prompt_tokens: 120, completion_tokens: 30, total_tokens: 150 } }),
+    )
+    expect(await provider(f).chat([])).toEqual({ content: 'hi', usage: { promptTokens: 120, completionTokens: 30 } })
+  })
+
+  it('ignores a malformed usage instead of failing the call', async () => {
+    const f = vi.fn<typeof fetch>(async () =>
+      json({ choices: [{ message: { content: 'hi' } }], usage: { prompt_tokens: null, completion_tokens: 'n/a' } }),
+    )
+    expect(await provider(f).chat([])).toEqual({ content: 'hi' })
   })
 
   it('sends preset extra headers and no Authorization when the key is empty', async () => {

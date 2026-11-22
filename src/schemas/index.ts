@@ -1,5 +1,6 @@
 export * from './exportFile'
 export * from './feedback'
+export * from './llmCall'
 export * from './session'
 export * from './settings'
 export * from './story'

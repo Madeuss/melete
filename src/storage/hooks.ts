@@ -32,6 +32,10 @@ export function useTurns(sessionId: string | undefined) {
   return useLiveQuery(() => (sessionId ? getRepositories().turns.listBySession(sessionId) : []), [sessionId])
 }
 
+export function useLlmCalls(sessionId: string | undefined) {
+  return useLiveQuery(() => (sessionId ? getRepositories().llmCalls.listBySession(sessionId) : []), [sessionId])
+}
+
 /** Sessions with answer count and average score, newest first. */
 export function useHistory() {
   return useLiveQuery(async () => {
