@@ -135,7 +135,22 @@
       "defaultVoice": "Voz padrão",
       "noVoices": "Nenhuma voz pra este idioma neste navegador.",
       "rate": "Velocidade",
-      "preview": "Ouvir exemplo"
+      "preview": "Ouvir exemplo",
+      "engineOff": "Desligada",
+      "engineBrowser": "Voz do navegador",
+      "engineKokoro": "Kokoro",
+      "kokoroTitle": "Uma voz natural que roda no seu aparelho",
+      "kokoroInfo": "O Kokoro é um modelo de voz aberto que roda dentro deste navegador: as perguntas não saem daqui. Na primeira vez ele baixa uns 110 MB (o modelo vem do Hugging Face); depois fica guardado no navegador.",
+      "kokoroEnglishOnly": "O Kokoro só fala inglês. Entrevistas em outros idiomas usam a voz do navegador.",
+      "kokoroDownloading": "Baixando o Kokoro… {{percent}}%",
+      "kokoroPreparing": "Preparando o Kokoro…",
+      "kokoroReady": "O Kokoro está pronto neste navegador.",
+      "kokoroErrorTitle": "Não deu pra carregar o Kokoro",
+      "kokoroError": "As perguntas vão ser lidas com a voz do navegador até funcionar. Detalhe: {{message}}",
+      "accentUs": "Inglês americano",
+      "accentGb": "Inglês britânico",
+      "female": "feminina",
+      "male": "masculina"
     },
     "language": {
       "title": "Idioma",
@@ -282,7 +297,9 @@
     "feedbackTitle": "Como foi essa resposta",
     "abandoned": "Esta entrevista foi deixada antes do fim.",
     "notFound": "Esta entrevista não existe.",
-    "openSettings": "Abrir configurações"
+    "openSettings": "Abrir configurações",
+    "preparingVoice": "Preparando a voz… {{percent}}%",
+    "preparingVoiceShort": "Preparando a voz…"
   },
   "feedback": {
     "star": {

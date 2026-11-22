@@ -223,6 +223,8 @@ export class InterviewEngine {
     })
     this.answerDurationMs = undefined
     await this.deps.tts.speak(current.text)
+    // While this one is answered, get the next main question's audio ready (follow-ups aren't known yet).
+    this.deps.tts.prepare?.(this.session.plannedQuestions[questionIndex + 1]?.text ?? '')
     // The user may have skipped or left while the question was being spoken.
     if (!this.stopped && this.snap.state === 'asking') this.set({ state: 'listening' })
   }

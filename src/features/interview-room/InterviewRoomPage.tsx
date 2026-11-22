@@ -3,8 +3,9 @@ import { useEffect, useId, useRef, useState, useSyncExternalStore } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { llmErrorMessage, sttErrorMessage } from '../../app/errors'
-import { canUseVoice, createEngine, createMicLevelMeter } from '../../app/services'
+import { canUseVoice, createEngine, createMicLevelMeter, usesKokoro } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
+import { useKokoroStatus } from '../../app/useKokoroStatus'
 import type { EngineSnapshot, InterviewEngine } from '../../interview/engine'
 import { Button, Dialog, Logo, Notice, Progress, RecordButton, Textarea, buttonClasses, iconPropsSm } from '../../ui'
 import { FeedbackView } from '../report/FeedbackView'
@@ -17,6 +18,19 @@ function Busy({ text, hint }: { text: string; hint?: string }) {
       {hint && <p className="text-sm text-text-subtle">{hint}</p>}
     </div>
   )
+}
+
+/** "Reading the question…", or the voice's download progress while Kokoro is still loading. */
+function SpeakingLabel() {
+  const { t } = useTranslation()
+  const { settings } = useSettings()
+  const kokoro = useKokoroStatus()
+  if (usesKokoro(settings) && kokoro.state === 'loading') {
+    return kokoro.progress === undefined
+      ? t('room.preparingVoiceShort')
+      : t('room.preparingVoice', { percent: Math.round(kokoro.progress * 100) })
+  }
+  return t('room.speaking')
 }
 
 /** Keeps a mic level (0..1) while recording, for the ring around the record button. */
@@ -134,13 +148,15 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
               <div className="flex flex-wrap items-center gap-2">
                 {s.state === 'asking' ? (
                   <>
-                    <span className="text-sm text-text-subtle">{t('room.speaking')}</span>
+                    <span className="text-sm text-text-subtle" aria-live="polite">
+                      <SpeakingLabel />
+                    </span>
                     <Button variant="ghost" size="sm" onClick={() => engine.skipQuestionAudio()}>
                       {t('room.skipAudio')}
                     </Button>
                   </>
                 ) : (
-                  settings.tts.kind === 'browser' && (
+                  settings.tts.kind !== 'off' && (
                     <Button
                       variant="ghost"
                       size="sm"

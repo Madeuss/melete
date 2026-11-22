@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath } from 'node:url'
 import { defineConfig, loadEnv, type Plugin, type ProxyOptions } from 'vite'
 
 /*
@@ -57,6 +58,15 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss(), cspMeta()],
     server: { proxy },
     preview: { proxy },
+    resolve: {
+      alias: {
+        // The ONNX runtime's .wasm, served by the app instead of transformers.js's CDN default.
+        // (The package's exports map hides dist/, so it's reached through an alias.)
+        'ort-dist': fileURLToPath(new URL('./node_modules/onnxruntime-web/dist', import.meta.url)),
+      },
+    },
+    // The Kokoro worker uses dynamic imports, which need ES module workers.
+    worker: { format: 'es' },
     test: {
       environment: 'jsdom',
       setupFiles: ['./src/test/setup.ts'],

@@ -1,6 +1,7 @@
-import { useId, useState, type FormEvent } from 'react'
+import { useEffect, useId, useState, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router'
+import { preloadVoice } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
 import { InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
 import { useStories } from '../../storage/hooks'
@@ -47,6 +48,9 @@ export default function NewInterviewPage() {
   const [config, setConfig] = useState<SessionConfig>(loadLastConfig)
   const [roleError, setRoleError] = useState(false)
   const [starting, setStarting] = useState(false)
+
+  // Warm up the voice model while the form is filled in, so the first question isn't delayed.
+  useEffect(() => preloadVoice(settings), [settings])
 
   const set = <K extends keyof SessionConfig>(key: K, value: SessionConfig[K]) =>
     setConfig((c) => ({ ...c, [key]: value }))

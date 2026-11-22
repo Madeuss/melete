@@ -135,7 +135,22 @@
       "defaultVoice": "Default voice",
       "noVoices": "No voices for this language in this browser.",
       "rate": "Speed",
-      "preview": "Hear a sample"
+      "preview": "Hear a sample",
+      "engineOff": "Off",
+      "engineBrowser": "Browser voice",
+      "engineKokoro": "Kokoro",
+      "kokoroTitle": "A natural voice that runs on your device",
+      "kokoroInfo": "Kokoro is an open speech model that runs inside this browser: the questions never leave it. The first time, it downloads about 110 MB (the model comes from Hugging Face); after that it's kept in the browser.",
+      "kokoroEnglishOnly": "Kokoro only speaks English. Interviews in other languages use the browser voice.",
+      "kokoroDownloading": "Downloading Kokoro… {{percent}}%",
+      "kokoroPreparing": "Preparing Kokoro…",
+      "kokoroReady": "Kokoro is ready in this browser.",
+      "kokoroErrorTitle": "Couldn't load Kokoro",
+      "kokoroError": "Questions will be read with the browser voice until it works. Details: {{message}}",
+      "accentUs": "American English",
+      "accentGb": "British English",
+      "female": "female",
+      "male": "male"
     },
     "language": {
       "title": "Language",
@@ -282,7 +297,9 @@
     "feedbackTitle": "How that answer went",
     "abandoned": "This interview was left before the end.",
     "notFound": "This interview doesn't exist.",
-    "openSettings": "Open settings"
+    "openSettings": "Open settings",
+    "preparingVoice": "Preparing the voice… {{percent}}%",
+    "preparingVoiceShort": "Preparing the voice…"
   },
   "feedback": {
     "star": {

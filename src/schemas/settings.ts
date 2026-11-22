@@ -22,7 +22,7 @@ export const Settings = z.object({
   llm: LlmSettings.optional(),
   stt: z.object({ kind: z.enum(['web-speech', 'typed-only']) }),
   tts: z.object({
-    kind: z.enum(['browser', 'off']),
+    kind: z.enum(['browser', 'kokoro', 'off']),
     voice: z.string().optional(),
     rate: z.number().min(0.5).max(2).default(1),
   }),
