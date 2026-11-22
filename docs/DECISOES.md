@@ -35,3 +35,4 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 28 | Retomar sessão | Recarregar a página no meio da entrevista retoma na próxima pergunta principal não respondida (sair pelo botão marca `abandoned`, recarregar não). Um follow-up pendente no momento do reload é pulado. | — |
 | 29 | Encerrar antes | Botão "encerrar agora" na sala: avalia o que já foi respondido e gera o resumo com isso. | — |
 | 30 | Gravação | O microfone só abre quando você aperta o botão de gravar (não começa sozinho depois que a pergunta é lida). | Começar a ouvir automaticamente depois da pergunta. |
+| 31 | Evals | 8 respostas de exemplo com nota esperada (minha avaliação: confira se concorda). O script mede erro médio, % dentro da tolerância, acerto do "respondeu a pergunta" e se a resposta melhorada inventou números. Keys só por variável de ambiente; `evals/providers.json` e `evals/results/` ficam fora do git. | — |

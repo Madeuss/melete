@@ -1,0 +1,104 @@
+[
+  {
+    "id": "strong-star",
+    "description": "Complete STAR with a measurable result",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Tell me about a time you fixed a problem in production under pressure.",
+    "competency": "ownership",
+    "transcript": "Last Black Friday our checkout error rate jumped from under half a percent to four percent about an hour after we opened. I was the on-call frontend engineer, so it was on me to find the cause while the team kept the store up. I pulled the error logs, saw that every failure was a double submit on the payment step, and traced it to a retry we had added the week before that fired before the first request timed out. I put the retry behind a feature flag, turned it off, and shipped a fix that disabled the button while a request was in flight. Errors were back under half a percent in twenty minutes, and afterwards I added an alert on checkout error rate so we'd catch it in five minutes instead of an hour.",
+    "answerDurationMs": 62000,
+    "expected": { "star": { "situation": 5, "task": 4, "action": 5, "result": 5 }, "clarity": 4, "answeredTheQuestion": true },
+    "tolerance": 1
+  },
+  {
+    "id": "vague-generic",
+    "description": "Generic, no concrete situation or result",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Tell me about a time you disagreed with a teammate.",
+    "competency": "conflict",
+    "transcript": "I think communication is really important. When I disagree with someone I always try to listen to them and understand their point of view, and then we find a solution together. Usually it works out well because I'm a team player.",
+    "answerDurationMs": 18000,
+    "expected": { "star": { "situation": 0, "task": 0, "action": 1, "result": 1 }, "clarity": 2, "answeredTheQuestion": false },
+    "tolerance": 1
+  },
+  {
+    "id": "missing-result",
+    "description": "Good situation and action, no outcome",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Describe a time you had to lead without formal authority.",
+    "competency": "leadership",
+    "transcript": "We had three teams each building their own date picker, and the designs were drifting apart. I wasn't anyone's manager, but I offered to own a shared component. I set up a short call with one person from each team, collected what each version needed, wrote a small RFC and built the first version with the props everyone agreed on. Then I paired with each team to migrate their first screen.",
+    "answerDurationMs": 34000,
+    "expected": { "star": { "situation": 4, "task": 3, "action": 4, "result": 0 }, "clarity": 4, "answeredTheQuestion": true },
+    "tolerance": 1
+  },
+  {
+    "id": "off-topic",
+    "description": "Answers a different question",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Tell me about a mistake you made and what you learned from it.",
+    "competency": "failure",
+    "transcript": "One project I'm really proud of is the design system I built at my last company. It had over forty components, full dark mode support and we used it in five products. Everyone loved it and it made the team much faster.",
+    "answerDurationMs": 20000,
+    "expected": { "star": { "situation": 2, "task": 1, "action": 2, "result": 2 }, "clarity": 3, "answeredTheQuestion": false },
+    "tolerance": 1
+  },
+  {
+    "id": "rambling-fillers",
+    "description": "Has the content but buried in fillers and detours",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Tell me about a time you had to deliver with a tight deadline.",
+    "competency": "deadline",
+    "transcript": "Um, so, basically, like, we had this launch, right, and it was, you know, kind of a big deal, and the, uh, the deadline was like two weeks and, um, I mean, the scope was huge. So what I did was, like, basically I, uh, sat with the PM and we, you know, cut the scope to the, um, the three flows that actually mattered, and, like, I built those, and we launched on time, I think, and, um, yeah, people used it.",
+    "answerDurationMs": 41000,
+    "expected": { "star": { "situation": 3, "task": 2, "action": 3, "result": 2 }, "clarity": 1, "answeredTheQuestion": true },
+    "tolerance": 1
+  },
+  {
+    "id": "technical-good",
+    "description": "Technical answer with context, problem, solution and trade-offs",
+    "interviewType": "technical",
+    "language": "en",
+    "question": "How would you find and fix a slow page load in a React app?",
+    "competency": "performance",
+    "transcript": "First I'd measure instead of guessing: a Lighthouse run and the Performance panel on a throttled connection, plus field data if we have it, to see whether the problem is the network, the bundle or rendering. On a dashboard I worked on, the main bundle was over two megabytes because a charting library and moment were imported on the first route. I split the routes with lazy imports, replaced moment with date-fns and moved the chart behind a dynamic import. The trade-off is a small delay when you first open a chart, so we prefetch it on hover. Largest contentful paint went from about four seconds to one point six on a mid-range phone.",
+    "answerDurationMs": 55000,
+    "expected": { "star": { "situation": 4, "task": 4, "action": 5, "result": 5 }, "clarity": 5, "answeredTheQuestion": true },
+    "tolerance": 1
+  },
+  {
+    "id": "portuguese-ok",
+    "description": "Portuguese interview, decent answer with a soft result",
+    "interviewType": "behavioral",
+    "language": "pt",
+    "question": "Me conte sobre uma vez em que você teve que aprender algo novo rápido.",
+    "competency": "learning",
+    "transcript": "Entrei num time que usava Vue e eu só conhecia React. Tinha duas semanas pra assumir uma feature de pagamentos. Então eu li a documentação oficial à noite, refiz uma tela pequena do produto num projeto separado e pedi pra fazer pair com a pessoa mais experiente do time nas primeiras tarefas. Na segunda semana eu já estava abrindo PRs sozinho e a feature saiu no prazo.",
+    "answerDurationMs": 30000,
+    "expected": { "star": { "situation": 4, "task": 3, "action": 4, "result": 3 }, "clarity": 4, "answeredTheQuestion": true },
+    "tolerance": 1
+  },
+  {
+    "id": "story-no-numbers",
+    "description": "Story without numbers: the improved answer must not invent any",
+    "interviewType": "behavioral",
+    "language": "en",
+    "question": "Tell me about a time you improved a process on your team.",
+    "competency": "impact",
+    "transcript": "Our code reviews were taking forever. I suggested we split big pull requests into smaller ones and add a checklist to the template. People liked it and reviews got faster.",
+    "story": {
+      "title": "Faster code reviews",
+      "situation": "Pull requests sat for days waiting for review.",
+      "task": "Nobody owned the review process.",
+      "action": "Proposed smaller PRs and a review checklist in the PR template.",
+      "result": "Reviews got faster and the team kept the checklist."
+    },
+    "expected": { "star": { "situation": 2, "task": 1, "action": 3, "result": 2 }, "clarity": 3, "answeredTheQuestion": true },
+    "tolerance": 1
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "openai gpt-4.1-mini",
+    "preset": "openai",
+    "baseUrl": "https://api.openai.com/v1",
+    "model": "gpt-4.1-mini",
+    "apiKeyEnv": "OPENAI_API_KEY"
+  },
+  {
+    "name": "groq llama-3.3-70b",
+    "preset": "groq",
+    "baseUrl": "https://api.groq.com/openai/v1",
+    "model": "llama-3.3-70b-versatile",
+    "apiKeyEnv": "GROQ_API_KEY"
+  },
+  {
+    "name": "ollama qwen3:8b",
+    "preset": "ollama",
+    "baseUrl": "http://localhost:11434/v1",
+    "model": "qwen3:8b"
+  }
+]

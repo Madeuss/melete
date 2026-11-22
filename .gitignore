@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# evals: provider config and results stay local
+evals/providers.json
+evals/results/
