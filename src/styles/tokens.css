@@ -1,0 +1,63 @@
+/*
+ * Melete design tokens. Source of truth: docs/SPEC.md → "Direção visual".
+ * Components never use hex values: they use the Tailwind utilities mapped in index.css
+ * (bg-bg, text-text-muted, border-border, bg-brand-strong...).
+ *
+ * Selectors are attribute-based (not only :root) so a subtree can force a theme,
+ * which the /styleguide page uses to show both themes side by side.
+ */
+
+:root,
+[data-theme='light'] {
+  --bg: #ffffff;
+  --surface-subtle: #f9f8f8;
+  --surface-sunken: #f3f1f1;
+  --border: #e5e2e2;
+  --border-strong: #d0cdcd;
+  --text: #191515;
+  --text-muted: #5b5757;
+  --text-subtle: #706c6c;
+
+  --brand: #fe3e6d;
+  --brand-strong: #d62d59;
+  --brand-hover: #b21e46;
+  --brand-text: #d62d59;
+  --brand-soft: #ffe9ed;
+  --brand-soft-text: #b21e46;
+  --on-brand: #ffffff;
+
+  --success: #187c49;
+  --warning: #9a6500;
+  --danger: #bf4306;
+
+  --shadow-float: 0 12px 32px -8px rgb(25 21 21 / 0.14), 0 2px 6px rgb(25 21 21 / 0.06);
+
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #110f0f;
+  --surface-subtle: #191617;
+  --surface-sunken: #242121;
+  --border: #302d2d;
+  --border-strong: #454141;
+  --text: #f5f3f3;
+  --text-muted: #aea9aa;
+  --text-subtle: #959191;
+
+  --brand: #fe3e6d;
+  --brand-strong: #d62d59;
+  --brand-hover: #b21e46;
+  --brand-text: #ff6c87;
+  --brand-soft: #3c161c;
+  --brand-soft-text: #ff6c87;
+  --on-brand: #ffffff;
+
+  --success: #62c689;
+  --warning: #eeb154;
+  --danger: #f67d51;
+
+  --shadow-float: 0 12px 32px -8px rgb(0 0 0 / 0.6), 0 2px 6px rgb(0 0 0 / 0.4);
+
+  color-scheme: dark;
+}
