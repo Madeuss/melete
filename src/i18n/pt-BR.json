@@ -308,5 +308,40 @@
     "fillers": "Palavras de preenchimento",
     "noFillers": "Nenhuma palavra de preenchimento",
     "pending": "Ainda não avaliada."
+  },
+  "report": {
+    "title": "Relatório",
+    "back": "Histórico",
+    "meta": "{{type}} · {{role}} · {{seniority}}",
+    "metaModel": "{{date}} · {{model}}",
+    "overall": "Nota geral",
+    "average": "Média das respostas: {{avg}}",
+    "topStrengths": "O que você fez bem",
+    "focusNext": "O que treinar agora",
+    "noSummaryAbandoned": "Esta entrevista terminou antes, então não tem resumo da sessão. As respostas avaliadas estão abaixo.",
+    "inProgress": "Esta entrevista ainda não terminou.",
+    "continue": "Continuar entrevista",
+    "question": "Pergunta {{n}}",
+    "noAnswers": "Nenhuma resposta foi enviada nesta sessão.",
+    "practiceAgain": "Nova entrevista",
+    "delete": "Apagar sessão",
+    "deleteTitle": "Apagar esta sessão?",
+    "deleteBody": "As perguntas, transcrições e feedback dela serão removidos deste navegador.",
+    "notFound": "Esta sessão não existe mais."
+  },
+  "history": {
+    "title": "Histórico",
+    "description": "Todas as entrevistas que você fez neste navegador.",
+    "emptyTitle": "Nenhuma entrevista ainda",
+    "emptyBody": "Comece uma e o relatório dela aparece aqui.",
+    "start": "Começar uma entrevista",
+    "status": {
+      "in-progress": "Em andamento",
+      "abandoned": "Encerrada antes"
+    },
+    "answers_one": "{{count}} resposta",
+    "answers_other": "{{count}} respostas",
+    "average": "Média {{avg}}",
+    "noScore": "Sem nota"
   }
 }

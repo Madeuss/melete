@@ -308,5 +308,40 @@
     "fillers": "Muletillas",
     "noFillers": "Sin muletillas",
     "pending": "Todavía no evaluada."
+  },
+  "report": {
+    "title": "Informe",
+    "back": "Historial",
+    "meta": "{{type}} · {{role}} · {{seniority}}",
+    "metaModel": "{{date}} · {{model}}",
+    "overall": "Nota general",
+    "average": "Promedio de las respuestas: {{avg}}",
+    "topStrengths": "Lo que hiciste bien",
+    "focusNext": "Qué practicar ahora",
+    "noSummaryAbandoned": "Esta entrevista terminó antes, así que no hay resumen de la sesión. Las respuestas evaluadas están abajo.",
+    "inProgress": "Esta entrevista todavía no terminó.",
+    "continue": "Continuar entrevista",
+    "question": "Pregunta {{n}}",
+    "noAnswers": "No se enviaron respuestas en esta sesión.",
+    "practiceAgain": "Nueva entrevista",
+    "delete": "Borrar sesión",
+    "deleteTitle": "¿Borrar esta sesión?",
+    "deleteBody": "Sus preguntas, transcripciones y feedback se eliminarán de este navegador.",
+    "notFound": "Esta sesión ya no existe."
+  },
+  "history": {
+    "title": "Historial",
+    "description": "Todas las entrevistas que hiciste en este navegador.",
+    "emptyTitle": "Todavía no hay entrevistas",
+    "emptyBody": "Empieza una y su informe aparecerá aquí.",
+    "start": "Empezar una entrevista",
+    "status": {
+      "in-progress": "En curso",
+      "abandoned": "Terminada antes"
+    },
+    "answers_one": "{{count}} respuesta",
+    "answers_other": "{{count}} respuestas",
+    "average": "Promedio {{avg}}",
+    "noScore": "Sin nota"
   }
 }

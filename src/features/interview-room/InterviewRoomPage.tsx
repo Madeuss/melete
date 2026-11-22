@@ -124,7 +124,7 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
           />
         )}
 
-        {s.current && (answering || s.state === 'decidingFollowUp' || s.state === 'evaluating' || s.state === 'showingFeedback') && (
+        {s.current && (answering || s.state === 'decidingFollowUp' || s.state === 'evaluating') && (
           <section aria-labelledby={`${ids}-q`} className="flex flex-col gap-4">
             <p className="text-sm font-medium text-text-muted">
               {isFollowUp ? t('room.followUp') : progressLabel}
@@ -274,11 +274,12 @@ function Room({ engine, sessionId }: { engine: InterviewEngine; sessionId: strin
             </h2>
             {s.lastFeedback.map(({ turn, feedback }) => (
               <div key={turn.id} className="flex flex-col gap-4 border-t border-border pt-6 first:border-t-0 first:pt-0">
-                {turn.kind === 'follow-up' && (
-                  <p className="text-sm text-text-muted">
-                    <span className="font-medium text-text">{t('room.followUp')}:</span> {turn.question}
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium text-text-muted">
+                    {turn.kind === 'follow-up' ? t('room.followUp') : progressLabel}
                   </p>
-                )}
+                  <h3 className="text-lg">{turn.question}</h3>
+                </div>
                 <FeedbackView turn={turn} feedback={feedback} showAnswer />
               </div>
             ))}

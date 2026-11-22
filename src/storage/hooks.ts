@@ -1,4 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
+import { sessionAverage } from '../interview/stats'
 import { getRepositories } from './repositories'
 
 /*
@@ -29,4 +30,18 @@ export function useSession(id: string | undefined) {
 
 export function useTurns(sessionId: string | undefined) {
   return useLiveQuery(() => (sessionId ? getRepositories().turns.listBySession(sessionId) : []), [sessionId])
+}
+
+/** Sessions with answer count and average score, newest first. */
+export function useHistory() {
+  return useLiveQuery(async () => {
+    const repos = getRepositories()
+    const sessions = await repos.sessions.list()
+    return Promise.all(
+      sessions.map(async (session) => {
+        const turns = await repos.turns.listBySession(session.id)
+        return { session, answers: turns.length, average: sessionAverage(turns) }
+      }),
+    )
+  }, [])
 }

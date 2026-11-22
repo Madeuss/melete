@@ -54,12 +54,20 @@ export class BrowserTts implements TextToSpeech {
     for (const sentence of splitSentences(text)) {
       if (this.cancelled) return
       await new Promise<void>((resolve) => {
+        // Chrome sometimes never fires onend (and never does without voices): cap the wait
+        // at a generous estimate of the sentence length so the interview can't get stuck.
+        const words = sentence.split(/\s+/).length
+        const cap = setTimeout(resolve, ((words / 2) * 1000) / this.rate + 3000)
+        const done = () => {
+          clearTimeout(cap)
+          resolve()
+        }
         const u = new SpeechSynthesisUtterance(sentence)
         u.lang = voice?.lang ?? this.lang
         if (voice) u.voice = voice
         u.rate = this.rate
-        u.onend = () => resolve()
-        u.onerror = () => resolve() // never block the interview on a TTS failure
+        u.onend = done
+        u.onerror = done // never block the interview on a TTS failure
         speechSynthesis.speak(u)
       })
     }

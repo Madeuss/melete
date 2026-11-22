@@ -308,5 +308,40 @@
     "fillers": "Filler words",
     "noFillers": "No filler words",
     "pending": "Not evaluated yet."
+  },
+  "report": {
+    "title": "Report",
+    "back": "History",
+    "meta": "{{type}} · {{role}} · {{seniority}}",
+    "metaModel": "{{date}} · {{model}}",
+    "overall": "Overall",
+    "average": "Average across answers: {{avg}}",
+    "topStrengths": "What you did well",
+    "focusNext": "What to practice next",
+    "noSummaryAbandoned": "This interview ended early, so there's no session summary. Answers that were evaluated are below.",
+    "inProgress": "This interview isn't finished yet.",
+    "continue": "Continue interview",
+    "question": "Question {{n}}",
+    "noAnswers": "No answers were sent in this session.",
+    "practiceAgain": "New interview",
+    "delete": "Delete session",
+    "deleteTitle": "Delete this session?",
+    "deleteBody": "Its questions, transcripts and feedback will be removed from this browser.",
+    "notFound": "This session doesn't exist anymore."
+  },
+  "history": {
+    "title": "History",
+    "description": "Every interview you did in this browser.",
+    "emptyTitle": "No interviews yet",
+    "emptyBody": "Start one and its report will show up here.",
+    "start": "Start an interview",
+    "status": {
+      "in-progress": "In progress",
+      "abandoned": "Ended early"
+    },
+    "answers_one": "{{count}} answer",
+    "answers_other": "{{count}} answers",
+    "average": "Average {{avg}}",
+    "noScore": "No score"
   }
 }
