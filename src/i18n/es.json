@@ -1,0 +1,166 @@
+{
+  "app": {
+    "skipToContent": "Saltar al contenido",
+    "loading": "Cargando…"
+  },
+  "nav": {
+    "label": "Principal",
+    "newInterview": "Nueva entrevista",
+    "history": "Historial",
+    "stories": "Historias",
+    "settings": "Ajustes"
+  },
+  "common": {
+    "save": "Guardar",
+    "saved": "Guardado",
+    "cancel": "Cancelar",
+    "delete": "Borrar",
+    "edit": "Editar",
+    "back": "Volver",
+    "close": "Cerrar",
+    "optional": "opcional",
+    "tryAgain": "Intentar de nuevo",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "of": "{{current}} de {{total}}",
+    "providerMessage": "Mensaje del proveedor: {{detail}}"
+  },
+  "errors": {
+    "llm": {
+      "auth": {
+        "title": "El proveedor rechazó la key",
+        "action": "Revisa la API key y que tenga acceso a este modelo."
+      },
+      "rate-limit": {
+        "title": "Demasiadas solicitudes, o no quedan créditos",
+        "action": "Espera un minuto, o revisa tu plan y créditos con el proveedor."
+      },
+      "not-found": {
+        "title": "Dirección o modelo no encontrado",
+        "action": "Revisa la URL base y el nombre del modelo."
+      },
+      "bad-request": {
+        "title": "El proveedor rechazó la solicitud",
+        "action": "Revisa el nombre del modelo. Algunos modelos no aceptan este tipo de llamada."
+      },
+      "server": {
+        "title": "El proveedor tiene problemas",
+        "action": "Inténtalo de nuevo en unos minutos."
+      },
+      "network": {
+        "title": "No se pudo conectar con el proveedor",
+        "action": "Revisa tu conexión y la URL base. Si ambas están bien, el proveedor puede bloquear llamadas desde el navegador (CORS)."
+      },
+      "local-unreachable": {
+        "title": "No se pudo conectar con {{name}} en este equipo",
+        "action": "Comprueba que esté en marcha y que permita este sitio. {{hint}}"
+      },
+      "timeout": {
+        "title": "El proveedor tardó demasiado",
+        "action": "Inténtalo de nuevo, o elige un modelo más rápido."
+      },
+      "aborted": {
+        "title": "Cancelado",
+        "action": ""
+      },
+      "invalid-response": {
+        "title": "Respuesta con un formato inesperado",
+        "action": "Revisa que la URL base apunte a una API compatible con OpenAI (suele terminar en /v1)."
+      },
+      "invalid-output": {
+        "title": "El modelo no devolvió lo que se pidió",
+        "action": "Inténtalo de nuevo. Si sigue pasando, elige un modelo más capaz."
+      },
+      "unknown": {
+        "title": "Algo salió mal",
+        "action": "Inténtalo de nuevo."
+      }
+    },
+    "localHint": {
+      "ollama": "Inícialo con OLLAMA_ORIGINS={{origin}} ollama serve",
+      "lmstudio": "En LM Studio, activa \"Enable CORS\" en los ajustes del servidor.",
+      "other": "Permite el origen {{origin}} en el CORS del servidor."
+    },
+    "stt": {
+      "not-allowed": "Se bloqueó el acceso al micrófono. Permítelo en la barra de direcciones del navegador, o escribe tu respuesta.",
+      "no-microphone": "No se encontró ningún micrófono. Conecta uno, o escribe tu respuesta.",
+      "network": "El reconocimiento de voz perdió la conexión. Escribe tu respuesta o inténtalo de nuevo.",
+      "unsupported": "Este navegador no transcribe voz. Escribe tu respuesta.",
+      "unknown": "El reconocimiento de voz se detuvo. Escribe tu respuesta o inténtalo de nuevo."
+    }
+  },
+  "settings": {
+    "title": "Ajustes",
+    "intro": "Melete habla directamente desde este navegador con el modelo que elijas. No hay un servidor de Melete en medio.",
+    "firstRun": "Elige un proveedor y pega tu key para empezar a practicar.",
+    "llm": {
+      "title": "Modelo de lenguaje",
+      "provider": "Proveedor",
+      "baseUrl": "URL base",
+      "baseUrlHint": "Cualquier API que acepte POST {baseUrl}/chat/completions.",
+      "apiKey": "API key",
+      "apiKeyNotNeeded": "API key (normalmente no hace falta)",
+      "apiKeyHint": "Se guarda solo en este navegador (IndexedDB) y se envía solo a {{name}}. Nunca se incluye en las exportaciones.",
+      "getKey": "Conseguir una key",
+      "model": "Modelo",
+      "modelHint": "Escribe el nombre del modelo o carga la lista del proveedor.",
+      "loadModels": "Cargar modelos",
+      "modelsLoaded_one": "{{count}} modelo encontrado",
+      "modelsLoaded_other": "{{count}} modelos encontrados",
+      "noModels": "El proveedor no devolvió la lista de modelos. Escribe el nombre.",
+      "test": "Probar conexión",
+      "testOk": "La conexión funciona",
+      "testOkDetail": "{{model}} respondió.",
+      "saveDone": "Proveedor guardado",
+      "invalidUrl": "Escribe la URL completa, como https://api.ejemplo.com/v1",
+      "modelRequired": "Escribe el nombre del modelo",
+      "keyRequired": "Pega tu API key",
+      "localNotice": "{{name}} funciona en tu equipo: es gratis y nada sale de tu máquina.",
+      "corsNotice": "Permite este sitio primero: {{hint}}",
+      "startInterview": "Empezar una entrevista",
+      "customLabel": "Personalizado"
+    },
+    "voice": {
+      "title": "Voz",
+      "answerMode": "Cómo respondes",
+      "speak": "Hablando",
+      "typeOnly": "Solo escribiendo",
+      "googleWarningTitle": "Chrome envía tu voz a Google",
+      "googleWarning": "En Chrome, el reconocimiento de voz funciona en los servidores de Google. Aquí solo se guarda la transcripción; el audio nunca se almacena. Elige \"Solo escribiendo\" si lo prefieres.",
+      "unsupportedTitle": "Este navegador no transcribe voz",
+      "unsupported": "Puedes responder escribiendo. Para usar la voz, abre Chrome, Edge o Safari.",
+      "readAloud": "Leer las preguntas en voz alta",
+      "readAloudHint": "Usa las voces que trae el navegador.",
+      "voice": "Voz",
+      "defaultVoice": "Voz predeterminada",
+      "noVoices": "No hay voces para este idioma en este navegador.",
+      "rate": "Velocidad",
+      "preview": "Escuchar ejemplo"
+    },
+    "language": {
+      "title": "Idioma",
+      "ui": "Interfaz",
+      "interview": "Entrevista",
+      "interviewHint": "El idioma en que habla el entrevistador y en que respondes."
+    },
+    "appearance": {
+      "title": "Apariencia",
+      "theme": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "data": {
+      "title": "Tus datos",
+      "description": "Historias, sesiones y transcripciones viven solo en este navegador. Las exportaciones nunca incluyen tu API key.",
+      "export": "Exportar todo",
+      "import": "Importar archivo",
+      "imported": "Se importaron {{stories}} historias y {{sessions}} sesiones.",
+      "importFailed": "Este archivo no es una exportación de Melete.",
+      "wipe": "Borrar todos los datos",
+      "wipeTitle": "¿Borrar todo en este navegador?",
+      "wipeBody": "Se eliminarán historias, sesiones, transcripciones y ajustes (incluida la key). Exporta antes si quieres una copia.",
+      "wipeConfirm": "Borrar todo"
+    }
+  }
+}

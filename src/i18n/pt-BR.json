@@ -1,0 +1,166 @@
+{
+  "app": {
+    "skipToContent": "Pular para o conteúdo",
+    "loading": "Carregando…"
+  },
+  "nav": {
+    "label": "Principal",
+    "newInterview": "Nova entrevista",
+    "history": "Histórico",
+    "stories": "Histórias",
+    "settings": "Configurações"
+  },
+  "common": {
+    "save": "Salvar",
+    "saved": "Salvo",
+    "cancel": "Cancelar",
+    "delete": "Apagar",
+    "edit": "Editar",
+    "back": "Voltar",
+    "close": "Fechar",
+    "optional": "opcional",
+    "tryAgain": "Tentar de novo",
+    "show": "Mostrar",
+    "hide": "Esconder",
+    "of": "{{current}} de {{total}}",
+    "providerMessage": "Mensagem do provedor: {{detail}}"
+  },
+  "errors": {
+    "llm": {
+      "auth": {
+        "title": "O provedor recusou a key",
+        "action": "Confira a API key e se ela tem acesso a este modelo."
+      },
+      "rate-limit": {
+        "title": "Muitas chamadas, ou acabaram os créditos",
+        "action": "Espere um minuto, ou confira seu plano e créditos no provedor."
+      },
+      "not-found": {
+        "title": "Endereço ou modelo não encontrado",
+        "action": "Confira a URL base e o nome do modelo."
+      },
+      "bad-request": {
+        "title": "O provedor recusou a chamada",
+        "action": "Confira o nome do modelo. Alguns modelos não aceitam esse tipo de chamada."
+      },
+      "server": {
+        "title": "O provedor está com problemas",
+        "action": "Tente de novo em alguns minutos."
+      },
+      "network": {
+        "title": "Não deu pra falar com o provedor",
+        "action": "Confira sua conexão e a URL base. Se as duas estiverem certas, o provedor pode bloquear chamadas vindas do navegador (CORS)."
+      },
+      "local-unreachable": {
+        "title": "Não deu pra falar com o {{name}} neste computador",
+        "action": "Confira se ele está rodando e se libera este site. {{hint}}"
+      },
+      "timeout": {
+        "title": "O provedor demorou demais",
+        "action": "Tente de novo, ou escolha um modelo mais rápido."
+      },
+      "aborted": {
+        "title": "Cancelado",
+        "action": ""
+      },
+      "invalid-response": {
+        "title": "Resposta num formato inesperado",
+        "action": "Confira se a URL base aponta pra uma API compatível com OpenAI (normalmente termina em /v1)."
+      },
+      "invalid-output": {
+        "title": "O modelo não devolveu o que foi pedido",
+        "action": "Tente de novo. Se continuar, escolha um modelo mais capaz."
+      },
+      "unknown": {
+        "title": "Algo deu errado",
+        "action": "Tente de novo."
+      }
+    },
+    "localHint": {
+      "ollama": "Inicie com OLLAMA_ORIGINS={{origin}} ollama serve",
+      "lmstudio": "No LM Studio, ligue \"Enable CORS\" nas configurações do servidor.",
+      "other": "Libere a origem {{origin}} no CORS do servidor."
+    },
+    "stt": {
+      "not-allowed": "O acesso ao microfone foi bloqueado. Libere na barra de endereço do navegador, ou digite sua resposta.",
+      "no-microphone": "Nenhum microfone encontrado. Conecte um, ou digite sua resposta.",
+      "network": "O reconhecimento de voz perdeu a conexão. Digite sua resposta ou tente de novo.",
+      "unsupported": "Este navegador não transcreve voz. Digite sua resposta.",
+      "unknown": "O reconhecimento de voz parou. Digite sua resposta ou tente de novo."
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "intro": "O Melete fala direto deste navegador com o modelo que você escolher. Não existe servidor do Melete no meio.",
+    "firstRun": "Escolha um provedor e cole sua key pra começar a treinar.",
+    "llm": {
+      "title": "Modelo de linguagem",
+      "provider": "Provedor",
+      "baseUrl": "URL base",
+      "baseUrlHint": "Qualquer API que aceite POST {baseUrl}/chat/completions.",
+      "apiKey": "API key",
+      "apiKeyNotNeeded": "API key (normalmente não precisa)",
+      "apiKeyHint": "Fica só neste navegador (IndexedDB) e vai só pro {{name}}. Nunca entra nos exports.",
+      "getKey": "Pegar uma key",
+      "model": "Modelo",
+      "modelHint": "Digite o nome do modelo ou carregue a lista do provedor.",
+      "loadModels": "Carregar modelos",
+      "modelsLoaded_one": "{{count}} modelo encontrado",
+      "modelsLoaded_other": "{{count}} modelos encontrados",
+      "noModels": "O provedor não devolveu a lista de modelos. Digite o nome.",
+      "test": "Testar conexão",
+      "testOk": "Conexão funcionando",
+      "testOkDetail": "{{model}} respondeu.",
+      "saveDone": "Provedor salvo",
+      "invalidUrl": "Digite a URL completa, como https://api.exemplo.com/v1",
+      "modelRequired": "Digite o nome do modelo",
+      "keyRequired": "Cole sua API key",
+      "localNotice": "O {{name}} roda no seu computador: é grátis e nada sai da sua máquina.",
+      "corsNotice": "Libere este site antes: {{hint}}",
+      "startInterview": "Começar uma entrevista",
+      "customLabel": "Personalizado"
+    },
+    "voice": {
+      "title": "Voz",
+      "answerMode": "Como você responde",
+      "speak": "Falando",
+      "typeOnly": "Só digitando",
+      "googleWarningTitle": "O Chrome manda sua voz pro Google",
+      "googleWarning": "No Chrome, o reconhecimento de voz roda nos servidores do Google. Aqui só a transcrição é salva; o áudio nunca é guardado. Escolha \"Só digitando\" se preferir.",
+      "unsupportedTitle": "Este navegador não transcreve voz",
+      "unsupported": "Você ainda pode responder digitando. Pra usar a voz, abra no Chrome, Edge ou Safari.",
+      "readAloud": "Ler as perguntas em voz alta",
+      "readAloudHint": "Usa as vozes que já vêm no navegador.",
+      "voice": "Voz",
+      "defaultVoice": "Voz padrão",
+      "noVoices": "Nenhuma voz pra este idioma neste navegador.",
+      "rate": "Velocidade",
+      "preview": "Ouvir exemplo"
+    },
+    "language": {
+      "title": "Idioma",
+      "ui": "Interface",
+      "interview": "Entrevista",
+      "interviewHint": "O idioma em que o entrevistador fala e você responde."
+    },
+    "appearance": {
+      "title": "Aparência",
+      "theme": "Tema",
+      "system": "Sistema",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "data": {
+      "title": "Seus dados",
+      "description": "Histórias, sessões e transcrições ficam só neste navegador. Os exports nunca incluem sua API key.",
+      "export": "Exportar tudo",
+      "import": "Importar arquivo",
+      "imported": "{{stories}} histórias e {{sessions}} sessões importadas.",
+      "importFailed": "Este arquivo não é um export do Melete.",
+      "wipe": "Apagar todos os dados",
+      "wipeTitle": "Apagar tudo deste navegador?",
+      "wipeBody": "Histórias, sessões, transcrições e configurações (inclusive a key) serão removidas. Exporte antes se quiser uma cópia.",
+      "wipeConfirm": "Apagar tudo"
+    }
+  }
+}

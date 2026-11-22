@@ -1,0 +1,166 @@
+{
+  "app": {
+    "skipToContent": "Skip to content",
+    "loading": "Loading…"
+  },
+  "nav": {
+    "label": "Main",
+    "newInterview": "New interview",
+    "history": "History",
+    "stories": "Stories",
+    "settings": "Settings"
+  },
+  "common": {
+    "save": "Save",
+    "saved": "Saved",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "close": "Close",
+    "optional": "optional",
+    "tryAgain": "Try again",
+    "show": "Show",
+    "hide": "Hide",
+    "of": "{{current}} of {{total}}",
+    "providerMessage": "Provider message: {{detail}}"
+  },
+  "errors": {
+    "llm": {
+      "auth": {
+        "title": "The provider rejected the key",
+        "action": "Check the API key and that it can use this model."
+      },
+      "rate-limit": {
+        "title": "Too many requests, or no credits left",
+        "action": "Wait a minute, or check your plan and credits with the provider."
+      },
+      "not-found": {
+        "title": "Address or model not found",
+        "action": "Check the base URL and the model name."
+      },
+      "bad-request": {
+        "title": "The provider refused the request",
+        "action": "Check the model name. Some models don't support this kind of call."
+      },
+      "server": {
+        "title": "The provider is having trouble",
+        "action": "Try again in a few minutes."
+      },
+      "network": {
+        "title": "Couldn't reach the provider",
+        "action": "Check your connection and the base URL. If both are right, this provider may block calls from browsers (CORS)."
+      },
+      "local-unreachable": {
+        "title": "Couldn't reach {{name}} on this computer",
+        "action": "Check that it's running and allows this site. {{hint}}"
+      },
+      "timeout": {
+        "title": "The provider took too long",
+        "action": "Try again, or pick a faster model."
+      },
+      "aborted": {
+        "title": "Cancelled",
+        "action": ""
+      },
+      "invalid-response": {
+        "title": "Unexpected response format",
+        "action": "Check that the base URL points to an OpenAI-compatible API (it usually ends in /v1)."
+      },
+      "invalid-output": {
+        "title": "The model didn't return what was asked",
+        "action": "Try again. If it keeps happening, pick a more capable model."
+      },
+      "unknown": {
+        "title": "Something went wrong",
+        "action": "Try again."
+      }
+    },
+    "localHint": {
+      "ollama": "Start it with OLLAMA_ORIGINS={{origin}} ollama serve",
+      "lmstudio": "In LM Studio, turn on \"Enable CORS\" in the server settings.",
+      "other": "Allow the origin {{origin}} in the server's CORS settings."
+    },
+    "stt": {
+      "not-allowed": "Microphone access was blocked. Allow it in the browser's address bar, or type your answer.",
+      "no-microphone": "No microphone found. Connect one, or type your answer.",
+      "network": "Speech recognition lost its connection. Type your answer or try again.",
+      "unsupported": "This browser can't transcribe speech. Type your answer instead.",
+      "unknown": "Speech recognition stopped. Type your answer or try again."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "intro": "Melete talks straight from this browser to the model you pick. There's no Melete server in between.",
+    "firstRun": "Pick a provider and paste your key to start practicing.",
+    "llm": {
+      "title": "Language model",
+      "provider": "Provider",
+      "baseUrl": "Base URL",
+      "baseUrlHint": "Any API that accepts POST {baseUrl}/chat/completions.",
+      "apiKey": "API key",
+      "apiKeyNotNeeded": "API key (usually not needed)",
+      "apiKeyHint": "Stored only in this browser (IndexedDB) and sent only to {{name}}. Never included in exports.",
+      "getKey": "Get a key",
+      "model": "Model",
+      "modelHint": "Type a model name or load the list from the provider.",
+      "loadModels": "Load models",
+      "modelsLoaded_one": "{{count}} model found",
+      "modelsLoaded_other": "{{count}} models found",
+      "noModels": "The provider didn't return a model list. Type the name.",
+      "test": "Test connection",
+      "testOk": "Connection works",
+      "testOkDetail": "{{model}} answered.",
+      "saveDone": "Provider saved",
+      "invalidUrl": "Enter a full URL, like https://api.example.com/v1",
+      "modelRequired": "Enter a model name",
+      "keyRequired": "Paste your API key",
+      "localNotice": "{{name}} runs on your computer: free, and nothing leaves your machine.",
+      "corsNotice": "Allow this site first: {{hint}}",
+      "startInterview": "Start an interview",
+      "customLabel": "Custom"
+    },
+    "voice": {
+      "title": "Voice",
+      "answerMode": "How you answer",
+      "speak": "Speak",
+      "typeOnly": "Type only",
+      "googleWarningTitle": "Chrome sends your voice to Google",
+      "googleWarning": "Speech recognition in Chrome runs on Google's servers. Only the transcript is saved here; the audio is never stored. Choose \"Type only\" if you'd rather not.",
+      "unsupportedTitle": "This browser can't transcribe speech",
+      "unsupported": "You can still answer by typing. For voice, use Chrome, Edge or Safari.",
+      "readAloud": "Read questions aloud",
+      "readAloudHint": "Uses your browser's built-in voices.",
+      "voice": "Voice",
+      "defaultVoice": "Default voice",
+      "noVoices": "No voices for this language in this browser.",
+      "rate": "Speed",
+      "preview": "Hear a sample"
+    },
+    "language": {
+      "title": "Language",
+      "ui": "Interface",
+      "interview": "Interview",
+      "interviewHint": "The language the interviewer speaks and you answer in."
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme": "Theme",
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "data": {
+      "title": "Your data",
+      "description": "Stories, sessions and transcripts live only in this browser. Exports never include your API key.",
+      "export": "Export everything",
+      "import": "Import file",
+      "imported": "Imported {{stories}} stories and {{sessions}} sessions.",
+      "importFailed": "This file isn't a Melete export.",
+      "wipe": "Delete all data",
+      "wipeTitle": "Delete everything in this browser?",
+      "wipeBody": "Stories, sessions, transcripts and settings (including the key) will be removed. Export first if you want a copy.",
+      "wipeConfirm": "Delete everything"
+    }
+  }
+}
