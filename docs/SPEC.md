@@ -418,7 +418,7 @@ Na ordem em que fazem sentido. Cada uma termina com teste ou com a tela funciona
 - [x] `metrics.ts` com testes.
 - [x] Prompts `v1` das quatro chamadas.
 - [x] `engine.ts` (máquina de estados) testado com `FakeLlm`.
-- [ ] STT Web Speech + resposta digitada; TTS do navegador. Testar no Linux. *(Implementado e testado com mocks; falta testar voz de verdade, inclusive no Linux.)*
+- [ ] STT Web Speech + resposta digitada; TTS do navegador. Testar no Linux. *(Implementado e testado com mocks; falta testar voz de verdade, inclusive no Linux. Depois do MVP entrou o Kokoro como opção de voz que roda no navegador: ver DECISOES 37–40.)*
 - [x] Telas Nova entrevista e Sala de entrevista.
 - [x] Relatório da sessão e Histórico.
 - [x] `evals/`: 5 a 10 respostas de exemplo e o script comparando provedores.

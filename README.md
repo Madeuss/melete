@@ -35,6 +35,8 @@ There is no Melete server. The app is a static page; everything happens in your 
 - **Speech recognition in Chrome sends your voice to Google.** That's how the browser's Web Speech
   API works there. If you'd rather not, choose "Type only" in Settings and type your answers.
 - Questions and answers are sent to the LLM provider you configured, under that provider's terms.
+- **Kokoro voice (optional).** If you pick it, the speech model (~90 MB) is downloaded once from
+  Hugging Face and then runs entirely in your browser: the questions it reads never leave it.
 
 ## Run it for free with Ollama
 
@@ -76,6 +78,11 @@ retries up to twice; if it keeps failing, try a larger model.
 | Chromium on Linux | Often missing — type instead | Voices vary in quality |
 
 Typed answers always work.
+
+For a better voice than the browser's, pick **Kokoro** in Settings: an open speech model
+([Kokoro-82M](https://huggingface.co/hexgrad/Kokoro-82M)) that runs in the browser, in English
+only. Expect a few seconds before the first question is read; the next main question is generated
+while you answer the current one.
 
 ## Development
 
