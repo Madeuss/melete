@@ -2,7 +2,7 @@ import { ArrowLeft, Trash2 } from 'lucide-react'
 import { useId, useState, type FormEvent, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
-import { SUGGESTED_TAGS, normalizeTag, type Story, type StoryInput } from '../../schemas'
+import { STORY_LIMITS, SUGGESTED_TAGS, normalizeTag, type Story, type StoryInput } from '../../schemas'
 import { useAllTags, useStory } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
 import {
@@ -21,6 +21,17 @@ import {
 import { PageHeader } from '../../ui/PageHeader'
 
 const STAR = ['situation', 'task', 'action', 'result'] as const
+
+/** Shows how much room is left, only once the text gets close to the limit. */
+function CharCount({ value, max }: { value: string; max: number }) {
+  const { t } = useTranslation()
+  if (value.length < max * 0.8) return null
+  return (
+    <p className="self-end text-caption text-text-subtle" aria-live="polite">
+      {t('stories.charCount', { count: value.length, max })}
+    </p>
+  )
+}
 
 const empty: StoryInput = { title: '', situation: '', task: '', action: '', result: '', tags: [] }
 
@@ -94,6 +105,7 @@ function Editor({ story }: { story?: Story }) {
           <Input
             id={`${ids}-title`}
             value={form.title}
+            maxLength={STORY_LIMITS.title}
             placeholder={t('stories.editor.titlePlaceholder')}
             onChange={(e) => {
               setForm({ ...form, title: e.target.value })
@@ -111,13 +123,17 @@ function Editor({ story }: { story?: Story }) {
             label={t(`stories.editor.${part}`)}
             hint={t(`stories.editor.${part}Hint`)}
           >
-            <Textarea
-              id={`${ids}-${part}`}
-              rows={part === 'action' ? 5 : 3}
-              value={form[part]}
-              onChange={(e) => setForm({ ...form, [part]: e.target.value })}
-              aria-describedby={`${ids}-${part}-hint`}
-            />
+            <div className="flex flex-col gap-1">
+              <Textarea
+                id={`${ids}-${part}`}
+                rows={part === 'action' ? 5 : 3}
+                maxLength={STORY_LIMITS.part}
+                value={form[part]}
+                onChange={(e) => setForm({ ...form, [part]: e.target.value })}
+                aria-describedby={`${ids}-${part}-hint`}
+              />
+              <CharCount value={form[part]} max={STORY_LIMITS.part} />
+            </div>
           </Field>
         ))}
 

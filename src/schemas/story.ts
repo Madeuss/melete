@@ -13,15 +13,20 @@ export const Story = z.object({
 })
 export type Story = z.infer<typeof Story>
 
+/**
+ * Editor limits. Generous for a spoken answer (2,000 characters is ~3 minutes of speech), but
+ * they keep prompts small. Only new edits are checked: stored and imported stories aren't.
+ */
+export const STORY_LIMITS = { title: 120, part: 2000 } as const
+
 /** What the editor produces: everything except the generated fields. */
-export const StoryInput = Story.pick({
-  title: true,
-  situation: true,
-  task: true,
-  action: true,
-  result: true,
-  tags: true,
-}).extend({ title: z.string().trim().min(1) })
+export const StoryInput = Story.pick({ tags: true }).extend({
+  title: z.string().trim().min(1).max(STORY_LIMITS.title),
+  situation: z.string().max(STORY_LIMITS.part),
+  task: z.string().max(STORY_LIMITS.part),
+  action: z.string().max(STORY_LIMITS.part),
+  result: z.string().max(STORY_LIMITS.part),
+})
 export type StoryInput = z.infer<typeof StoryInput>
 
 /** Suggested tags shown in the editor; users can type any other. */

@@ -26,11 +26,22 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   reading?: boolean
 }
 
-export function Textarea({ className, reading = false, rows = 4, ...rest }: TextareaProps) {
+/**
+ * Grows with its content: at least `rows` lines, at most ~16 lines, then it scrolls.
+ * (Browsers without `field-sizing` keep a fixed `rows`-line box that scrolls.)
+ */
+export function Textarea({ className, reading = false, rows = 4, style, ...rest }: TextareaProps) {
   return (
     <textarea
       rows={rows}
-      className={cn(field, 'resize-y rounded-field px-5 py-3', reading ? 'text-reading' : 'text-base', className)}
+      className={cn(
+        field,
+        'field-sizing-content max-h-[calc(16lh+1.5rem+2px)] resize-none overflow-y-auto rounded-field px-5 py-3',
+        reading ? 'text-reading' : 'text-base',
+        className,
+      )}
+      // rows lines + vertical padding (py-3) + border
+      style={{ minHeight: `calc(${rows}lh + 1.5rem + 2px)`, ...style }}
       {...rest}
     />
   )
