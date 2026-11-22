@@ -245,6 +245,8 @@ export class InterviewEngine {
   // ── answering ────────────────────────────────────────────────────────
 
   startRecording() {
+    // Answering while the question is still being read skips the rest of the audio.
+    if (this.snap.state === 'asking') this.skipQuestionAudio()
     if (this.snap.state !== 'listening' || this.snap.recording) return
     this.deps.tts.cancel()
     this.recordingStartedAt = this.now()
@@ -273,6 +275,7 @@ export class InterviewEngine {
 
   /** Edits the transcript under review. */
   setDraft(text: string) {
+    if (this.snap.state === 'asking') this.skipQuestionAudio()
     if (this.snap.state === 'reviewing' || this.snap.state === 'listening') this.set({ draft: text })
   }
 

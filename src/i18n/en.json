@@ -205,5 +205,108 @@
       "deleteBody": "Past sessions keep their questions and transcripts.",
       "notFound": "This story doesn't exist anymore."
     }
+  },
+  "newInterview": {
+    "title": "New interview",
+    "description": "Set it up like the interview you're preparing for. The questions are planned when you start.",
+    "type": "Type",
+    "types": {
+      "behavioral": "Behavioral",
+      "technical": "Technical",
+      "mixed": "Mixed"
+    },
+    "role": "Role",
+    "rolePlaceholder": "Frontend engineer",
+    "roleRequired": "Enter the role",
+    "seniority": "Seniority",
+    "seniorities": {
+      "junior": "Junior",
+      "mid": "Mid-level",
+      "senior": "Senior",
+      "staff": "Staff"
+    },
+    "jobDescription": "Job description",
+    "jobDescriptionHint": "Paste the job post to get questions aimed at it.",
+    "questionCount": "Questions",
+    "followUps": "Follow-up questions",
+    "followUpsHint": "At most one per question, only when part of the answer is missing.",
+    "feedbackTiming": "Feedback",
+    "timing": {
+      "per-answer": "After each answer",
+      "end": "Only at the end"
+    },
+    "storiesUsed_one": "Questions will draw on your {{count}} story.",
+    "storiesUsed_other": "Questions will draw on your {{count}} stories.",
+    "noStories": "You have no stories yet, so questions will be generic.",
+    "addStories": "Add stories",
+    "usingModel": "Using {{model}} · interview in {{language}}",
+    "change": "Change",
+    "start": "Start interview",
+    "languages": {
+      "en": "English",
+      "pt": "Portuguese"
+    }
+  },
+  "room": {
+    "leave": "Leave",
+    "leaveTitle": "Leave the interview?",
+    "leaveBody": "Answers you already sent stay saved. The session will be marked as abandoned.",
+    "stay": "Keep going",
+    "finishNow": "End and see report",
+    "progress": "Question {{current}} of {{total}}",
+    "followUp": "Follow-up",
+    "planning": "Preparing your questions…",
+    "planningHint": "This takes a few seconds with most models.",
+    "speaking": "Reading the question…",
+    "skipAudio": "Skip",
+    "repeat": "Hear again",
+    "tapToAnswer": "Tap to answer",
+    "recording": "Listening… tap to stop",
+    "startRecording": "Start recording",
+    "stopRecording": "Stop recording",
+    "preferTyping": "Type instead",
+    "preferSpeaking": "Answer out loud",
+    "liveTranscript": "Live transcript",
+    "yourAnswer": "Your answer",
+    "typePlaceholder": "Write your answer the way you'd say it.",
+    "reviewHint": "Fix anything the recognition got wrong before sending.",
+    "send": "Send answer",
+    "retake": "Record again",
+    "emptyTranscript": "Nothing was captured. Record again or type your answer.",
+    "deciding": "Listening to your answer…",
+    "evaluating": "Evaluating your answer…",
+    "summarizing": "Writing your report…",
+    "evaluatingProgress": "Evaluating answer {{done}} of {{total}}…",
+    "next": "Next question",
+    "toReport": "See report",
+    "feedbackTitle": "How that answer went",
+    "abandoned": "This interview was left before the end.",
+    "notFound": "This interview doesn't exist.",
+    "openSettings": "Open settings"
+  },
+  "feedback": {
+    "star": {
+      "situation": "Situation",
+      "task": "Task",
+      "action": "Action",
+      "result": "Result"
+    },
+    "clarity": "Clarity",
+    "scoreOf": "{{score}} of 5",
+    "answered": "Answered what was asked",
+    "notAnswered": "Didn't answer what was asked",
+    "strengths": "What worked",
+    "improvements": "What to improve",
+    "improvedAnswer": "A stronger version",
+    "improvedAnswerHint": "Same facts, better told. Fill in anything in [brackets].",
+    "yourAnswer": "Your answer",
+    "metrics": "Delivery",
+    "words_one": "{{count}} word",
+    "words_other": "{{count}} words",
+    "wpm": "{{wpm}} words per minute",
+    "typed": "typed",
+    "fillers": "Filler words",
+    "noFillers": "No filler words",
+    "pending": "Not evaluated yet."
   }
 }

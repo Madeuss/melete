@@ -205,5 +205,108 @@
       "deleteBody": "Las sesiones anteriores conservan sus preguntas y transcripciones.",
       "notFound": "Esta historia ya no existe."
     }
+  },
+  "newInterview": {
+    "title": "Nueva entrevista",
+    "description": "Configúrala como la entrevista que estás preparando. Las preguntas se planifican al empezar.",
+    "type": "Tipo",
+    "types": {
+      "behavioral": "Conductual",
+      "technical": "Técnica",
+      "mixed": "Mixta"
+    },
+    "role": "Puesto",
+    "rolePlaceholder": "Frontend engineer",
+    "roleRequired": "Escribe el puesto",
+    "seniority": "Seniority",
+    "seniorities": {
+      "junior": "Junior",
+      "mid": "Semi senior",
+      "senior": "Senior",
+      "staff": "Staff"
+    },
+    "jobDescription": "Descripción del puesto",
+    "jobDescriptionHint": "Pega el anuncio para recibir preguntas enfocadas en él.",
+    "questionCount": "Preguntas",
+    "followUps": "Preguntas de seguimiento",
+    "followUpsHint": "Como máximo una por pregunta, solo cuando falta una parte de la respuesta.",
+    "feedbackTiming": "Feedback",
+    "timing": {
+      "per-answer": "Después de cada respuesta",
+      "end": "Solo al final"
+    },
+    "storiesUsed_one": "Las preguntas usarán tu {{count}} historia.",
+    "storiesUsed_other": "Las preguntas usarán tus {{count}} historias.",
+    "noStories": "Todavía no tienes historias, así que las preguntas serán genéricas.",
+    "addStories": "Añadir historias",
+    "usingModel": "Usando {{model}} · entrevista en {{language}}",
+    "change": "Cambiar",
+    "start": "Empezar entrevista",
+    "languages": {
+      "en": "inglés",
+      "pt": "portugués"
+    }
+  },
+  "room": {
+    "leave": "Salir",
+    "leaveTitle": "¿Salir de la entrevista?",
+    "leaveBody": "Las respuestas ya enviadas quedan guardadas. La sesión quedará como abandonada.",
+    "stay": "Seguir",
+    "finishNow": "Terminar y ver informe",
+    "progress": "Pregunta {{current}} de {{total}}",
+    "followUp": "Seguimiento",
+    "planning": "Preparando tus preguntas…",
+    "planningHint": "Tarda unos segundos con la mayoría de los modelos.",
+    "speaking": "Leyendo la pregunta…",
+    "skipAudio": "Saltar",
+    "repeat": "Escuchar de nuevo",
+    "tapToAnswer": "Toca para responder",
+    "recording": "Escuchando… toca para detener",
+    "startRecording": "Empezar a grabar",
+    "stopRecording": "Detener grabación",
+    "preferTyping": "Prefiero escribir",
+    "preferSpeaking": "Responder hablando",
+    "liveTranscript": "Transcripción en vivo",
+    "yourAnswer": "Tu respuesta",
+    "typePlaceholder": "Escribe la respuesta como la dirías.",
+    "reviewHint": "Corrige lo que el reconocimiento entendió mal antes de enviar.",
+    "send": "Enviar respuesta",
+    "retake": "Grabar de nuevo",
+    "emptyTranscript": "No se captó nada. Graba de nuevo o escribe tu respuesta.",
+    "deciding": "Escuchando tu respuesta…",
+    "evaluating": "Evaluando tu respuesta…",
+    "summarizing": "Escribiendo tu informe…",
+    "evaluatingProgress": "Evaluando la respuesta {{done}} de {{total}}…",
+    "next": "Siguiente pregunta",
+    "toReport": "Ver informe",
+    "feedbackTitle": "Cómo fue esa respuesta",
+    "abandoned": "Esta entrevista se dejó antes del final.",
+    "notFound": "Esta entrevista no existe.",
+    "openSettings": "Abrir ajustes"
+  },
+  "feedback": {
+    "star": {
+      "situation": "Situación",
+      "task": "Tarea",
+      "action": "Acción",
+      "result": "Resultado"
+    },
+    "clarity": "Claridad",
+    "scoreOf": "{{score}} de 5",
+    "answered": "Respondió lo que se preguntó",
+    "notAnswered": "No respondió lo que se preguntó",
+    "strengths": "Lo que funcionó",
+    "improvements": "Qué mejorar",
+    "improvedAnswer": "Una versión más sólida",
+    "improvedAnswerHint": "Los mismos hechos, mejor contados. Completa lo que esté entre [corchetes].",
+    "yourAnswer": "Tu respuesta",
+    "metrics": "Expresión",
+    "words_one": "{{count}} palabra",
+    "words_other": "{{count}} palabras",
+    "wpm": "{{wpm}} palabras por minuto",
+    "typed": "escrita",
+    "fillers": "Muletillas",
+    "noFillers": "Sin muletillas",
+    "pending": "Todavía no evaluada."
   }
 }

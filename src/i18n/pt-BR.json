@@ -205,5 +205,108 @@
       "deleteBody": "As sessões antigas continuam com as perguntas e transcrições.",
       "notFound": "Esta história não existe mais."
     }
+  },
+  "newInterview": {
+    "title": "Nova entrevista",
+    "description": "Monte do jeito da entrevista pra qual você está se preparando. As perguntas são planejadas quando você começa.",
+    "type": "Tipo",
+    "types": {
+      "behavioral": "Comportamental",
+      "technical": "Técnica",
+      "mixed": "Mista"
+    },
+    "role": "Cargo",
+    "rolePlaceholder": "Frontend engineer",
+    "roleRequired": "Digite o cargo",
+    "seniority": "Senioridade",
+    "seniorities": {
+      "junior": "Júnior",
+      "mid": "Pleno",
+      "senior": "Sênior",
+      "staff": "Staff"
+    },
+    "jobDescription": "Descrição da vaga",
+    "jobDescriptionHint": "Cole o anúncio da vaga pra receber perguntas voltadas a ela.",
+    "questionCount": "Perguntas",
+    "followUps": "Perguntas de follow-up",
+    "followUpsHint": "No máximo uma por pergunta, só quando falta uma parte da resposta.",
+    "feedbackTiming": "Feedback",
+    "timing": {
+      "per-answer": "Depois de cada resposta",
+      "end": "Só no fim"
+    },
+    "storiesUsed_one": "As perguntas vão usar a sua {{count}} história.",
+    "storiesUsed_other": "As perguntas vão usar as suas {{count}} histórias.",
+    "noStories": "Você ainda não tem histórias, então as perguntas vão ser genéricas.",
+    "addStories": "Adicionar histórias",
+    "usingModel": "Usando {{model}} · entrevista em {{language}}",
+    "change": "Trocar",
+    "start": "Começar entrevista",
+    "languages": {
+      "en": "inglês",
+      "pt": "português"
+    }
+  },
+  "room": {
+    "leave": "Sair",
+    "leaveTitle": "Sair da entrevista?",
+    "leaveBody": "As respostas já enviadas ficam salvas. A sessão fica marcada como abandonada.",
+    "stay": "Continuar",
+    "finishNow": "Encerrar e ver relatório",
+    "progress": "Pergunta {{current}} de {{total}}",
+    "followUp": "Follow-up",
+    "planning": "Preparando suas perguntas…",
+    "planningHint": "Leva alguns segundos na maioria dos modelos.",
+    "speaking": "Lendo a pergunta…",
+    "skipAudio": "Pular",
+    "repeat": "Ouvir de novo",
+    "tapToAnswer": "Toque pra responder",
+    "recording": "Ouvindo… toque pra parar",
+    "startRecording": "Começar a gravar",
+    "stopRecording": "Parar de gravar",
+    "preferTyping": "Prefiro digitar",
+    "preferSpeaking": "Responder falando",
+    "liveTranscript": "Transcrição ao vivo",
+    "yourAnswer": "Sua resposta",
+    "typePlaceholder": "Escreva a resposta do jeito que você falaria.",
+    "reviewHint": "Corrija o que o reconhecimento errou antes de enviar.",
+    "send": "Enviar resposta",
+    "retake": "Gravar de novo",
+    "emptyTranscript": "Nada foi captado. Grave de novo ou digite sua resposta.",
+    "deciding": "Ouvindo sua resposta…",
+    "evaluating": "Avaliando sua resposta…",
+    "summarizing": "Escrevendo seu relatório…",
+    "evaluatingProgress": "Avaliando a resposta {{done}} de {{total}}…",
+    "next": "Próxima pergunta",
+    "toReport": "Ver relatório",
+    "feedbackTitle": "Como foi essa resposta",
+    "abandoned": "Esta entrevista foi deixada antes do fim.",
+    "notFound": "Esta entrevista não existe.",
+    "openSettings": "Abrir configurações"
+  },
+  "feedback": {
+    "star": {
+      "situation": "Situação",
+      "task": "Tarefa",
+      "action": "Ação",
+      "result": "Resultado"
+    },
+    "clarity": "Clareza",
+    "scoreOf": "{{score}} de 5",
+    "answered": "Respondeu o que foi perguntado",
+    "notAnswered": "Não respondeu o que foi perguntado",
+    "strengths": "O que funcionou",
+    "improvements": "O que melhorar",
+    "improvedAnswer": "Uma versão mais forte",
+    "improvedAnswerHint": "Os mesmos fatos, mais bem contados. Complete o que estiver entre [colchetes].",
+    "yourAnswer": "Sua resposta",
+    "metrics": "Fala",
+    "words_one": "{{count}} palavra",
+    "words_other": "{{count}} palavras",
+    "wpm": "{{wpm}} palavras por minuto",
+    "typed": "digitada",
+    "fillers": "Palavras de preenchimento",
+    "noFillers": "Nenhuma palavra de preenchimento",
+    "pending": "Ainda não avaliada."
   }
 }
