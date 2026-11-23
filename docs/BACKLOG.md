@@ -4,17 +4,6 @@ Ideias para depois do MVP. **Para o assistente de código:** nada aqui deve ser 
 
 ## Ideias do Mat
 
-### 1. Currículo como base
-
-- **Onde:** tela nova "Perfil".
-- **Upload:** PDF ou DOCX, lido no próprio navegador (pdf.js para PDF, mammoth para DOCX). O arquivo não vai pra servidor nem é guardado; só o texto extraído.
-- **Estruturação:** o LLM transforma o texto num perfil (experiências com empresa, cargo, período e conquistas; habilidades; formação; idiomas). O usuário revisa e edita antes de salvar. Nova tabela `profile`, com um registro.
-- **Usos:**
-  - `planQuestions` passa a perguntar sobre experiências específicas do CV ("Walk me through your time at X"), lacunas e mudanças de carreira.
-  - Sugere histórias pro banco a partir das conquistas do CV, já em formato STAR pro usuário completar.
-  - Com a descrição da vaga, compara CV e vaga e aponta requisitos sem evidência no CV, pra treinar como responder sobre eles.
-  - A avaliação confere se a resposta bate com o CV (cargos, datas, números).
-
 ### 2. Perguntas para fazer ao entrevistador
 
 - **Onde:** tela própria e uma etapa final opcional na simulação. O entrevistador pergunta "Do you have any questions for us?", o usuário treina fazer as perguntas e a avaliação comenta se foram boas.

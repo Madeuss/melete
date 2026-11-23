@@ -9,7 +9,8 @@
     "history": "Histórico",
     "stories": "Histórias",
     "settings": "Configurações",
-    "pitch": "Apresentação"
+    "pitch": "Apresentação",
+    "profile": "Perfil"
   },
   "common": {
     "save": "Salvar",
@@ -326,7 +327,9 @@
       "technical": "Uma pessoa engenheira do time: decisões técnicas, trade-offs, debugging e arquitetura da sua experiência.",
       "values": "Encaixe com os princípios da empresa: colaboração, feedback, integridade, foco no cliente, aprender com erros.",
       "final": "Uma liderança sênior, visão geral: objetivos de carreira, por que essa empresa, liderar pessoas, decisões difíceis, seus primeiros meses."
-    }
+    },
+    "useProfile": "Usar meu currículo",
+    "useProfileHint": "O entrevistador pergunta sobre a sua experiência nele e aponta respostas que não batem com ele."
   },
   "room": {
     "leave": "Sair",
@@ -393,7 +396,8 @@
     "typed": "digitada",
     "fillers": "Palavras de preenchimento",
     "noFillers": "Nenhuma palavra de preenchimento",
-    "pending": "Ainda não avaliada."
+    "pending": "Ainda não avaliada.",
+    "cvMismatches": "Não bate com o seu currículo"
   },
   "report": {
     "title": "Relatório",
@@ -573,6 +577,59 @@
       "said": "Você disse",
       "better": "Mais natural:",
       "needsProvider": "Configure um provedor pra receber sugestões de expressões."
+    }
+  },
+  "profile": {
+    "title": "Perfil",
+    "description": "Seu currículo, organizado. O entrevistador pergunta sobre a sua experiência de verdade, confere as respostas com ele e compara com a vaga.",
+    "importTitle": "Traga seu currículo",
+    "importHint": "O arquivo é lido neste navegador e não é guardado nem enviado: só o texto vai pro seu provedor ser organizado.",
+    "chooseFile": "Escolher arquivo (PDF ou DOCX)",
+    "fileRead": "Lido: {{name}}",
+    "cvText": "Texto do currículo",
+    "cvTextHint": "Preenchido a partir do arquivo, ou cole aqui. Dá pra corrigir antes de organizar.",
+    "organize": "Organizar meu currículo",
+    "needsProvider": "Configure um provedor pra organizar o currículo.",
+    "fileErrors": {
+      "too-large": "O arquivo tem mais de 5 MB",
+      "unsupported": "Só arquivos PDF e DOCX",
+      "unreadable": "Não deu pra ler o arquivo",
+      "empty": "Nenhum texto encontrado no arquivo"
+    },
+    "fileErrorAction": "PDFs escaneados (imagem) não têm texto: cole o texto do currículo no campo abaixo.",
+    "reviewTitle": "Revise antes de salvar",
+    "reviewBody": "Confira empresas, cargos e datas: o entrevistador vai usar isso como fato.",
+    "headline": "Resumo em uma linha",
+    "experiences": "Experiência",
+    "company": "Empresa",
+    "jobTitle": "Cargo",
+    "start": "Início",
+    "end": "Fim",
+    "endHint": "Vazio se é o emprego atual.",
+    "achievements": "Conquistas",
+    "onePerLine": "Uma por linha.",
+    "toStoryHint": "Transforme uma conquista numa história STAR pro banco:",
+    "toStory": "Virar história: {{achievement}}",
+    "addExperience": "Adicionar experiência",
+    "removeExperience": "Remover esta experiência",
+    "skills": "Habilidades",
+    "education": "Formação",
+    "languages": "Idiomas",
+    "save": "Salvar perfil",
+    "saved": "Perfil salvo.",
+    "replace": "Importar outro currículo",
+    "delete": "Apagar perfil",
+    "deleteTitle": "Apagar o perfil?",
+    "deleteBody": "O currículo organizado sai deste navegador. As entrevistas param de usá-lo."
+  },
+  "jobFit": {
+    "title": "A vaga e o seu currículo",
+    "hint": "Veja o que a vaga pede e o seu currículo ainda não mostra, e como responder sobre isso sem inventar nada.",
+    "button": "Comparar com meu currículo",
+    "evidence": {
+      "strong": "seu currículo mostra",
+      "weak": "só indiretamente",
+      "none": "não aparece no currículo"
     }
   }
 }

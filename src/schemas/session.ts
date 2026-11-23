@@ -41,6 +41,8 @@ export const SessionConfig = z.object({
   difficulty: Difficulty.default('standard'),
   /** Absent = a general interview, as before stages existed. */
   stage: InterviewStage.optional(),
+  /** Whether the interviewer uses the candidate's CV profile (questions and consistency checks). */
+  useProfile: z.boolean().optional(),
 })
 export type SessionConfig = z.infer<typeof SessionConfig>
 

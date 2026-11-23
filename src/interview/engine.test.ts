@@ -372,6 +372,30 @@ describe('InterviewEngine', () => {
     expect(turn.corrections).toEqual([{ heard: 'lead', meant: 'led' }])
   })
 
+  it('uses the CV profile in planning and evaluation when the interview asks for it', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end', questionCount: 1, useProfile: true })
+    await t.repos.profile.save({
+      headline: 'Frontend engineer',
+      experiences: [{ company: 'Acme', title: 'Frontend Engineer', start: '2021', end: '', achievements: [] }],
+      skills: [],
+      education: [],
+      languages: [],
+    })
+    await t.engine.open(t.session.id)
+    await typeAnswer(t.engine, 'At Acme I led the checkout rewrite.')
+    const [plan, evaluate] = t.llm.calls.map((c) => c.messages.at(-1)!.content)
+    expect(plan).toContain('Frontend Engineer at Acme (2021 – present)')
+    expect(evaluate).toContain('<cv>')
+  })
+
+  it('leaves the CV out when the interview does not use it', async () => {
+    const t = await setup({ followUps: false, feedbackTiming: 'end', questionCount: 1 })
+    await t.repos.profile.save({ headline: 'x', experiences: [], skills: [], education: [], languages: [] })
+    await t.engine.open(t.session.id)
+    await typeAnswer(t.engine, 'An answer.')
+    expect(t.llm.calls.every((c) => !c.messages.at(-1)!.content.includes('<cv>'))).toBe(true)
+  })
+
   it('typed answers have no words per minute', async () => {
     const t = await setup({ followUps: false, feedbackTiming: 'end' })
     await t.engine.open(t.session.id)

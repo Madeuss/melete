@@ -35,6 +35,8 @@ There is no Melete server. The app is a static page; everything happens in your 
 - **Speech recognition in Chrome sends your voice to Google.** That's how the browser's Web Speech
   API works there. If you'd rather not, choose "Type only" in Settings and type your answers.
 - Questions and answers are sent to the LLM provider you configured, under that provider's terms.
+- **Your CV (optional).** The file is read in your browser and never uploaded or kept: only its text
+  goes to your provider to be organized, and the profile you review is stored in this browser.
 - **Kokoro voice (optional).** If you download it, the speech model (~330 MB on browsers with
   WebGPU, ~90 MB otherwise) comes once from Hugging Face and then runs entirely in your browser:
   the questions it reads never leave it.

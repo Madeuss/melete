@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie'
-import type { LlmCall, Pitch, Session, Settings, Story, Turn } from '../schemas'
+import type { LlmCall, Pitch, Profile, Session, Settings, Story, Turn } from '../schemas'
 
 /**
  * IndexedDB via Dexie. Only the repositories in this folder touch it;
@@ -12,6 +12,7 @@ export class MeleteDb extends Dexie {
   turns!: EntityTable<Turn, 'id'>
   llmCalls!: EntityTable<LlmCall, 'id'>
   pitches!: EntityTable<Pitch, 'id'>
+  profile!: EntityTable<Profile, 'id'>
 
   constructor(name = 'melete') {
     super(name)
@@ -28,6 +29,10 @@ export class MeleteDb extends Dexie {
     // v3: saved versions of the "Tell me about yourself" pitch. Only adds a table.
     this.version(3).stores({
       pitches: 'id, createdAt',
+    })
+    // v4: the CV as a structured profile (one record). Only adds a table.
+    this.version(4).stores({
+      profile: 'id',
     })
   }
 }

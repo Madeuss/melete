@@ -9,7 +9,8 @@
     "history": "History",
     "stories": "Stories",
     "settings": "Settings",
-    "pitch": "Introduction"
+    "pitch": "Introduction",
+    "profile": "Profile"
   },
   "common": {
     "save": "Save",
@@ -326,7 +327,9 @@
       "technical": "An engineer on the team: technical decisions, trade-offs, debugging and architecture from your experience.",
       "values": "Fit with the company's principles: collaboration, feedback, integrity, customer focus, learning from mistakes.",
       "final": "A senior leader, big picture: career goals, why this company, leading others, hard decisions, your first months."
-    }
+    },
+    "useProfile": "Use my CV",
+    "useProfileHint": "The interviewer asks about your experience in it and points out answers that contradict it."
   },
   "room": {
     "leave": "Leave",
@@ -393,7 +396,8 @@
     "typed": "typed",
     "fillers": "Filler words",
     "noFillers": "No filler words",
-    "pending": "Not evaluated yet."
+    "pending": "Not evaluated yet.",
+    "cvMismatches": "Doesn't match your CV"
   },
   "report": {
     "title": "Report",
@@ -573,6 +577,59 @@
       "said": "You said",
       "better": "More natural:",
       "needsProvider": "Set up a provider to get phrasing suggestions."
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Your CV, organized. The interviewer asks about your real experience, checks answers against it and compares it with job descriptions.",
+    "importTitle": "Bring your CV",
+    "importHint": "The file is read in this browser and isn't saved or uploaded anywhere: only its text goes to your provider to be organized.",
+    "chooseFile": "Choose a file (PDF or DOCX)",
+    "fileRead": "Read: {{name}}",
+    "cvText": "CV text",
+    "cvTextHint": "Filled in from the file, or paste it here. You can fix it before organizing.",
+    "organize": "Organize my CV",
+    "needsProvider": "Set up a provider to organize the CV.",
+    "fileErrors": {
+      "too-large": "The file is larger than 5 MB",
+      "unsupported": "Only PDF and DOCX files",
+      "unreadable": "Couldn't read the file",
+      "empty": "No text found in the file"
+    },
+    "fileErrorAction": "Scanned PDFs (images) have no text: paste the CV text in the box below instead.",
+    "reviewTitle": "Review before saving",
+    "reviewBody": "Check companies, titles and dates: the interviewer will use them as facts.",
+    "headline": "Headline",
+    "experiences": "Experience",
+    "company": "Company",
+    "jobTitle": "Title",
+    "start": "Start",
+    "end": "End",
+    "endHint": "Empty if it's your current job.",
+    "achievements": "Achievements",
+    "onePerLine": "One per line.",
+    "toStoryHint": "Turn an achievement into a STAR story for the bank:",
+    "toStory": "Turn into a story: {{achievement}}",
+    "addExperience": "Add experience",
+    "removeExperience": "Remove this experience",
+    "skills": "Skills",
+    "education": "Education",
+    "languages": "Languages",
+    "save": "Save profile",
+    "saved": "Profile saved.",
+    "replace": "Import another CV",
+    "delete": "Delete profile",
+    "deleteTitle": "Delete the profile?",
+    "deleteBody": "The organized CV is removed from this browser. Interviews stop using it."
+  },
+  "jobFit": {
+    "title": "The job and your CV",
+    "hint": "See what the job asks for that your CV doesn't show yet, and how to answer about it without making anything up.",
+    "button": "Compare with my CV",
+    "evidence": {
+      "strong": "your CV shows it",
+      "weak": "only indirectly",
+      "none": "not in your CV"
     }
   }
 }

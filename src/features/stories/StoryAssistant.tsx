@@ -15,12 +15,19 @@ const NARRATIVE_MAX = 4000
  * "Organize with help": the user tells the story however it comes, the model splits it into STAR
  * (filling the editor below) and asks about what's missing; answering refines it.
  */
-export function StoryAssistant({ onResult }: { onResult: (r: StructureStoryOutput) => void }) {
+export function StoryAssistant({
+  onResult,
+  initialNarrative = '',
+}: {
+  onResult: (r: StructureStoryOutput) => void
+  /** Opens the assistant with this text, e.g. an achievement from the CV profile. */
+  initialNarrative?: string
+}) {
   const { t } = useTranslation()
   const { settings } = useSettings()
   const ids = useId()
-  const [open, setOpen] = useState(false)
-  const [narrative, setNarrative] = useState('')
+  const [open, setOpen] = useState(!!initialNarrative)
+  const [narrative, setNarrative] = useState(initialNarrative)
   const [questions, setQuestions] = useState<string[]>([])
   const [answers, setAnswers] = useState<Record<string, string>>({})
   /** Answers from earlier rounds, sent again so later rounds keep them. */

@@ -57,6 +57,11 @@ export function useRetries(sessionId: string | undefined) {
   }, [sessionId])
 }
 
+/** The CV profile; null when there is none (undefined while loading). */
+export function useProfile() {
+  return useLiveQuery(async () => (await getRepositories().profile.get()) ?? null, [])
+}
+
 /** Saved "Tell me about yourself" versions, newest first. */
 export function usePitches() {
   return useLiveQuery(() => getRepositories().pitches.list(), [])

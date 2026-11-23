@@ -3,8 +3,20 @@
  * (or the engine) instead of constructing providers themselves.
  */
 import { InterviewEngine } from '../interview/engine'
-import { callEvaluatePitch, callStructureStory, callSuggestExpressions } from '../interview/llmCalls'
-import type { EvaluatePitchInput, StructureStoryInput, SuggestExpressionsInput } from '../interview/prompts'
+import {
+  callCompareProfileJob,
+  callEvaluatePitch,
+  callStructureProfile,
+  callStructureStory,
+  callSuggestExpressions,
+} from '../interview/llmCalls'
+import type {
+  CompareProfileJobInput,
+  EvaluatePitchInput,
+  StructureProfileInput,
+  StructureStoryInput,
+  SuggestExpressionsInput,
+} from '../interview/prompts'
 import { SPEECH_LANG } from '../interview/samples'
 import { createLlmProvider, testConnection } from '../providers/llm/openaiCompatible'
 import type { LlmProvider } from '../providers/llm/types'
@@ -42,6 +54,16 @@ export function evaluatePitch(llm: LlmSettings, input: EvaluatePitchInput, signa
 /** English fluency (report): suggests more natural phrasings for what the candidate said. */
 export function suggestExpressions(llm: LlmSettings, input: SuggestExpressionsInput, signal?: AbortSignal) {
   return callSuggestExpressions(createLlmProvider(llm), input, signal)
+}
+
+/** Profile (CV): organizes the CV text into a profile to review. */
+export function structureProfile(llm: LlmSettings, input: StructureProfileInput, signal?: AbortSignal) {
+  return callStructureProfile(createLlmProvider(llm), input, signal)
+}
+
+/** New interview: what the job description asks for that the CV does or doesn't show. */
+export function compareProfileJob(llm: LlmSettings, input: CompareProfileJobInput, signal?: AbortSignal) {
+  return callCompareProfileJob(createLlmProvider(llm), input, signal)
 }
 
 export function fetchModels(llm: LlmSettings, signal?: AbortSignal): Promise<string[]> {
@@ -101,7 +123,13 @@ export function createEngine(settings: Settings): InterviewEngine {
     llm: createLlmProvider(settings.llm),
     stt: sttFromSettings(settings),
     tts: ttsFromSettings(settings),
-    repos: { sessions: repos.sessions, turns: repos.turns, stories: repos.stories, llmCalls: repos.llmCalls },
+    repos: {
+      sessions: repos.sessions,
+      turns: repos.turns,
+      stories: repos.stories,
+      llmCalls: repos.llmCalls,
+      profile: repos.profile,
+    },
     feedbackLanguage: settings.uiLanguage,
   })
 }

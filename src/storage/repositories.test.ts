@@ -170,7 +170,7 @@ describe('llm calls and the v2 database', () => {
     const db = new MeleteDb(name)
     dbs.push(db)
     const r = createRepositories(db)
-    expect(db.verno).toBe(3)
+    expect(db.verno).toBe(4)
     const session = await r.sessions.get('old-session')
     expect(session?.config.difficulty).toBe('standard') // default filled in on read
     expect(await r.turns.listBySession('old-session')).toHaveLength(1)
@@ -179,6 +179,7 @@ describe('llm calls and the v2 database', () => {
     await r.llmCalls.add({ sessionId: 'old-session', kind: 'summarizeSession', model: 'm' })
     expect(await r.llmCalls.listBySession('old-session')).toHaveLength(1)
     expect(await r.pitches.list()).toEqual([]) // v3 table, empty
+    expect(await r.profile.get()).toBeUndefined() // v4 table, empty
   })
 
   it('exports, imports and deletes llm calls with their session', async () => {

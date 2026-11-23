@@ -2,6 +2,7 @@ import {
   ExportFile,
   LlmCall,
   Pitch,
+  Profile,
   Session,
   Settings,
   Story,
@@ -9,6 +10,7 @@ import {
   Turn,
   defaultSettings,
   normalizeTag,
+  type ProfileInput,
   type SessionStatus,
   type UiLanguage,
 } from '../schemas'
@@ -183,16 +185,34 @@ export function createPitchesRepo(db: MeleteDb) {
   }
 }
 
+export function createProfileRepo(db: MeleteDb) {
+  return {
+    async get(): Promise<Profile | undefined> {
+      const row = await db.profile.get('default')
+      return row ? Profile.parse(row) : undefined
+    },
+    async save(input: ProfileInput): Promise<Profile> {
+      const profile = Profile.parse({ ...input, id: 'default', updatedAt: nowIso() })
+      await db.profile.put(profile)
+      return profile
+    },
+    async remove(): Promise<void> {
+      await db.profile.delete('default')
+    },
+  }
+}
+
 export function createDataRepo(db: MeleteDb) {
   return {
     /** Full export. Settings (and so the API key) are never included. */
     async exportAll(): Promise<ExportFile> {
-      const [stories, sessions, turns, llmCalls, pitches] = await Promise.all([
+      const [stories, sessions, turns, llmCalls, pitches, profile] = await Promise.all([
         db.stories.toArray(),
         db.sessions.toArray(),
         db.turns.toArray(),
         db.llmCalls.toArray(),
         db.pitches.toArray(),
+        db.profile.get('default'),
       ])
       return ExportFile.parse({
         app: 'melete',
@@ -203,6 +223,7 @@ export function createDataRepo(db: MeleteDb) {
         turns,
         llmCalls,
         pitches,
+        ...(profile ? { profile } : {}),
       })
     },
     async exportStories(): Promise<ExportFile> {
@@ -216,17 +237,19 @@ export function createDataRepo(db: MeleteDb) {
     /** Validates the whole file first, then upserts everything in one transaction. */
     async importFile(raw: unknown): Promise<{ stories: number; sessions: number }> {
       const file = ExportFile.parse(raw)
-      await db.transaction('rw', [db.stories, db.sessions, db.turns, db.llmCalls, db.pitches], async () => {
+      await db.transaction('rw', [db.stories, db.sessions, db.turns, db.llmCalls, db.pitches, db.profile], async () => {
         await db.stories.bulkPut(file.stories)
         await db.sessions.bulkPut(file.sessions)
         await db.turns.bulkPut(file.turns)
         await db.llmCalls.bulkPut(file.llmCalls)
         await db.pitches.bulkPut(file.pitches)
+        if (file.profile) await db.profile.put(file.profile)
       })
       return { stories: file.stories.length, sessions: file.sessions.length }
     },
     async wipe(): Promise<void> {
-      await db.transaction('rw', [db.settings, db.stories, db.sessions, db.turns, db.llmCalls, db.pitches], async () => {
+      const tables = [db.settings, db.stories, db.sessions, db.turns, db.llmCalls, db.pitches, db.profile]
+      await db.transaction('rw', tables, async () => {
         await Promise.all([
           db.settings.clear(),
           db.stories.clear(),
@@ -234,6 +257,7 @@ export function createDataRepo(db: MeleteDb) {
           db.turns.clear(),
           db.llmCalls.clear(),
           db.pitches.clear(),
+          db.profile.clear(),
         ])
       })
     },
@@ -246,6 +270,7 @@ export type SessionsRepo = ReturnType<typeof createSessionsRepo>
 export type TurnsRepo = ReturnType<typeof createTurnsRepo>
 export type LlmCallsRepo = ReturnType<typeof createLlmCallsRepo>
 export type PitchesRepo = ReturnType<typeof createPitchesRepo>
+export type ProfileRepo = ReturnType<typeof createProfileRepo>
 export type DataRepo = ReturnType<typeof createDataRepo>
 
 export interface Repositories {
@@ -255,6 +280,7 @@ export interface Repositories {
   turns: TurnsRepo
   llmCalls: LlmCallsRepo
   pitches: PitchesRepo
+  profile: ProfileRepo
   data: DataRepo
 }
 
@@ -266,6 +292,7 @@ export function createRepositories(db: MeleteDb): Repositories {
     turns: createTurnsRepo(db),
     llmCalls: createLlmCallsRepo(db),
     pitches: createPitchesRepo(db),
+    profile: createProfileRepo(db),
     data: createDataRepo(db),
   }
 }

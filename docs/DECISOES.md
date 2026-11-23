@@ -73,6 +73,10 @@ e o que mudar se você preferir outra coisa. Marque ✅ (mantém) ou escreva o a
 | 66 | Pista de pronúncia pelas correções | Só funciona se a pessoa corrige a transcrição antes de enviar; a seção explica isso quando não houve correção. Uma palavra só vira pista quando é corrigida em duas respostas diferentes, pra não confundir erro pontual do reconhecimento com pronúncia. | Mostrar toda palavra corrigida. |
 | 67 | Sugestões de expressões sob demanda | A chamada só roda quando a pessoa clica, no relatório, e o resultado fica salvo. Não entra no custo por sessão (`llmCalls`), porque é pedida depois da entrevista. | Rodar junto com o resumo, sempre. |
 | 68 | Só em inglês | A seção aparece só nas entrevistas em inglês, que é pra quem a feature foi pensada. A lista de palavras comuns ignoradas também é de inglês. | Mostrar também em português. |
+| 69 | Arquivo do currículo | Lido no navegador e descartado; só o texto extraído vai pro provedor (pra organizar) e só o perfil revisado fica salvo. pdf.js e mammoth (os do backlog) entram em pedaços separados, carregados só ao escolher um arquivo. PDF escaneado não tem OCR: a tela pede pra colar o texto. | OCR no navegador pra PDFs escaneados (pesado). |
+| 70 | Perfil editável em texto | Experiências têm campos próprios (são usadas como fato); habilidades, formação e idiomas são uma por linha, que é mais rápido de corrigir. | Campos estruturados também pra formação e idiomas. |
+| 71 | Comparação com a vaga sob demanda | O botão aparece na Nova entrevista quando há perfil e descrição da vaga; o resultado não fica salvo (muda quando a descrição muda) e não entra no custo por sessão. O planejamento v3 já pergunta sobre um requisito sem evidência mesmo sem a comparação. | Rodar a comparação automaticamente ao colar a vaga. |
+| 72 | Novas versões de prompt | `planQuestions` v3 e `evaluateAnswer` v2 são o v2/v1 com o bloco do currículo quando a entrevista usa o perfil; sem perfil, o texto enviado é idêntico ao da versão anterior. | — |
 
 ## O que ficou pra você
 

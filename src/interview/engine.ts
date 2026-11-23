@@ -16,8 +16,18 @@ import { isAbortError } from '../providers/llm/errors'
 import type { LlmProvider } from '../providers/llm/types'
 import { SttError, type SpeechToText } from '../providers/stt/types'
 import type { TextToSpeech } from '../providers/tts/types'
-import type { Feedback, ListeningAids, LlmCallKind, PlannedQuestion, Session, Story, Turn, UiLanguage } from '../schemas'
-import type { LlmCallsRepo, SessionsRepo, StoriesRepo, TurnsRepo } from '../storage/repositories'
+import type {
+  Feedback,
+  ListeningAids,
+  LlmCallKind,
+  PlannedQuestion,
+  Profile,
+  Session,
+  Story,
+  Turn,
+  UiLanguage,
+} from '../schemas'
+import type { LlmCallsRepo, ProfileRepo, SessionsRepo, StoriesRepo, TurnsRepo } from '../storage/repositories'
 import {
   callClassifyReply,
   callDecideFollowUp,
@@ -81,7 +91,7 @@ export interface EngineDeps {
   llm: LlmProvider
   stt: SpeechToText
   tts: TextToSpeech
-  repos: { sessions: SessionsRepo; turns: TurnsRepo; stories: StoriesRepo; llmCalls: LlmCallsRepo }
+  repos: { sessions: SessionsRepo; turns: TurnsRepo; stories: StoriesRepo; llmCalls: LlmCallsRepo; profile: ProfileRepo }
   /** Language for strengths/improvements/summary. */
   feedbackLanguage: UiLanguage
   now?: () => number
@@ -114,6 +124,8 @@ export class InterviewEngine {
   /** The transcript as speech recognition gave it, to see what the user corrected. */
   private heardTranscript?: string
   private stories = new Map<string, Story>()
+  /** The CV profile, when this interview uses it. */
+  private profile?: Profile
   /** Help used on the current question, saved with its answer. */
   private aids: ListeningAids = { repeats: 0, textShown: false }
 
@@ -161,6 +173,7 @@ export class InterviewEngine {
     if (session.status === 'abandoned') return this.set({ state: 'abandoned' })
 
     await this.loadStories()
+    if (session.config.useProfile) this.profile = await this.deps.repos.profile.get()
     if (session.plannedQuestions.length === 0) return this.run(() => this.plan())
 
     const answeredMain = turns.filter((t) => t.kind === 'main').length
@@ -225,6 +238,7 @@ export class InterviewEngine {
         config: this.session.config,
         stories: stories.map((s) => ({ id: s.id, title: s.title, tags: s.tags })),
         language: this.session.language,
+        ...(this.profile ? { profile: this.profile } : {}),
       },
       this.abort.signal,
     )
@@ -472,6 +486,7 @@ export class InterviewEngine {
         interviewType: this.session.config.type,
         language: this.session.language,
         feedbackLanguage: this.deps.feedbackLanguage,
+        ...(this.profile ? { profile: this.profile } : {}),
       },
       this.abort.signal,
     )

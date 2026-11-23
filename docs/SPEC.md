@@ -511,6 +511,18 @@ Pra quem não é nativo. Seção "Fluência em inglês" no relatório das entrev
 
 - [x] Feito em 22/11/2026.
 
+### Currículo como base (pedido em 22/11/2026)
+
+- Tela nova "Perfil" (`/profile`). O usuário escolhe um PDF ou DOCX (lido no navegador com pdf.js e mammoth, carregados só nessa hora; o arquivo não é guardado nem enviado, até 5 MB) ou cola o texto. O texto pode ser corrigido antes de organizar. PDF escaneado (imagem) não tem texto: a tela pede pra colar.
+- Prompt novo `structureProfile` (v1): texto do currículo (até 24 mil caracteres) → resumo em uma linha, experiências (empresa, cargo, início, fim, conquistas), habilidades, formação e idiomas, só com o que o currículo diz. O usuário revisa e edita tudo antes de salvar. Tabela `profile` (um registro, versão 4 do Dexie), incluída no export, no import e em "apagar todos os dados".
+- Usos:
+  - Nova entrevista: "Usar meu currículo" (ligado por padrão quando há perfil; `SessionConfig.useProfile`). `planQuestions` v3: cerca de um terço das perguntas sobre experiências do currículo ("Walk me through your time at…"), lacuna ou mudança de carreira no máximo uma vez, e, com descrição da vaga, pelo menos um requisito que o currículo não mostra.
+  - Cada conquista salva tem "Virar história", que abre o editor de histórias com o assistente já preenchido com a conquista.
+  - Com perfil e descrição da vaga, "Comparar com meu currículo" (prompt `compareProfileJob` v1, sob demanda): até 10 requisitos com o quanto o currículo mostra cada um (mostra, só indiretamente, não aparece), os que faltam primeiro, e como responder com honestidade sobre cada um.
+  - `evaluateAnswer` v2: quando a entrevista usa o currículo, aponta até 3 contradições claras entre a resposta e o currículo (cargo, empresa, datas, números), mostradas no feedback como "Não bate com o seu currículo".
+
+- [x] Feito em 22/11/2026.
+
 ## Decidido
 
 | Tema | Decisão |

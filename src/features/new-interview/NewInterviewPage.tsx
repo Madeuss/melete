@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router'
 import { canUseVoice, preloadVoice } from '../../app/services'
 import { useSettings } from '../../app/settingsContext'
 import { Difficulty, InterviewStage, InterviewType, Seniority, SessionConfig, type FeedbackTiming } from '../../schemas'
-import { useStories } from '../../storage/hooks'
+import { useProfile, useStories } from '../../storage/hooks'
 import { getRepositories } from '../../storage/repositories'
 import { Button, Field, Input, Notice, SegmentedControl, Select, Textarea, Toggle, describedBy } from '../../ui'
 import { PageHeader } from '../../ui/PageHeader'
+import { JobFit } from './JobFit'
 
 const LAST_CONFIG_KEY = 'melete.lastConfig'
 
@@ -55,7 +56,10 @@ export default function NewInterviewPage() {
   const navigate = useNavigate()
   const { settings } = useSettings()
   const stories = useStories()
+  const profile = useProfile()
   const [config, setConfig] = useState<SessionConfig>(loadLastConfig)
+  // With a profile, interviews use it unless the user turned it off.
+  const withProfile = !!profile && config.useProfile !== false
   const [roleError, setRoleError] = useState(false)
   const [starting, setStarting] = useState(false)
 
@@ -72,6 +76,7 @@ export default function NewInterviewPage() {
     e.preventDefault()
     const parsed = SessionConfig.safeParse({
       ...config,
+      useProfile: withProfile,
       role: config.role.trim(),
       jobDescription: config.jobDescription?.trim() || undefined,
     })
@@ -222,6 +227,17 @@ export default function NewInterviewPage() {
             />
           </div>
         </div>
+
+        {profile && config.jobDescription?.trim() && <JobFit profile={profile} jobDescription={config.jobDescription.trim()} />}
+
+        {profile && (
+          <Toggle
+            checked={withProfile}
+            onChange={(v) => set('useProfile', v)}
+            label={t('newInterview.useProfile')}
+            description={t('newInterview.useProfileHint')}
+          />
+        )}
 
         <Toggle
           checked={config.followUps}

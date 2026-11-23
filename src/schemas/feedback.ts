@@ -10,6 +10,8 @@ export const Feedback = z.object({
   strengths: z.array(z.string()).max(3),
   improvements: z.array(z.string()).max(3),
   improvedAnswer: z.string(), // same story, better told, in the interview language
+  /** Where the answer contradicts the candidate's CV (only when the interview uses it). */
+  cvMismatches: z.array(z.string()).max(3).optional(),
 })
 export type Feedback = z.infer<typeof Feedback>
 

@@ -1,22 +1,27 @@
 import { generateStructured } from '../providers/llm/structuredOutput'
 import type { LlmProvider } from '../providers/llm/types'
-import type { Feedback, PitchFeedback, PlannedQuestion, SessionSummary } from '../schemas'
+import type { Feedback, PitchFeedback, PlannedQuestion, ProfileInput, SessionSummary } from '../schemas'
 import {
   classifyReply,
   decideFollowUp,
+  compareProfileJob,
   evaluateAnswer,
   evaluatePitch,
   planQuestions,
+  structureProfile,
   structureStory,
   suggestExpressions,
   summarizeSession,
   type ClassifyReplyInput,
   type DecideFollowUpInput,
+  type CompareProfileJobInput,
   type EvaluateAnswerInput,
   type EvaluatePitchInput,
   type PlanQuestionsInput,
+  type StructureProfileInput,
   type StructureStoryInput,
   type StructureStoryOutput,
+  type JobRequirement,
   type Expression,
   type SuggestExpressionsInput,
   type SummarizeSessionInput,
@@ -126,4 +131,34 @@ export async function callSuggestExpressions(
     signal,
   })
   return suggestExpressions.postProcess(out, input)
+}
+
+/** CV text (from the uploaded file) → a structured profile for the user to review. Not part of a session. */
+export async function callStructureProfile(
+  llm: LlmProvider,
+  input: StructureProfileInput,
+  signal?: AbortSignal,
+): Promise<ProfileInput> {
+  const out = await generateStructured(llm, {
+    messages: structureProfile.build(input),
+    schema: structureProfile.schema,
+    name: structureProfile.name,
+    signal,
+  })
+  return structureProfile.postProcess(out)
+}
+
+/** What the job asks for and how well the CV shows each requirement, gaps first. Not part of a session. */
+export async function callCompareProfileJob(
+  llm: LlmProvider,
+  input: CompareProfileJobInput,
+  signal?: AbortSignal,
+): Promise<JobRequirement[]> {
+  const out = await generateStructured(llm, {
+    messages: compareProfileJob.build(input),
+    schema: compareProfileJob.schema,
+    name: compareProfileJob.name,
+    signal,
+  })
+  return compareProfileJob.postProcess(out)
 }

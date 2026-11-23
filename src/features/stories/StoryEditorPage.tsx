@@ -105,6 +105,7 @@ function Editor({ story }: { story?: Story }) {
       />
       <div className="mb-10">
         <StoryAssistant
+          initialNarrative={story ? '' : (params.get('from') ?? '')}
           onResult={(r) =>
             // The assistant fills the STAR parts it found; what it left empty keeps what was typed.
             // The title is only filled in when there isn't one yet.

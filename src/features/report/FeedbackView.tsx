@@ -2,7 +2,7 @@ import { CircleCheck, CircleX } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { totalFillers } from '../../interview/metrics'
 import type { Feedback, Turn } from '../../schemas'
-import { cn, iconPropsSm } from '../../ui'
+import { Notice, cn, iconPropsSm } from '../../ui'
 
 /** 0–5 score as five segments plus the number. Brand pink is used for the filled part (charts). */
 export function ScoreRow({ label, score }: { label: string; score: number }) {
@@ -88,6 +88,16 @@ export function FeedbackView({ turn, feedback, showAnswer = false }: { turn: Tur
             )}
             {feedback.answeredTheQuestion ? t('feedback.answered') : t('feedback.notAnswered')}
           </p>
+
+          {!!feedback.cvMismatches?.length && (
+            <Notice tone="warning" title={t('feedback.cvMismatches')}>
+              <ul className="flex list-disc flex-col gap-1 pl-5">
+                {feedback.cvMismatches.map((m, i) => (
+                  <li key={i}>{m}</li>
+                ))}
+              </ul>
+            </Notice>
+          )}
 
           <div className="grid gap-6 sm:grid-cols-2">
             <List title={t('feedback.strengths')} items={feedback.strengths} />
